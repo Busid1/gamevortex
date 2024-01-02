@@ -1,0 +1,38 @@
+.tag-container{
+    background: #121212;
+    z-index: 1;
+    top: 50%;
+    position: relative;
+}
+
+.tag-box{
+    height: 40px;
+}
+
+.currentTag{
+    display: flex;
+    align-items: center;
+    color: #fff;
+    text-shadow: 1px 1px 2px #ffc107;
+    padding: 3px 5px;
+    transition: all .3s;
+    height: 100%;
+}
+
+.currentTag:hover{
+    background-color: rgb(255, 193, 5, .9);
+    color: #121212;
+    text-shadow: 1px 1px 2px #121212;
+}
+
+.currentTag.focused{
+    background-color: #ffc107;
+    color: #121212;
+    border-radius: 10px;
+    text-shadow: 1px 1px 2px #121212;
+    height: 30px;
+}
+
+#notFound-box{
+    height: calc(100vh - 212px);
+}

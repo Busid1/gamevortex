@@ -1,0 +1,32 @@
+.breadcrumb>li+li:before {
+    content: "/" !important;
+    color: #ffffff !important;
+    padding: 0;
+}
+
+.breadcrumb-container {
+    background-color: #121212;
+    height: 35px;
+    z-index: 1;
+}
+
+.breadcrumb-item{
+    display: flex;
+    align-items: center;
+    height: 35px;
+}
+
+.breadcrumb-item > a{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    text-shadow: 2px 1px 1px #000;
+    padding: 0 10px;
+}
+
+.breadcrumb-item > a:hover{
+    background-color: #000;
+    transition: all .3s linear;
+}

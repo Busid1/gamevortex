@@ -1,25 +1,103 @@
-import logo from './logo.svg';
 import './App.css';
+import Games from './components/Games/Games';
+import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
+import { useState, useEffect, useRef } from 'react';
+import { Route, Routes, useLocation, useNavigate } from 'react-router';
+import axios from "axios";
+import GameDetails from './components/GameDetails/GameDetails';
+import Cart from './components/Cart/Cart';
+import Tags from './components/Tags/Tags';
 
 function App() {
+  const [videogames, setVideogames] = useState([]);
+  const [searchGame, setSearchGame] = useState([]);
+  const location = useLocation();
+
+  // Crea una referencia
+  const inputRef = useRef(null);
+  // Función para enfocar el input
+  const focusInput = () => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+  })
+
+  useEffect(() => {
+    async function gamesData() {
+      try {
+        const response = await axios.get('http://localhost:5000/');
+        setVideogames(response.data);
+      }
+
+      catch (err) {
+        console.log(err);
+      }
+    }
+    // When the component is mounted the function 'allGames()' will be executed
+    gamesData();
+  }, []);
+
+  const [cartCount, setCartCount] = useState(0);
+
+  const handleAddToCart = () => {
+    setCartCount(cartCount + 1);
+  }
+
+  const handleRemoveFromCart = () => {
+    if (cartCount < 1) {
+      setCartCount(0);
+    }
+    else {
+      setCartCount(cartCount - 1);
+    }
+  }
+
+  const URL_BASE = "http://localhost:5000";
+
+  const onSearch = (title) => {
+    axios(`${URL_BASE}/${title}`)
+      .then(response => {
+        setSearchGame(response.data[0])
+      })
+
+      .catch(err => {
+        console.log(err);
+      })
+  }
+
+
+  const titleLength = (title) => {
+    if (title.length > 21) {
+      let ellipsisTitle = title.slice(0, 22) + "...";
+      return ellipsisTitle;
+    }
+    else {
+      return title;
+    }
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Header cartCount={cartCount} onSearch={onSearch} videogames={videogames} searchGame={searchGame} />
+      {
+        location.pathname === "/" ? (<Tags />) : (null)
+      }
+      <Routes>
+        <Route path='/' element={<Games videogames={videogames} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} titleLength={titleLength} />}></Route>
+        <Route path='/:game' element={<GameDetails handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} videogames={videogames} titleLength={titleLength} />} />
+        {
+          location.pathname !== "/" ? (<Route path='/games/:tag' element={<Tags videogames={videogames} titleLength={titleLength} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} />}></Route>) : (null)
+        }
+        <Route path='/cart' element={<Cart handleRemoveFromCart={handleRemoveFromCart} inputRef={inputRef} focusInput={focusInput} />} />
+      </Routes>
+      <Footer />
     </div>
-  );
+  )
 }
 
 export default App;

@@ -1,0 +1,9 @@
+#addCart-game-alert {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    margin: 0;
+    padding: 10px;
+    font-size: 18px;
+}

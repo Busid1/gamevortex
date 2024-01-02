@@ -1,0 +1,14 @@
+header{
+    position: sticky;
+    top: 0;
+    z-index: 20;
+}
+
+#user-icon, #cart-icon {
+    cursor: pointer;
+}
+
+#push-cart {
+    font-size: 10px;
+}
+
