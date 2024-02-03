@@ -1,6 +1,7 @@
 import "./footer.css";
 import React, { useState } from "react";
 import validation from "./validation";
+import gameVortexLogo from "../../images/gamevortexlogo.png"
 
 export default function Footer() {
     const [isFocused, setIsFocused] = useState({
@@ -44,16 +45,16 @@ export default function Footer() {
     return (
         <footer className="footer d-flex flex-column w-100 bg-warning">
             <div className="d-flex flex-column align-items-center py-3">
-                <div className="d-flex w-75 align-items-center justify-content-between">
-                    <a className="navbar-brand fs-3" href="#!">VG Store</a>
-                    <span className="fs-5">© 2023 Copyright: VG Store</span>
+                <div className="d-flex align-items-center justify-content-evenly">
+                    <span className="copyright">© 2024 Copyright:</span>
+                    <a className="footerLogo-box" href="#"><img className="gameVortex-logo" src={gameVortexLogo} alt="gameVortex-logo" /></a>
                 </div>
-                <hr className="w-75 m-2" />
+                <hr className="w-50 m-2" />
             </div>
-            <div className="d-flex flex-column align-items-center py-4" style={{ backgroundColor: "#121212" }}>
-                <div className="d-flex justify-content-between w-75">
-                    <form onSubmit={handleSubmit} className="input-container d-flex flex-column gap-2 w-50">
-                        <h2 className="text-white fs-3 text-decoration-underline">Contact me!!</h2>
+            <div id="contactSocial-box" className="py-4" style={{ backgroundColor: "#121212" }}>
+                <div id="contact-box" className="d-flex justify-content-evenly">
+                    <form onSubmit={handleSubmit} className="input-container d-flex flex-column gap-2">
+                        <h2 className="text-white fs-6 text-decoration-underline">Contact me!!</h2>
                         <input
                             type="text"
                             name="name"
@@ -102,16 +103,16 @@ export default function Footer() {
 
                         />
 
-                        <button type="submit" className="btn btn-primary d-flex align-self-center justify-content-center py-2 border-0 w-50" >Send</button>
+                        <button type="submit" className="btn btn-primary d-flex align-self-center justify-content-center py-2 border-0" >Send</button>
                     </form>
-                    <div className="d-flex flex-column">
-                        <h2 className="text-white text-decoration-underline fs-3">My social webs</h2>
-                        <ul className="navbar d-flex flex-column gap-5 mt-4">
-                            <li className="footerNav-item"><a href="#"><i className="fab fa-instagram text-danger shadow"></i><span>Instagram</span></a></li>
-                            <li className="footerNav-item"><a href="https://github.com/Busid1"><i className="fab fa-github shadow text-dark"></i><span>Github</span></a></li>
-                            <li className="footerNav-item"><a href="#"><i className="fab fa-linkedin text-primary shadow"></i><span>Linkedin</span></a></li>
-                        </ul>
-                    </div>
+                </div>
+                <div id="socialWebs-box" className="d-flex flex-column">
+                    <h2 className="text-white text-decoration-underline fs-6">My social webs</h2>
+                    <ul className="navbar gap-5 mt-3">
+                        <li className="footerNav-item"><a href="#"><i className="fab fa-instagram text-danger shadow"></i><span>Instagram</span></a></li>
+                        <li className="footerNav-item"><a href="https://github.com/Busid1"><i className="fab fa-github shadow text-dark"></i><span>Github</span></a></li>
+                        <li className="footerNav-item"><a href="#"><i className="fab fa-linkedin text-primary shadow"></i><span>Linkedin</span></a></li>
+                    </ul>
                 </div>
             </div>
         </footer>

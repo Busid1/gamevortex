@@ -105,7 +105,7 @@ export default function Game({ id, title, price, description, image, prevGamepla
     };
 
     return (
-        <div id="card-item_game" className="card my-3 rounded-3 d-flex align-items-center border-0">
+        <div id="card-item_game" className="card rounded-3 my-3 d-flex align-items-center border-0">
             <div className="navbar-brand text-white card-body">
                 <div className="img-games-box">
                     <img className="img-games" src={image} alt={title} />
@@ -114,11 +114,11 @@ export default function Game({ id, title, price, description, image, prevGamepla
                 <div className="card-body-bottom">
                     <div className="titlePrice-box">
                         <Link className="card-title" to={`/${title}`}>
-                            {titleLength(title)}
+                            {titleLength(title, 22)}
                         </Link>
                         <span ref={changeFocus} className="card-price mx-2 border border-dark badge bg-danger rounded-pill">{price}</span>
                     </div>
-                    <div id="btn-box" className="d-flex w-100 justify-content-evenly">
+                    <div id="btns-box" className="d-flex w-100 justify-content-evenly">
                         <button ref={popoverList} type="button" data-bs-custom-class="custom-popover" id="info-btn" className="btn btn-secondary d-flex align-items-center gap-2" data-container="body">
                             Info
                             <i className="fas fa-info-circle"></i>

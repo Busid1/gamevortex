@@ -1,8 +1,9 @@
 #card-item_game {
-    width: 280px;
+    width: 250px;
     box-shadow: 2px 2px 5px 1px #000;
     overflow: hidden;
     background-color: #121212;
+    padding-bottom: 7px;
 }
 
 #card-item_game>.card-body {
@@ -60,7 +61,7 @@
 .card-title {
     padding: 7px 10px;
     margin: 0;
-    font-size: 22px;
+    font-size: 1.2em;
     z-index: 1;
     position: relative;
     color: #ffc107;
@@ -89,9 +90,9 @@
     --bs-popover-body-padding-y: .5rem;
 }
 
-#cart-btn {
-    padding: 5px 10px;
-    position: relative;
+#info-btn, #cart-btn, #delete-btn{
+    font-size: 14px;
+    padding: 6px;
     overflow: hidden;
 }
 
@@ -173,8 +174,8 @@
     right: 0;
     bottom: 5%;
     margin: 0;
-    padding: 5px;
-    font-size: 18px;
+    padding: 10px;
+    font-size: 15px;
     z-index: 2;
     animation: alertAn 1s linear;
 }
@@ -193,11 +194,8 @@
         opacity: .9;
     }
 
-    75%{
-        opacity: .7;
-    }
-
     100% {
-        opacity: 0;
+        opacity: .5;
     }
 }
+

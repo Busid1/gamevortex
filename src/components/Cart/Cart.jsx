@@ -1,29 +1,28 @@
 import { useSelector } from "react-redux";
 import "./cart.css";
+import "../../responsive.css";
 import { useState, useEffect } from "react";
-import Breadcrumb from "../Breadcrumb/Breadcrumb";
 import { removeFromCart } from "../../redux/actions";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import Payment from "../Payment/Payment";
 
-export default function Cart({ handleRemoveFromCart, inputRef, focusInput }) {
+export default function Cart({ handleRemoveFromCart, inputRef, focusInput, titleLength }) {
     const [gamesInCart, setGamesInCart] = useState(useSelector(state => state.gamesInCart));
     const [gameCounts, setGameCounts] = useState({}); // Inicialmente, no hay cantidades para ningún juego
     //Accedemos al ultimo array ya que este tendra todos los valores validos de la tarjeta y asi no se duplican los elementos
     const creditCardData = useSelector(state => state.creditCard.slice(-1)[0]);
-
     const creditCardErrors = useSelector(state => state.creditCardErrors.slice(-1)[0]);
+    const [lastCreditCard, setLastCreditCard] = useState("");
 
     const creditCardComponent = creditCardData ? (
         <div className="creditCardBox">
-            <h3>Card holder: {creditCardData.cardHolder}</h3>
-            <h3>Number: {creditCardData.cardNumber}</h3>
-            <h3>Expiration: {creditCardData.cardExpirationMonth}/{creditCardData.cardExpirationYear}</h3>
-            <h3>CVC: {creditCardData.cardCVC}</h3>
+            <h3>Card holder: {lastCreditCard.cardHolder}</h3>
+            <h3>Number: {lastCreditCard.cardNumber}</h3>
+            <h3>Expiration: {lastCreditCard.cardExpirationMonth}/{lastCreditCard.cardExpirationYear}</h3>
+            <h3>CVC: {lastCreditCard.cardCVC}</h3>
         </div>
-
-    ) : null;
+    ) : (null);
 
     useEffect(() => {
         // Obtener las claves del objeto gameCounts
@@ -74,25 +73,25 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput }) {
     }
 
     const gamesAddsInCart = filterGames.map((game) => (
-        <div key={game.id} className="cart-box bg-secondary shadow rounded d-flex gap-3 my-4">
+        <div key={game.id} className="cart-box bg-secondary shadow rounded d-flex gap-3">
             <img className="rounded-start" src={game.image} alt={game.title} />
             <div className="d-flex flex-column justify-content-center">
-                <Link to={`/${game.title}`} className="gameTitle fs-4 text-warning">
-                    {game.title}
+                <Link to={`/${game.title}`} className="gameTitle text-warning">
+                    {titleLength(game.title, 16)}
                 </Link>
-                <span>{game.price}</span>
-                <div id={game.id} className="d-flex gap-2">
-                    <span>Amount:</span>
-                    <span id={game.id} onClick={() => increaseCount(game.id)} className="material-symbols-outlined btn btn-dark p-1 fs-6">
+                <span className="gamePrice">{game.price}</span>
+                <div id={game.id} className="d-flex gap-1 align-items-center">
+                    <span className="gameAmount">Amount:</span>
+                    <span id={game.id} onClick={() => increaseCount(game.id)} className="cartBtns material-symbols-outlined btn btn-dark p-1">
                         add
                     </span>
                     {/* Accede al objeto que se le pasa por id, en caso de que dentro de 
                         ese objeto no haya nada pues gameCount sera igual a 0 */}
-                    <span id={game.id}>{gameCounts[game.id] || 1}</span>
-                    <span onClick={() => decreaseCount(game.id)} className="material-symbols-outlined btn btn-dark p-1 fs-6">
+                    <span className="cartBtns" id={game.id}>{gameCounts[game.id] || 1}</span>
+                    <span onClick={() => decreaseCount(game.id)} className="cartBtns material-symbols-outlined btn btn-dark p-1">
                         remove
                     </span>
-                    <button onClick={() => filterDelGame(game.id)} className="material-symbols-outlined btn btn-danger p-1 fs-6">
+                    <button onClick={() => filterDelGame(game.id)} className="cartBtns material-symbols-outlined btn btn-danger p-1">
                         delete
                     </button>
                 </div>
@@ -111,9 +110,7 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput }) {
 
     let total = prices.reduce((a, b) => a + b);
 
-    const [payment, setPayment] = useState(false);
     const [isBuyGame, setIsBuyGame] = useState(false);
-    const [isBuyGameBtn, setIsBuyGameBtn] = useState(false);
     const [isSpinner, setIsSpinner] = useState(true);
     const [isBuyGameAlert, setIsBuyGameAlert] = useState(true);
 
@@ -126,13 +123,38 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput }) {
         window.location.href = 'http://localhost:3000';
     }, 11000);
 
-    const handlePayment = () => {
-        if (payment) {
-            setPayment(false);
-            setIsBuyGameBtn(true);
+    const [closePayment, setClosePayment] = useState(false);
+    const handleClosePayment = () => {
+        if (closePayment) {
+            setClosePayment(false);
         }
         else {
-            setPayment(true);
+            setClosePayment(true);
+        }
+    }
+
+    const [editPayment, setEditPayment] = useState(false);
+    const handleEditPayment = () => {
+        if (editPayment) {
+            setEditPayment(false);
+            setClosePayment(false);
+        }
+        else {
+            setEditPayment(true);
+            setClosePayment(true);
+        }
+    }
+    
+    const [addPayment, setAddPayment] = useState(false);
+    const handleAddPayment = () => {
+        if (addPayment) {
+            setAddPayment(true);
+            setClosePayment(true);
+        }
+        else {
+            setAddPayment(false);
+            setClosePayment(false);
+            setLastCreditCard({ ...creditCardData })
         }
     }
 
@@ -142,7 +164,7 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput }) {
         if (counter > 0) {
             setCounter(prevCounter => prevCounter - 1);
         }
-        else{
+        else {
             setCounter(0);
         }
     }
@@ -162,25 +184,41 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput }) {
         }
     }
 
+    const [creditCardValid, setCreditCardValid] = useState(false);
 
+    //function thats validate if all fields of inputs are correctly
+    const isErrors = (obj, errors) => {
+        let hasErrors = Object.keys(errors).length;
+
+        for (let el in obj) {
+            if (obj[el] === true && hasErrors === 0) {
+                setCreditCardValid(true);
+                return true;
+            }
+
+            else {
+                setCreditCardValid(false);
+                return false;
+            }
+        }
+    }
     return (
-        <div className="cart-container d-flex flex-column bg-dark text-white px-4 py-2 w-100">
-            <Breadcrumb />
-            <div className="d-flex gap-2 justify-content-between">
+        <div className="cart-container d-flex flex-column bg-dark text-white px-3 py-4 w-100">
+            <div className="d-flex gap-3">
                 <div className="cartGamesBox d-flex flex-column">
                     {gamesAddsInCart}
                 </div>
-                <div className="bg-secondary rounded py-3 px-3 resumeGamesBox d-flex flex-column align-items-center">
-                    <h2>Resume</h2>
+                <div className="bg-secondary rounded py-3 resumeGamesBox d-flex flex-column align-items-center">
+                    <h2 className="m-0">Resume</h2>
 
-                    <div className="d-flex gap-4 mt-3">
+                    <div className="d-flex gap-4 mt-2">
                         <div className="d-flex flex-column gap-3">
                             <span className="text-warning">Game</span>
                             {
                                 filterGames.map(game => {
                                     return (
                                         <div key={game.id}>
-                                            <span>{game.title}</span>
+                                            <span>{titleLength(game.title, 8)}</span>
                                             <hr className="my-2" />
                                         </div>
                                     )
@@ -224,15 +262,26 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput }) {
                     </div>
                     <span>Total: {total.toFixed(2)}$</span>
 
-                    <button onClick={() => { handlePayment(); focusInput(); }} className="d-flex align-items-center gap-2 fs-5 btn btn-warning shadow mt-3">
-                        Add/edit payment
-                        <span className="material-symbols-outlined">
-                            credit_card
-                        </span>
-                    </button>
-                    {creditCardComponent}
+                    {
+                        creditCardValid ?
+                            <button id="editPayment" onClick={() => { handleEditPayment(); focusInput(); }} className="d-flex align-items-center gap-2 fs-6 btn btn-info shadow mt-3">
+                                Edit payment
+                                <span className="material-symbols-outlined">
+                                    credit_card_gear
+                                </span>
+                            </button>
+                            :
+                            <button onClick={() => { handleClosePayment(); focusInput(); }} className="d-flex align-items-center gap-2 fs- btn btn-warning shadow mt-3">
+                                Add payment
+                                <span className="material-symbols-outlined">
+                                    add_card
+                                </span>
+                            </button>
+                    }
 
-                    {isBuyGameBtn ? (
+                    {lastCreditCard && creditCardData ? creditCardComponent : null}
+
+                    {creditCardValid ? (
                         <div>
                             <button onClick={handleBuyGame} className="d-flex align-items-center gap-2 fs-5 btn btn-success shadow mt-3">
                                 Buy game/s
@@ -267,10 +316,12 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput }) {
                     ) : null}
 
                     {
-                        payment ? <Payment
-                            handlePayment={handlePayment}
-                            gameCounts={gameCounts}
+                        closePayment ? <Payment
+                            handleClosePayment={handleClosePayment}
+                            handleAddPayment={handleAddPayment}
+                            creditCardData={creditCardData}
                             inputRef={inputRef}
+                            isErrors={isErrors}
                         /> :
                             null
                     }

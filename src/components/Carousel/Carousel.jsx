@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './carousel.css';
-import './responsive.css';
+import './carouselResponsive.css';
 
 export default function Carousel({ screenshots, title }) {
     const [currentSlide, setCurrentSlide] = useState(0);

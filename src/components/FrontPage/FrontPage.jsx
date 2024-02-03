@@ -2,11 +2,10 @@ import "./frontpage.css";
 import { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { addToCart, removeFromCart } from "../../redux/actions";
-import Breadcrumb from "../Breadcrumb/Breadcrumb";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
-export default function FrontPage({ id, title, price, description, image, handleAddToCart, handleRemoveFromCart }) {
+export default function FrontPage({ id, title, price, description, image, frontPageImage,  handleAddToCart, handleRemoveFromCart }) {
     const location = useLocation();
     const popoverList = useRef();
     const dispatch = useDispatch();
@@ -89,21 +88,17 @@ export default function FrontPage({ id, title, price, description, image, handle
     }, []);
 
     return (
-        <div className="d-flex flex-column align-items-center front-page">
-            <div className="front-page-image d-flex align-items-center justify-content-center">
-                <div className="gradiente-izquierdo"></div>
-                <div className="gradiente-arriba"></div>
-                <img src={image} alt={title} />
-                <div className="gradiente-derecho"></div>
-                <div className="gradiente-abajo"></div>
+        <div className="frontPage-container">
+            <div className="frontPageImage-box d-flex align-items-center justify-content-end">
+                <img src={frontPageImage} alt={title} />
             </div>
-            <div className="card-body-principal d-flex flex-column justify-content-center align-items-start">
+            <div className="card-body-main d-flex flex-column justify-content-center align-items-start">
                 <div className="navbar-brand text-white">
                     <Link to={`/${title}`}>
                         <h3 className="card-title-main text-warning">{title}</h3>
                     </Link>
-                    <span ref={changeFocus} className="card-price fs-6">{price}</span>
-                    <div id="btn-box" className="d-flex w-100 gap-3">
+                    <span ref={changeFocus} className="frontPageCard-price">{price}</span>
+                    <div id="btns-box" className="d-flex w-100 gap-3">
                         <button type="button" ref={popoverList} data-bs-custom-class="custom-popover" id="info-btn" className="btn btn-secondary d-flex align-items-center gap-2" data-container="body">
                             Info
                             <i className="fas fa-info-circle"></i>
@@ -124,27 +119,18 @@ export default function FrontPage({ id, title, price, description, image, handle
                     </div>
                 </div>
             </div>
-            <Breadcrumb />
             {
                 cartAlert ?
-                    <div className="addGameAlert-box">
-                        <div id="addGameCart-alert" className="alert alert-success alert-dismissible p-1" role="alert">
-                            <div className="d-flex justify-content-between align-items-center">
-                                <p className="m-0 px-2">El juego se agrego al carrito</p>
-                            </div>
-                        </div>
+                    <div id="addGameCart-alert" className="alert alert-success alert-dismissible p-1" role="alert">
+                        <p className="m-0 px-2">The game was added to cart</p>
                     </div>
                     : null
             }
 
             {
                 delAlert ?
-                    <div className="delGameAlert-box" >
-                        <div id="delGameCart-alert" className="alert alert-warning alert-dismissible p-1" role="alert">
-                            <div className="d-flex justify-content-between align-items-center">
-                                <p className="m-0 px-2">El juego se elimino del carrito</p>
-                            </div>
-                        </div>
+                    <div id="delGameCart-alert" className="alert alert-warning alert-dismissible p-1" role="alert">
+                        <p className="m-0 px-2">The game was remove from cart</p>
                     </div>
                     : null
             }

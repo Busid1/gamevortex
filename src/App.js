@@ -27,15 +27,15 @@ function App() {
     $('[data-toggle="tooltip"]').tooltip();
   })
 
+  const apiUrl = 'https://bow-rebel-apartment.glitch.me';
+
   useEffect(() => {
     async function gamesData() {
       try {
-        const response = await axios.get('http://localhost:5000/');
+        const response = await axios(apiUrl);
         setVideogames(response.data);
-      }
-
-      catch (err) {
-        console.log(err);
+      } catch (error) {
+        console.error(error);
       }
     }
     // When the component is mounted the function 'allGames()' will be executed
@@ -57,12 +57,12 @@ function App() {
     }
   }
 
-  const URL_BASE = "http://localhost:5000";
+  const URL_BASE = "https://bow-rebel-apartment.glitch.me";
 
   const onSearch = (title) => {
     axios(`${URL_BASE}/${title}`)
       .then(response => {
-        setSearchGame(response.data[0])
+        setSearchGame(response.data[0]);
       })
 
       .catch(err => {
@@ -71,9 +71,9 @@ function App() {
   }
 
 
-  const titleLength = (title) => {
-    if (title.length > 21) {
-      let ellipsisTitle = title.slice(0, 22) + "...";
+  const titleLength = (title, value) => {
+    if (title.length > value) {
+      let ellipsisTitle = title.slice(0, value) + "...";
       return ellipsisTitle;
     }
     else {
@@ -93,7 +93,7 @@ function App() {
         {
           location.pathname !== "/" ? (<Route path='/games/:tag' element={<Tags videogames={videogames} titleLength={titleLength} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} />}></Route>) : (null)
         }
-        <Route path='/cart' element={<Cart handleRemoveFromCart={handleRemoveFromCart} inputRef={inputRef} focusInput={focusInput} />} />
+        <Route path='/cart' element={<Cart titleLength={titleLength} handleRemoveFromCart={handleRemoveFromCart} inputRef={inputRef} focusInput={focusInput} />} />
       </Routes>
       <Footer />
     </div>

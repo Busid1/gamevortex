@@ -2,11 +2,11 @@ import { useEffect, useState, useRef } from "react";
 import { useParams, useLocation } from "react-router";
 import axios from "axios";
 import "./gamedetails.css";
-import Breadcrumb from "../Breadcrumb/Breadcrumb";
 import Game from "../Game/Game";
 import { useDispatch } from "react-redux";
 import { addToCart, removeFromCart } from "../../redux/actions";
 import Carousel from "../Carousel/Carousel";
+import Buttons from "../Buttons/Buttons";
 
 export default function GameDetails({ videogames, handleAddToCart, handleRemoveFromCart, titleLength }) {
     const [specificGame, setSpecificGame] = useState([]);
@@ -24,7 +24,7 @@ export default function GameDetails({ videogames, handleAddToCart, handleRemoveF
 
         async function gameDetails() {
             try {
-                const response = await axios.get(`http://localhost:5000/${game}`)
+                const response = await axios.get(`https://bow-rebel-apartment.glitch.me/${game}`)
                 setSpecificGame(response.data[0]);
                 filterOtherGames();
             }
@@ -38,7 +38,6 @@ export default function GameDetails({ videogames, handleAddToCart, handleRemoveF
 
     const { id, title, description, price, image, background, screenshots, gameplay } = specificGame;
 
-    const location = useLocation();
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -99,14 +98,16 @@ export default function GameDetails({ videogames, handleAddToCart, handleRemoveF
 
     return (
         <div className="gameDetails-container">
-            <img className="gameBackground" src={background} alt={title} />
-            <div className="gradient-overlay"></div>
-
+            <div className="gameBackgroundContainer">
+                <img className="gameBackground" src={background} alt={title} />
+                <div className="gradient-overlay"></div>
+                <div className="gameFrontPageContainer d-flex justify-content-center align-items-center">
+                    <img className="gameFrontPage rounded shadow mt-3" src={image} alt={title} />
+                </div>
+            </div>
             <div className="gameDetails-box text-white">
-                <Breadcrumb />
-                <img className="w-50 rounded shadow" src={image} alt={title} />
-                <div className="d-flex justify-content-between align-items-center w-50">
-                    <h3 className="text-warning fs-3 m-0">{title}</h3>
+                <div className="d-flex flex-column justify-content-between align-items-center w-100 gap-2">
+                    <h3 className="w-100 text-warning fs-3 m-0">{title}</h3>
                     <span className="fs-5">{price}</span>
                     <div id="detailBtns-box" className="d-flex align-items-center gap-3">
                         {
@@ -124,9 +125,9 @@ export default function GameDetails({ videogames, handleAddToCart, handleRemoveF
                         }
                     </div>
                 </div>
-                <div className="d-flex flex-column gap-2 w-100">
+                <div className="description-box d-flex flex-column gap-2 w-100">
                     <h3 className="text-warning">Description</h3>
-                    <p className="text-justify fs-5">{description}</p>
+                    <p className="fs-5">{description}</p>
                 </div>
                 <div className="w-100 gap-2 d-flex flex-column align-items-center">
                     <h3 className="text-warning align-left-left w-100">Gameplay</h3>
@@ -134,11 +135,11 @@ export default function GameDetails({ videogames, handleAddToCart, handleRemoveF
                         <iframe controls className="rounded" src={gameplay}></iframe>
                     </div>
                 </div>
-                <div className="d-flex flex-column align-items-center gap-2 w-100">
+                <div className="screenshots-box d-flex flex-column align-items-center w-100">
                     <h3 className="text-warning align-self-left w-100">Screenshots</h3>
                     {
                         !!screenshots ? (
-                            <Carousel screenshots={screenshots} title={title}/>
+                            <Carousel screenshots={screenshots} title={title} />
                         ) : (null)
                     }
                 </div>
@@ -166,6 +167,7 @@ export default function GameDetails({ videogames, handleAddToCart, handleRemoveF
                     }
                 </div>
             </div>
+            <Buttons />
         </div>
     )
 }

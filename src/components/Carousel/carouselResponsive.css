@@ -1,0 +1,108 @@
+@media (min-width: 425px) {
+    .carousel-container {
+        height: 200px;
+    }
+
+    .carousel-container.zoomActive>.carousel-box {
+        height: 30%;
+    }
+
+    .carousel-container.zoomActive>.closeBtn-box {
+        height: 40%;
+    }
+
+    .carouselBtn-box>button {
+        font-size: 50px;
+    }
+}
+
+@media (min-width: 768px) {
+    .carousel-container {
+        height: 270px;
+        width: 95%;
+    }
+
+    .carousel-container.zoomActive>.carousel-box {
+        height: 40%;
+    }
+
+    .carousel-container.zoomActive>.closeBtn-box {
+        height: 50%;
+    }
+
+    .closeBtn-box>.close{
+        font-size: 50px;
+    }
+
+    .carouselBtn-box>button {
+        font-size: 65px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .carousel-container {
+        height: 300px;
+    }
+    
+    .carousel-container.zoomActive>.carousel-box {
+        height: 62%;
+    }
+
+    .carousel-container.zoomActive>.closeBtn-box {
+        height: 75%;
+    }
+
+    .carousel-container.zoomActive .carouselBtn-box {
+        width: 98%;
+    }
+
+    .carouselBtn-box>button {
+        font-size: 85px;
+    }
+
+    .closeBtn-box>.close{
+        font-size: 60px;
+    }
+}
+
+@media (min-width: 1440px) {
+    .carousel-container {
+        height: 400px;
+    }
+
+    .carousel-container.zoomActive>.carousel-box {
+        width: 100%;
+        height: 46%;
+    }
+
+    .carousel-container.zoomActive>.closeBtn-box {
+        height: 55%;
+    }
+
+    .carousel-container.zoomActive .carouselBtn-box {
+        width: 95%;
+    }
+
+    .carouselBtn-box>button {
+        font-size: 100px;
+    }
+
+    .closeBtn-box>.close{
+        font-size: 80px;
+    }
+}
+
+@media (min-width: 2560px) {
+    .carousel-container {
+        height: 700px;
+        width: 100%;
+    }
+
+    .carouselBtn-box>button {
+        font-size: 180px;
+    }
+
+    .closeBtn-box>.close{
+        font-size: 120px;
+    }
+}

@@ -1,8 +1,32 @@
 .tag-container{
-    background: #121212;
     z-index: 1;
     top: 50%;
     position: relative;
+}
+
+.tagTitle-box{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    color: #ffc107;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.tagTitle-box > h2{
+    display: flex;
+    align-items: center;
+    font-size: 1.7em;
+}
+
+.tagTitle{
+    text-transform: capitalize;
+}
+
+#leftRow-icon{
+    display: flex;
+    align-items: center;
+    color: #fff;
 }
 
 .tag-box{

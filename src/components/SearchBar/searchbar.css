@@ -1,38 +1,29 @@
 .searchBar-container{
+    flex: 1;
+    max-width: 60%;
+    justify-content: center;
+    align-self: center;
     position: relative;
+}
+
+.searchBar-container > form{
     width: 100%;
-}
-
-.search-bar {
-    height: 35px;
-    opacity: 0;
-    font-size: .8em;
-    outline: none;
-}
-
-#search-icon {
-    z-index: 1;
-    transition: all .4s linear;
-    cursor: pointer;
-}
-
-#close-searchBar{
-    cursor: pointer;
-    opacity: 0;
 }
 
 .gameSearched-box{
     position: absolute;
-    top: 110%;
-    left: 15%;
+    top: 100%;
+    left: 0%;
+    margin-top: 5px;
     z-index: 5;
     border-radius: 5px;
-    width: 75%;
+    width: 98%;
     background-color: #121212;
 }
 
 .gameSearched-item{
     transition: all .2s linear;
+    height: 100%;
 }
 
 .gameSearched-item:hover{
@@ -40,9 +31,19 @@
 }
 
 .gameSearched-link{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 100%;
     color: #ffca2c;
     text-shadow: 1px 1px 2px #121212;
     font-size: 17px;
+}
+
+.gameSearched-link>img{
+    width: 20%;
+    object-fit: contain;
+    border-radius: 5px;
 }
 
 .filter{
