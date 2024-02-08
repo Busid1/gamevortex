@@ -1,26 +1,174 @@
-header{
-    position: sticky;
+header {
+    display: flex;
+    align-items: center;
+    position: fixed;
     top: 0;
     z-index: 20;
     width: 100%;
+    height: 50px;
+    background: linear-gradient(rgb(17, 22, 26, .9), rgba(0, 0, 0, 0));
 }
 
-.logo-box{
+header.headerBackground {
+    background-image: none;
+    background-color: rgb(0, 0, 0, .9);
+    height: 60px;
+    transition: all .2s linear;
+}
+
+header>nav {
+    width: 100%;
+    padding: 10px 0;
+}
+
+header>nav>div {
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 120px;
-}
-
-.logo-box > img{
+    justify-content: space-evenly;
     width: 100%;
 }
 
-#user-icon, #cart-icon {
+.logo-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90px;
+}
+
+.logo-box>img {
+    width: 100%;
+}
+
+#user-icon,
+#cart-icon {
     cursor: pointer;
+    font-size: 1.2em;
 }
 
 #push-cart {
-    font-size: 10px;
+    font-size: .4em;
 }
 
+.cartHeader-container {
+    display: flex;
+    gap: 10px;
+    position: relative;
+}
+
+.cartGamesPrev-box {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    width: 200px;
+    max-height: 300px;
+    position: absolute;
+    top: 185%;
+    right: 0%;
+    margin: 0;
+    padding: 0;
+    border-radius: 7px;
+    background-color: rgb(59, 59, 59);
+    overflow: hidden;
+    transition: all .2s linear;
+    z-index: 40;
+    box-shadow: 0px 0px 4px 2px rgba(17, 17, 17, 0.8);
+}
+
+.cartPrev-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1em;
+    margin: 0;
+    padding: 5px 0;
+    background-color: #ffc107;
+    color: #141414;
+    border-bottom: 1px solid #141414;
+}
+
+.startDeploy-icon {
+    position: absolute;
+    left: 0%;
+    top: 100%;
+    font-size: 1.2em;
+}
+
+.cartGamePrev-item>div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 5px 10px;
+    background-color: rgb(32, 32, 32);
+    border-bottom: 1px solid #777777;
+    border-top: 1px solid #777777;
+    transition: all .2s linear;
+}
+
+.cartGamePrev-item > div:hover {
+    background-color: rgb(32, 32, 32, .6);
+    box-shadow: 0px 0px 3px 1px rgb(180, 180, 180, .8);
+}
+
+.cartGamePrev-item>div>img {
+    object-fit: contain;
+    width: 35%;
+    border-radius: 5px;
+}
+
+.cartPrev-body>a{
+    text-shadow: 0px 1px 1px #141414;
+}
+
+.cartPrev-body>a:hover {
+    text-decoration: underline;
+}
+
+.cartPrev-bottom > button>i{
+    text-shadow: 1px 1px 1px #141414;
+}
+
+.emptyCart-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    height: 30px;
+    background-color: rgb(34, 34, 34, .9);
+}
+
+.separator {
+    width: 65%;
+    margin: 0 auto;
+    border-width: 1px;
+    opacity: 1;
+    border-radius: 20px;
+    margin-top: 10px;
+}
+
+.deployPrevGames-icon {
+    padding: 0 5px;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Ancho del scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* Fondo del scrollbar */
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+/* Color de la barra de desplazamiento */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+/* Hover del scrollbar */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

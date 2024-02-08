@@ -1,6 +1,5 @@
 import { useSelector } from "react-redux";
 import "./cart.css";
-import "../../responsive.css";
 import { useState, useEffect } from "react";
 import { removeFromCart } from "../../redux/actions";
 import { useDispatch } from "react-redux";
@@ -203,8 +202,8 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput, title
         }
     }
     return (
-        <div className="cart-container d-flex flex-column bg-dark text-white px-3 py-4 w-100">
-            <div className="d-flex gap-3">
+        <div className="cart-container text-white px-3 py-4">
+            <div className="cartGamesResume-box">
                 <div className="cartGamesBox d-flex flex-column">
                     {gamesAddsInCart}
                 </div>

@@ -34,7 +34,6 @@ export default function Buttons() {
                     </button>
                     : null
             }
-
         </div>
 
     )

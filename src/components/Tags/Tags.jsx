@@ -19,20 +19,22 @@ export default function Tags({ id, handleAddToCart, handleRemoveFromCart, titleL
     });
 
     useEffect(() => {
-        axios.get(`${URL_BASE}/games/${tag}`)
-            .then((response) => {
-                setGameTag(response.data);
-            })
-            .catch((err) => {
-                setGameTag(false);
-                return err;
-            })
+        if (tag) {
+            axios.get(`${URL_BASE}/games/${tag}`)
+                .then((response) => {
+                    setGameTag(response.data);
+                })
+                .catch((err) => {
+                    setGameTag(false);
+                    return err;
+                })
 
-        //Add a yellow background fixed to the current tag
-        setIsCurrentTag({
-            [tag]: true,
-        });
-    }, [pathname, tag])
+            // Add a yellow background fixed to the current tag
+            setIsCurrentTag({
+                [tag]: true,
+            });
+        }
+    }, [pathname, tag]);
 
     useEffect(() => {
         if (location.pathname !== "/") {
@@ -42,8 +44,8 @@ export default function Tags({ id, handleAddToCart, handleRemoveFromCart, titleL
 
     return (
         <div className="tag-container">
-            <div className="nav-item dropdown text-white d-flex justify-content-evenly align-items-center">
-                <div className="d-flex tag-box justify-content-evenly align-items-center col-12">
+            <div className="nav-item tag-box dropdown text-white d-flex justify-content-evenly align-items-center">
+                <div className="d-flex justify-content-evenly align-items-center col-12">
                     <Link className={`currentTag ${isCurrentTag.action ? 'focused' : ''}`} to={"/games/action"}>Action</Link>
                     <Link className={`currentTag ${isCurrentTag.survival ? 'focused' : ''}`} to={"/games/survival"}>Survival</Link>
                     {/* <Link className={`currentTag ${isCurrentTag.racing ? 'focused' : ''}`} to={"/games/racing"}>Racing</Link> */}
@@ -74,7 +76,7 @@ export default function Tags({ id, handleAddToCart, handleRemoveFromCart, titleL
                                         chevron_right
                                     </span>
                                 </div>
-                                <div className="d-flex flex-wrap rounded-0 gap-3 pb-3 justify-content-evenly">
+                                <div id="tag-games" className="d-flex flex-wrap rounded-0 pb-3 justify-content-evenly">
                                     {
                                         gameTag.map(({ id, title, price, description, image, prevGameplay }) => {
                                             return (

@@ -9,15 +9,12 @@
 
 body{
     text-shadow: 0px 1px 1px #555;
-    background-image: url("https://www.toptal.com/designers/subtlepatterns/uploads/ep_naturalblack.png");
+    background-image: url("https://cdn.glitch.global/2c9253f6-1a6e-48eb-a381-f462c9c635d5/background.png?v=1707151252932");
+    background-color: rgb(37, 37, 37);
 }
 
 a {
     text-decoration: none;
-}
-
-#cookies-modal {
-    background: radial-gradient(circle, transparent, rgba(0, 0, 0, 1));
 }
 
 #jumpscare {
@@ -28,17 +25,3 @@ a {
     z-index: 100;
     background-color: #000;
 }
-
-/* ::-webkit-scrollbar {
-    width: 5px;
-  } */
-  
-  /* Estilo del "pulgón" (el área desplazable) */
-  /* ::-webkit-scrollbar-thumb {
-    background-color: #555;
-  } */
-  
-  /* Estilo del área del track (la parte no desplazable) */
-  /* ::-webkit-scrollbar-track {
-    background-color: red;
-  } */

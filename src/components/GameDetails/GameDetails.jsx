@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { useParams, useLocation } from "react-router";
+import { useParams } from "react-router";
 import axios from "axios";
 import "./gamedetails.css";
 import Game from "../Game/Game";
@@ -144,9 +144,9 @@ export default function GameDetails({ videogames, handleAddToCart, handleRemoveF
                     }
                 </div>
             </div>
-            <div id="otherGames-container" className="d-flex flex-column align-items-center bg-dark">
+            <div id="otherGames-container" className="d-flex flex-column align-items-center">
                 <h3 className="text-left text-warning mt-3">Other games</h3>
-                <div id="otherGames-box" className="pb-3 d-flex w-100 flex-wrap bg-dark rounded-0 justify-content-evenly">
+                <div id="otherGames-box" className="pb-3 d-flex w-100 flex-wrap rounded-0 justify-content-evenly">
                     {
                         otherVideogames.map(otherGame => {
                             return (

@@ -6,7 +6,6 @@ const initialState = {
     creditCardErrors: []
 }
 
-
 const rootReducer = (state = initialState, action) => {
     switch (action.type) {
         case "ADD_CART":

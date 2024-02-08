@@ -5,7 +5,7 @@ import { addToCart, removeFromCart } from "../../redux/actions";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
-export default function FrontPage({ id, title, price, description, image, frontPageImage,  handleAddToCart, handleRemoveFromCart }) {
+export default function FrontPage({ id, title, price, description, image, frontPageImage, handleAddToCart, handleRemoveFromCart }) {
     const location = useLocation();
     const popoverList = useRef();
     const dispatch = useDispatch();
@@ -88,30 +88,28 @@ export default function FrontPage({ id, title, price, description, image, frontP
     }, []);
 
     return (
-        <div className="frontPage-container">
+        <Link to={`/${title}`} className="frontPage-container">
             <div className="frontPageImage-box d-flex align-items-center justify-content-end">
                 <img src={frontPageImage} alt={title} />
+                <div className="frontPage-gradient"></div>
             </div>
             <div className="card-body-main d-flex flex-column justify-content-center align-items-start">
                 <div className="navbar-brand text-white">
-                    <Link to={`/${title}`}>
-                        <h3 className="card-title-main text-warning">{title}</h3>
-                    </Link>
+                    <h3 className="card-title-main text-warning">{title}</h3>
                     <span ref={changeFocus} className="frontPageCard-price">{price}</span>
-                    <div id="btns-box" className="d-flex w-100 gap-3">
+                    <div id="frontPageBtns-box" className="d-flex w-100 gap-3">
                         <button type="button" ref={popoverList} data-bs-custom-class="custom-popover" id="info-btn" className="btn btn-secondary d-flex align-items-center gap-2" data-container="body">
-                            Info
                             <i className="fas fa-info-circle"></i>
                         </button>
                         {
                             handleIsTrue(id) ? (
-                                <button id="cart-btn" ref={cartBtnRef} onClick={() => handleFalseCart(id)} className="btn btn-warning d-flex align-items-center gap-2">Cart
+                                <button id="cart-btn" ref={cartBtnRef} onClick={() => handleFalseCart(id)} className="btn btn-warning d-flex align-items-center gap-2">
                                     <span className="material-symbols-outlined">
                                         add_shopping_cart
                                     </span>
                                 </button>
                             ) : (
-                                <button id="delete-btn" ref={delBtnRef} onClick={() => handleTrueCart(id)} className="btn btn-danger d-flex align-items-center gap-2">Delete
+                                <button id="delete-btn" ref={delBtnRef} onClick={() => handleTrueCart(id)} className="btn btn-danger d-flex align-items-center gap-2">
                                     <i className="fas fa-trash-alt"></i>
                                 </button>
                             )
@@ -134,6 +132,6 @@ export default function FrontPage({ id, title, price, description, image, frontP
                     </div>
                     : null
             }
-        </div>
+        </Link>
     )
 }

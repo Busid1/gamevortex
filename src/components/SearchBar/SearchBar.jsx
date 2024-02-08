@@ -57,16 +57,16 @@ export default function SearchBar({ onSearch, videogames }) {
                 <input ref={inputList} onKeyUp={handleSearchGame} autoFocus 
                     onChange={handleInput} 
                     value={searchTitle} 
-                    className="form-control me-2 search-bar border-0 px-2" 
+                    className="w-100 search-bar px-2" 
                     placeholder="Minecraft, Valheim..."
-                    type="text" />
+                    type="search" />
             </form>
             <ul
                 ref={gameListBox}
                 className="gameSearched-box p-0"
                 style={{
                     overflowY: gameList.length > 8 ? "scroll" : "hidden",
-                    maxHeight: "300px"
+                    maxHeight: "230px"
                 }}
             >
                 {gameList

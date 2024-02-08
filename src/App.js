@@ -3,7 +3,8 @@ import Games from './components/Games/Games';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import { useState, useEffect, useRef } from 'react';
-import { Route, Routes, useLocation, useNavigate } from 'react-router';
+import { useSelector } from "react-redux";
+import { Route, Routes, useLocation } from 'react-router';
 import axios from "axios";
 import GameDetails from './components/GameDetails/GameDetails';
 import Cart from './components/Cart/Cart';
@@ -83,7 +84,12 @@ function App() {
 
   return (
     <div>
-      <Header cartCount={cartCount} onSearch={onSearch} videogames={videogames} searchGame={searchGame} />
+      {
+        location.pathname !== "/cart" ?
+          <Header cartCount={cartCount} onSearch={onSearch} videogames={videogames} titleLength={titleLength} handleRemoveFromCart={handleRemoveFromCart} searchGame={searchGame} />
+          :
+          (null)
+      }
       {
         location.pathname === "/" ? (<Tags />) : (null)
       }

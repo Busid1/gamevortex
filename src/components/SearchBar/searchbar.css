@@ -1,13 +1,31 @@
 .searchBar-container{
-    flex: 1;
+    flex: .7;
     max-width: 60%;
     justify-content: center;
     align-self: center;
     position: relative;
+    height: 27px;
 }
 
 .searchBar-container > form{
     width: 100%;
+}
+
+.search-bar{
+    border: none;
+    outline: none;
+    background-color: transparent;
+    border-bottom: 1px solid #ffc107;
+    transition: all .2s linear;
+}
+
+.search-bar:focus{
+    border-bottom: 1px solid #ffffff;
+}
+
+.search-bar, .search-bar::placeholder{
+    font-size: .9em;
+    color: #d4d4d4;
 }
 
 .gameSearched-box{

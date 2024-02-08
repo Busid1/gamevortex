@@ -1,7 +1,9 @@
 .tag-container{
-    z-index: 1;
-    top: 50%;
-    position: relative;
+    display: none;
+}
+
+#tags-games-box{
+    margin: 40px 0;
 }
 
 .tagTitle-box{
@@ -30,7 +32,18 @@
 }
 
 .tag-box{
+    width: 100%;
+    z-index: 3;
+    position: absolute;
+    backdrop-filter: blur(15px);
+}
+
+.tag-box > div{
     height: 40px;
+}
+
+#tag-games{
+    gap: 50px 20px;
 }
 
 .currentTag{

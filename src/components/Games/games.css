@@ -1,5 +1,28 @@
-#cards-games-box {
+#home-container{
+    padding-bottom: 60px;
+}
+
+.homeTitle-box{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    color: #ffc107;
     width: 100%;
-    padding: 20px 0;
+    margin-top: 20px;
+}
+
+.homeTitle-box > h2{
+    display: flex;
+    align-items: center;
+    font-size: 1.7em;
+}
+
+.homeTitle{
+    text-transform: capitalize;
+}
+
+#cardGames-box {
+    width: 100%;
+    gap: 50px 20px;
 }
 

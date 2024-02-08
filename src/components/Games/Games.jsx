@@ -1,12 +1,12 @@
 import "./games.css";
-import "../../responsive.css";
+import "./responsive.css";
 import Game from "../Game/Game";
 import FrontPage from "../FrontPage/FrontPage";
 import Buttons from "../Buttons/Buttons";
 
 export default function Games({ videogames, handleAddToCart, handleRemoveFromCart, titleLength }) {
     return (
-        <section className="d-flex flex-column w-100 align-items-center">
+        <section id="home-container" className="d-flex flex-column w-100 align-items-center">
             {
                 videogames.map(game => {
                     if (game.id === 1) {
@@ -26,27 +26,35 @@ export default function Games({ videogames, handleAddToCart, handleRemoveFromCar
                     }
                 })
             }
-            <div id="cards-games-box" className="pb-3 d-flex flex-wrap rounded-0 justify-content-evenly">
-                {
-                    videogames.map(game => {
-                        if (game.id !== 1) {
-                            return (
-                                <Game
-                                    handleAddToCart={handleAddToCart}
-                                    handleRemoveFromCart={handleRemoveFromCart}
-                                    titleLength={titleLength}
-                                    key={game.id}
-                                    id={game.id}
-                                    title={game.title}
-                                    price={game.price}
-                                    description={game.description}
-                                    image={game.image}
-                                    prevGameplay={game.prevGameplay}
-                                />
-                            )
-                        }
-                    })
-                }
+            <div id="cardGames-container">
+                <div className="homeTitle-box">
+                    <h2 className="tagTitle">Home</h2>
+                    <span id="leftRow-icon" className="material-symbols-outlined">
+                        chevron_right
+                    </span>
+                </div>
+                <div id="cardGames-box" className="d-flex flex-wrap justify-content-evenly">
+                    {
+                        videogames.map(game => {
+                            if (game.id !== 1) {
+                                return (
+                                    <Game
+                                        handleAddToCart={handleAddToCart}
+                                        handleRemoveFromCart={handleRemoveFromCart}
+                                        titleLength={titleLength}
+                                        key={game.id}
+                                        id={game.id}
+                                        title={game.title}
+                                        price={game.price}
+                                        description={game.description}
+                                        image={game.image}
+                                        prevGameplay={game.prevGameplay}
+                                    />
+                                )
+                            }
+                        })
+                    }
+                </div>
             </div>
             <Buttons />
         </section>
