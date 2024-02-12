@@ -2,8 +2,8 @@ import "./game.css";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSpring, animated } from 'react-spring';
-import { useDispatch } from "react-redux";
-import { addToCart, removeFromCart } from "../../redux/actions";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, removeFromCart, isDeploy } from "../../redux/actions";
 import { useLocation } from "react-router-dom";
 
 export default function Game({ id, title, price, description, image, prevGameplay, handleAddToCart, handleRemoveFromCart, titleLength }) {
@@ -15,7 +15,7 @@ export default function Game({ id, title, price, description, image, prevGamepla
     const changeFocus = useRef(null);
     const [cartAlert, setCartAlert] = useState(false);
     const [delAlert, setDelAlert] = useState(false);
-
+    
     useEffect(() => {
         if (location.pathname !== "/") {
             localStorage.setItem(id, JSON.stringify({ [id]: true }));

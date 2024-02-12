@@ -38,4 +38,4 @@ export const creditCardErrors = (error) => {
         type: "CREDIT_CARD_ERRORS",
         payload: error
     }
-} 
+}

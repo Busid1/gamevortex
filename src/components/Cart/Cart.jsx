@@ -5,6 +5,7 @@ import { removeFromCart } from "../../redux/actions";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import Payment from "../Payment/Payment";
+import PaymentGateway from "../PaymentGateway/PaymentGateway";
 
 export default function Cart({ handleRemoveFromCart, inputRef, focusInput, titleLength }) {
     const [gamesInCart, setGamesInCart] = useState(useSelector(state => state.gamesInCart));
@@ -143,7 +144,7 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput, title
             setClosePayment(true);
         }
     }
-    
+
     const [addPayment, setAddPayment] = useState(false);
     const handleAddPayment = () => {
         if (addPayment) {
@@ -202,7 +203,8 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput, title
         }
     }
     return (
-        <div className="cart-container text-white px-3 py-4">
+        <div className="cart-container text-white pb-4">
+            <PaymentGateway />
             <div className="cartGamesResume-box">
                 <div className="cartGamesBox d-flex flex-column">
                     {gamesAddsInCart}

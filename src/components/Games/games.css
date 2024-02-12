@@ -7,8 +7,8 @@
     align-items: center;
     justify-content: flex-start;
     color: #ffc107;
-    width: 100%;
     margin-top: 20px;
+    margin-left: 40px;
 }
 
 .homeTitle-box > h2{

@@ -28,7 +28,7 @@ export default function Games({ videogames, handleAddToCart, handleRemoveFromCar
             }
             <div id="cardGames-container">
                 <div className="homeTitle-box">
-                    <h2 className="tagTitle">Home</h2>
+                    <h2 className="homeTitle">Home</h2>
                     <span id="leftRow-icon" className="material-symbols-outlined">
                         chevron_right
                     </span>

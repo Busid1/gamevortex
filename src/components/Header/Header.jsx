@@ -1,7 +1,7 @@
 import "./header.css";
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { removeFromCart } from "../../redux/actions";
+import { removeFromCart, isDeploy } from "../../redux/actions";
 import SearchBar from "../SearchBar/SearchBar";
 import { Link } from "react-router-dom";
 
@@ -29,21 +29,21 @@ export default function Header({ cartCount, onSearch, searchGame, videogames, ti
 
     useEffect(() => {
         const handleClickOutside = (event) => {
-          // Si el elemento pulsado no es el cartHeader o uno de sus descendientes
-          if (cartHeaderRef.current && !cartHeaderRef.current.contains(event.target)) {
-            setIsPrevClose(false);
-            // Aquí puedes realizar las acciones que desees cuando el cartHeader no sea pulsado
-          }
+            // Si el elemento pulsado no es el cartHeader o uno de sus descendientes
+            if (cartHeaderRef.current && !cartHeaderRef.current.contains(event.target)) {
+                setIsPrevClose(false);
+                // Aquí puedes realizar las acciones que desees cuando el cartHeader no sea pulsado
+            }
         };
-    
+
         // Agregamos el event listener al documento para detectar clics fuera del cartHeader
         document.addEventListener('mousedown', handleClickOutside);
-    
+
         // Es importante limpiar el event listener al desmontar el componente
         return () => {
-          document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('mousedown', handleClickOutside);
         };
-      }, []);
+    }, []);
 
     const filterDelGame = (id) => {
         const newGamesInCart = cartGamesPrev.filter(game => game.id !== id)
@@ -64,12 +64,16 @@ export default function Header({ cartCount, onSearch, searchGame, videogames, ti
     }
 
     useEffect(() => {
+        if(cartCount % 2 === 0 && cartCount !== 0){
+            setIsPrevClose(true);
+        }
+
         window.addEventListener('scroll', handleScrollY);
 
         return () => {
             window.removeEventListener('scroll', handleScrollY);
         };
-    }, []);
+    }, [cartCount]);
 
     return (
         <header className={isScrollY ? "headerBackground" : ""}>

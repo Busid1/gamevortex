@@ -1,5 +1,6 @@
 .cart-container{
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
@@ -60,6 +61,7 @@
 .resumeGamesBox {
     min-width: 280px;
     align-self: center;
+    margin-top: 20px;
 }
 
 .creditCardBox {
@@ -118,7 +120,7 @@
 
 
 /* ------------ Responsive ------------- */
-@media only screen and (min-width: 425px) {
+@media screen and (min-width: 425px) {
     .logo-box{
         width: 100px;
     }
@@ -136,6 +138,10 @@
         font-size: .9em;
     }
 
+    .homeTitle-box{
+        margin-left: 0px;
+    }
+
     #card-item_game{
         width: 245px;
     }
@@ -145,7 +151,7 @@
     }
 }
 
-@media only screen and (min-width: 768px) {
+@media screen and (min-width: 768px) {
     .logo-box{
         width: 120px;
     }
@@ -213,7 +219,7 @@
     }
 }
 
-@media only screen and (min-width: 1024px) {
+@media screen and (min-width: 1024px) {
     header{
         height: 60px;
     }
@@ -267,7 +273,7 @@
     }
 }
 
-@media only screen and (min-width: 1440px) {
+@media screen and (min-width: 1440px) {
     header{
         height: 70px;
     }
@@ -315,7 +321,7 @@
     }
 }
 
-@media only screen and (min-width: 2560px) {
+@media screen and (min-width: 2560px) {
     .frontPage-container{
         height: 600px;
     }

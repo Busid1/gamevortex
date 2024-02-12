@@ -3,7 +3,7 @@ const initialState = {
     gamesInCart: [],
     gamesTags : [],
     creditCard: [],
-    creditCardErrors: []
+    creditCardErrors: [],
 }
 
 const rootReducer = (state = initialState, action) => {

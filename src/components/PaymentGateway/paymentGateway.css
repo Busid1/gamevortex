@@ -1,0 +1,145 @@
+.paymentGateway-container{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 80px;
+    width: 100%;
+    padding: 0 10px;
+    background-color: #000;
+    margin-bottom: 20px;
+}
+
+.gameVortexCart-logo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url("https://cdn.glitch.global/2c9253f6-1a6e-48eb-a381-f462c9c635d5/gameVortexLogo-yellow.png?v=1707151175584");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    width: 120px;
+    height: 24px;
+}
+
+.progress-steps{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    opacity: 1;
+    width: 100%;
+    top: 0;
+    transition: .2s;
+    visibility: visible;
+}
+
+.progress-steps .step.active{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    color: #fff;
+}
+
+.progress-steps .step.active .number{
+    box-shadow: 0 0 0 2px #ffc107;
+    color: #fff;
+}
+
+.progress-steps .step .number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    box-shadow: 0 0 0 2px #6d6d6d;
+    border-radius: 100px;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.progress-steps .step.active .text{
+    font-size: .8em;
+}
+
+.progress-steps .step .text{
+    font-size: .8em;
+    white-space: nowrap;
+}
+
+.progress-steps .step{
+    display: flex;
+    align-items: center;
+    color: #6d6d6d;
+}
+
+.progress-steps .step .spacer{
+    display: none;
+    background-color: #6d6d6d;
+    height: 2px;
+    margin-left: 15px;
+    width: 50px;
+}
+
+@media screen and (min-width: 425px) {
+    .progress-steps .step .spacer{
+        display: block;
+    }
+
+    .progress-steps{
+        justify-content: center;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .paymentGateway-container{
+        flex-direction: row;
+        padding: 0 30px;
+    }
+
+    .gameVortexCart-logo{
+        width: 150px;
+        height: 30px;
+        margin-right: auto;
+    }
+
+    .progress-steps{
+        width: auto;
+    }
+
+    .progress-steps .step .spacer{
+        width: 70px;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .paymentGateway-container{
+        flex-direction: row;
+        padding: 0 30px;
+    }
+
+    .gameVortexCart-logo{
+        width: 150px;
+        height: 30px;
+        margin-right: auto;
+    }
+
+    .progress-steps{
+        width: auto;
+    }
+
+    .progress-steps .step .spacer{
+        width: 70px;
+        height: 3px;
+    }
+
+    .progress-steps .step.active .text{
+        font-size: 1em;
+    }
+
+    .progress-steps .step .number {
+        box-shadow: 0 0 0 3px #6d6d6d;
+    }
+
+    .progress-steps .step.active .number{
+        box-shadow: 0 0 0 3px #ffc107;
+    }
+}

@@ -133,7 +133,7 @@ header>nav>div {
     align-items: center;
     justify-content: center;
     gap: 5px;
-    height: 30px;
+    padding: 10px 0;
     background-color: rgb(34, 34, 34, .9);
 }
 

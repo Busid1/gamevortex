@@ -88,15 +88,17 @@ export default function FrontPage({ id, title, price, description, image, frontP
     }, []);
 
     return (
-        <Link to={`/${title}`} className="frontPage-container">
-            <div className="frontPageImage-box d-flex align-items-center justify-content-end">
+        <div className="frontPage-container">
+            <Link to={`/${title}`} className="frontPageImage-box d-flex align-items-center justify-content-end">
                 <img src={frontPageImage} alt={title} />
                 <div className="frontPage-gradient"></div>
-            </div>
+            </Link>
             <div className="card-body-main d-flex flex-column justify-content-center align-items-start">
                 <div className="navbar-brand text-white">
-                    <h3 className="card-title-main text-warning">{title}</h3>
-                    <span ref={changeFocus} className="frontPageCard-price">{price}</span>
+                    <div className="d-flex flex-column">
+                        <Link to={`/${title}`} className="card-title-main text-warning">{title}</Link>
+                        <span ref={changeFocus} className="frontPageCard-price">{price}</span>
+                    </div>
                     <div id="frontPageBtns-box" className="d-flex w-100 gap-3">
                         <button type="button" ref={popoverList} data-bs-custom-class="custom-popover" id="info-btn" className="btn btn-secondary d-flex align-items-center gap-2" data-container="body">
                             <i className="fas fa-info-circle"></i>
@@ -132,6 +134,6 @@ export default function FrontPage({ id, title, price, description, image, frontP
                     </div>
                     : null
             }
-        </Link>
+        </div>
     )
 }
