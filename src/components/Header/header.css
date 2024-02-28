@@ -118,6 +118,10 @@ header>nav>div {
 
 .cartPrev-body>a{
     text-shadow: 0px 1px 1px #141414;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100px;
 }
 
 .cartPrev-body>a:hover {
@@ -150,6 +154,14 @@ header>nav>div {
     padding: 0 5px;
     cursor: pointer;
     user-select: none;
+}
+
+#favoriteHeader-btn{
+    color: #ffc107;
+    font-size: 1.3em;
+    background-color: inherit;
+    border: none;
+    text-shadow: 1px 1px 2px #121212;
 }
 
 /* Ancho del scrollbar */

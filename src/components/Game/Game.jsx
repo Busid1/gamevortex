@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSpring, animated } from 'react-spring';
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, removeFromCart, isDeploy } from "../../redux/actions";
+import { addToCart, removeFromCart, addToFav, removeFromFav } from "../../redux/actions";
 import { useLocation } from "react-router-dom";
 
 export default function Game({ id, title, price, description, image, prevGameplay, handleAddToCart, handleRemoveFromCart, titleLength }) {
@@ -15,14 +15,6 @@ export default function Game({ id, title, price, description, image, prevGamepla
     const changeFocus = useRef(null);
     const [cartAlert, setCartAlert] = useState(false);
     const [delAlert, setDelAlert] = useState(false);
-    
-    useEffect(() => {
-        if (location.pathname !== "/") {
-            localStorage.setItem(id, JSON.stringify({ [id]: true }));
-        }
-
-        window.scrollTo(0, 0);
-    }, []);
 
     const handleTrueCart = (gameId) => {
         const localId = localStorage.getItem(gameId);
@@ -73,7 +65,7 @@ export default function Game({ id, title, price, description, image, prevGamepla
                     setCartAlert(false);
                 }, 1000);
             }
-        }, 800)
+        }, 500)
     };
 
     const handleIsTrue = (gameId) => {
@@ -137,6 +129,37 @@ export default function Game({ id, title, price, description, image, prevGamepla
         scale: cartAnimation ? 0.6 : 1,
     });
 
+    const [isFav, setIsFav] = useState(false);
+    useEffect(() => {
+        const getIsTrue = localStorage.getItem(title);
+        const parseIsTrue = JSON.parse(getIsTrue);
+        if (parseIsTrue && parseIsTrue[title]) {
+            setIsFav(true);
+        } else {
+            setIsFav(false);
+        }
+    }, [title]); // Run effect when title changes
+
+    const handleAddFav = () => {
+        localStorage.setItem(title, JSON.stringify({ [title]: true }));
+        setIsFav(true);
+        dispatch(addToFav({ id, title, price, description, image, prevGameplay, handleAddToCart, handleRemoveFromCart, titleLength }));
+    };
+
+    const handleRemoveFav = () => {
+        localStorage.removeItem(title);
+        setIsFav(false);
+        dispatch(removeFromFav(id));
+    };
+
+    useEffect(() => {
+        if (location.pathname === "/") {
+            localStorage.setItem(id, JSON.stringify({ [id]: true }));
+        }
+
+        window.scrollTo(0, 0);
+    }, []);
+
     return (
         <div id="card-item_game" className="card rounded-3 my-3 bg-black d-flex align-items-center border-0">
             <div to={`/${title}`} className="navbar-brand text-white card-body">
@@ -144,10 +167,22 @@ export default function Game({ id, title, price, description, image, prevGamepla
                     <img className="img-games" src={image} alt={title} />
                     <video ref={videoRef} autoPlay={false} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut} playsInline loop muted preload="none" className="prevGameplay" src={prevGameplay}></video>
                 </Link>
+                {
+                    isFav ?
+                        <button onClick={() => handleRemoveFav(title)} id="favoriteFill-btn">
+                            <i className="fas fa-heart"></i>
+                        </button>
+                        :
+                        <button onClick={() => handleAddFav(title)} id="favorite-btn">
+                            <span className="material-symbols-outlined">
+                                favorite
+                            </span>
+                        </button>
+                }
                 <div className="card-body-bottom">
                     <div className="titlePrice-box">
                         <Link className="card-title" to={`/${title}`}>
-                            {titleLength(title, 15)}
+                            {title}
                         </Link>
                         <span ref={changeFocus} className="card-price border border-dark badge bg-danger rounded-pill">{price}</span>
                     </div>

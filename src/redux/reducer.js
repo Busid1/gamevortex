@@ -1,7 +1,8 @@
 const initialState = {
     searchedGame: "",
     gamesInCart: [],
-    gamesTags : [],
+    favGames: [],
+    gamesTags: [],
     creditCard: [],
     creditCardErrors: [],
 }
@@ -18,6 +19,18 @@ const rootReducer = (state = initialState, action) => {
             return {
                 ...state,
                 gamesInCart: [...state.gamesInCart].filter(game => game.id !== action.payload)
+            }
+
+        case "ADD_FAV":
+            return {
+                ...state,
+                favGames: [...state.favGames, action.payload]
+            }
+
+        case "REMOVE_FAV":
+            return {
+                ...state,
+                favGames: [...state.favGames].filter(game => game.id !== action.payload)
             }
 
         case "SEARCH_GAME":

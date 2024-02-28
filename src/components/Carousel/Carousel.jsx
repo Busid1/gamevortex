@@ -33,21 +33,24 @@ export default function Carousel({ screenshots, title }) {
                 <button className={zoomActive ? "material-symbols-outlined close" : "d-none"} onClick={handleZoomOut}>close</button>
             </div>
 
-            {screenshots.map((screenshot, index) => (
-                //Only the first item can have the class show
-                <div key={index} className={`carousel-box ${index === currentSlide ? 'show' : ''}`}>
-                    <img src={screenshot} alt={title} />
+            <div className="carousel-box">
+                {screenshots.map((screenshot, index) => (
+                    //Only the first item can have the class show
+                    <div key={index} className={`carousel-item ${index === currentSlide ? 'show' : ''}`}>
+                        <img src={screenshot} alt={title} />
+                    </div>
+                ))}
+                <div className="carouselBtn-box">
+                    <button onClick={() => handleSlideChange('left')} className="material-symbols-outlined chevron-left">
+                        keyboard_double_arrow_left
+                    </button>
+                    <button onClick={() => handleSlideChange('right')} className="material-symbols-outlined chevron-right">
+                        keyboard_double_arrow_right
+                    </button>
                 </div>
-            ))}
-
-            <div className="carouselBtn-box">
-                <button onClick={() => handleSlideChange('left')} className="material-symbols-outlined chevron-left">
-                    keyboard_double_arrow_left
-                </button>
-                <button onClick={() => handleSlideChange('right')} className="material-symbols-outlined chevron-right">
-                    keyboard_double_arrow_right
-                </button>
             </div>
+
         </div>
     );
+
 };

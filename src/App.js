@@ -3,12 +3,12 @@ import Games from './components/Games/Games';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import { useState, useEffect, useRef } from 'react';
-import { useSelector } from "react-redux";
 import { Route, Routes, useLocation } from 'react-router';
 import axios from "axios";
 import GameDetails from './components/GameDetails/GameDetails';
 import Cart from './components/Cart/Cart';
 import Tags from './components/Tags/Tags';
+import Favorite from './components/Favorites/Favorites';
 
 function App() {
   const [videogames, setVideogames] = useState([]);
@@ -28,12 +28,15 @@ function App() {
     $('[data-toggle="tooltip"]').tooltip();
   })
 
-  const apiUrl = 'https://bow-rebel-apartment.glitch.me';
+  const HOME_URL = "GameVortex";
+  const API_URL = `https://bow-rebel-apartment.glitch.me/${HOME_URL}`;
 
   useEffect(() => {
     async function gamesData() {
       try {
-        const response = await axios(apiUrl);
+        const response = await axios(API_URL);
+        console.log(response);
+
         setVideogames(response.data);
       } catch (error) {
         console.error(error);
@@ -58,10 +61,8 @@ function App() {
     }
   }
 
-  const URL_BASE = "https://bow-rebel-apartment.glitch.me";
-
   const onSearch = (title) => {
-    axios(`${URL_BASE}/${title}`)
+    axios(`${API_URL}/${title}`)
       .then(response => {
         setSearchGame(response.data[0]);
       })
@@ -73,7 +74,7 @@ function App() {
 
 
   const titleLength = (title, value) => {
-    if (title.length > value) {
+    if (typeof title === 'string' && title.length > value) {
       let ellipsisTitle = title.slice(0, value) + "...";
       return ellipsisTitle;
     }
@@ -85,21 +86,22 @@ function App() {
   return (
     <div>
       {
-        location.pathname !== "/cart" ?
+        location.pathname !== `/${HOME_URL}/cart` ?
           <Header cartCount={cartCount} onSearch={onSearch} videogames={videogames} titleLength={titleLength} handleRemoveFromCart={handleRemoveFromCart} searchGame={searchGame} />
           :
           (null)
       }
       {
-        location.pathname === "/" ? (<Tags />) : (null)
+        location.pathname === HOME_URL ? (<Tags />) : (null)
       }
       <Routes>
-        <Route path='/' element={<Games videogames={videogames} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} titleLength={titleLength} />}></Route>
-        <Route path='/:game' element={<GameDetails handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} videogames={videogames} titleLength={titleLength} />} />
+        <Route path={`/${HOME_URL}`} element={<Games videogames={videogames} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} titleLength={titleLength} />}></Route>
+        <Route path={`/${HOME_URL}/:game`} element={<GameDetails handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} videogames={videogames} titleLength={titleLength} />} />
+        <Route path={`/${HOME_URL}/favorites`} element={<Favorite titleLength={titleLength} />} />
         {
-          location.pathname !== "/" ? (<Route path='/games/:tag' element={<Tags videogames={videogames} titleLength={titleLength} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} />}></Route>) : (null)
+          location.pathname !== `/${HOME_URL}` ? (<Route path={`/${HOME_URL}/games/tag`} element={<Tags videogames={videogames} titleLength={titleLength} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} />}></Route>) : (null)
         }
-        <Route path='/cart' element={<Cart titleLength={titleLength} handleRemoveFromCart={handleRemoveFromCart} inputRef={inputRef} focusInput={focusInput} />} />
+        <Route path={`/${HOME_URL}/cart`} element={<Cart titleLength={titleLength} handleRemoveFromCart={handleRemoveFromCart} inputRef={inputRef} focusInput={focusInput} />} />
       </Routes>
       <Footer />
     </div>

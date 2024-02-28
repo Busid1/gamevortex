@@ -74,6 +74,9 @@ button {
     position: relative;
     color: #ffc107;
     text-shadow: 2px 2px 2px #121212;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 170px;
 }
 
 .card-price {
@@ -111,6 +114,58 @@ button {
     --bs-popover-header-color: var(--bs-warning);
     --bs-popover-body-padding-x: 1rem;
     --bs-popover-body-padding-y: .5rem;
+}
+
+#favorite-btn, #favoriteFill-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #121212;
+    border: none;
+    height: 20px;
+    width: 20px;
+    background-color: inherit;
+    color: #ffc107;
+    position: absolute;
+    right: 0;
+    margin: 10px;
+    padding: 10px;
+    z-index: 2;
+    text-shadow: 1px 1px 2px #121212;
+}
+
+#favorite-btn{
+    animation: favoriteAn .3s ease-in-out;
+}
+
+@keyframes favoriteAn {
+    0%{
+        transform: scale(.9);
+    }
+    50%{
+        transform: scale(1.1);
+    }
+    100%{
+        transform: scale(1);
+    } 
+}
+
+#favoriteFill-btn{
+    color: #d11313;
+    font-size: 1.3em;
+    animation: favoriteFillAn .3s ease-in-out;
+}
+
+@keyframes favoriteFillAn {
+    0%{
+        transform: scale(.9);
+    }
+    50%{
+        transform: scale(1.1);
+    }
+    100%{
+        transform: scale(1);
+    } 
 }
 
 #info-btn,

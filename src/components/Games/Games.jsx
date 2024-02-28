@@ -1,5 +1,4 @@
 import "./games.css";
-import "./responsive.css";
 import Game from "../Game/Game";
 import FrontPage from "../FrontPage/FrontPage";
 import Buttons from "../Buttons/Buttons";

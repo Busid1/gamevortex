@@ -96,9 +96,9 @@ export default function Payment({ handleClosePayment, handleAddPayment, inputRef
         <div className='vh-100 gradient-custom userLogin-container'>
             <div className="container py-5 h-1005">
                 <div className="d-flex justify-content-center align-items-center w-100 h-100">
-                    <div className="col-lg-7 mx-auto">
+                    <div className="col-lg-5 mx-auto">
                         <span onClick={handleClosePayment}
-                            className="material-symbols-outlined d-flex text-white fs-2 border-0 w-100 justify-content-end btn cursor-pointer"
+                            className="material-symbols-outlined d-flex text-danger fs-2 border-0 w-100 justify-content-end btn cursor-pointer"
                             id="close-icon">
                             close
                         </span>
@@ -108,7 +108,7 @@ export default function Payment({ handleClosePayment, handleAddPayment, inputRef
                                 <Tab eventKey="card" title="Credit Card">
                                     {/* credit card form content */}
                                     <div className="d-flex flex-column justify-content-between tab-pane fade show active">
-                                        <form onSubmit={handleSubmit} className='input-container d-flex gap-4 flex-column w-100' action="#">
+                                        <form onSubmit={handleSubmit} className='input-container d-flex gap-4 flex-column' action="#">
                                             <div>
                                                 <label className='d-flex gap-1' htmlFor='name'>Cardholder
                                                     <span className="material-symbols-outlined">

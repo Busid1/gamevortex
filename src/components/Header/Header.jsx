@@ -4,8 +4,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { removeFromCart, isDeploy } from "../../redux/actions";
 import SearchBar from "../SearchBar/SearchBar";
 import { Link } from "react-router-dom";
+import Favorite from "../Favorites/Favorites";
 
-export default function Header({ cartCount, onSearch, searchGame, videogames, titleLength, handleRemoveFromCart }) {
+export default function Header({ cartCount, onSearch, searchGame, videogames, handleRemoveFromCart }) {
     const [cartGamesPrev, setCartGamesPrev] = useState([]);
     const cartHeaderRef = useRef();
     const [isScrollY, setIsScrollY] = useState(false);
@@ -64,7 +65,7 @@ export default function Header({ cartCount, onSearch, searchGame, videogames, ti
     }
 
     useEffect(() => {
-        if(cartCount % 2 === 0 && cartCount !== 0){
+        if (cartCount >= 1) {
             setIsPrevClose(true);
         }
 
@@ -79,13 +80,10 @@ export default function Header({ cartCount, onSearch, searchGame, videogames, ti
         <header className={isScrollY ? "headerBackground" : ""}>
             <nav>
                 <div>
-                    <Link to={"/"} className="navbar-brand logo-box text-black">
+                    <Link to={"/GameVortex"} className="navbar-brand logo-box text-black">
                         <img src="https://cdn.glitch.global/2c9253f6-1a6e-48eb-a381-f462c9c635d5/gameVortexLogo-yellow.png?v=1707151175584" alt={"gameVortex-logo"} />
                     </Link>
                     <SearchBar onSearch={onSearch} searchGame={searchGame} videogames={videogames} />
-                    {/* <button className="text-white btn btn-warning material-symbols-outlined">
-                        search
-                    </button> */}
                     <div ref={cartHeaderRef} className="cartHeader-container text-warning">
                         <Link to={'cart'} className="d-flex cartIcon-box text-warning">
                             <div className="material-symbols-outlined position-relative" id="cart-icon">
@@ -110,7 +108,9 @@ export default function Header({ cartCount, onSearch, searchGame, videogames, ti
                                                     <div>
                                                         <img className="shadow" src={game.image} alt={game.title} />
                                                         <div className="cartPrev-body d-flex flex-column w-75">
-                                                            <Link onClick={handleClosePrevGames} className="text-warning" to={`/${game.title}`}>{titleLength(game.title, 8)}</Link>
+                                                            <Link onClick={handleClosePrevGames} className="text-warning" to={`/${game.title}`}>
+                                                                {game.title}
+                                                            </Link>
                                                             <div className="cartPrev-bottom d-flex align-items-center justify-content-between">
                                                                 <span className="text-white">{game.price}</span>
                                                                 <button
@@ -143,6 +143,11 @@ export default function Header({ cartCount, onSearch, searchGame, videogames, ti
                             {isPrevClose ? 'arrow_drop_down' : 'arrow_drop_up'}
                         </span>
                     </div>
+                    <Link to="/favorites">
+                        <button id="favoriteHeader-btn">
+                            <i className="fas fa-heart"></i>
+                        </button>
+                    </Link>
                 </div>
             </nav>
         </header>

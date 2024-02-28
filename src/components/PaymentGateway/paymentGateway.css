@@ -127,11 +127,15 @@
     }
 
     .progress-steps .step .spacer{
-        width: 70px;
+        width: 80px;
         height: 3px;
     }
 
     .progress-steps .step.active .text{
+        font-size: 1em;
+    }
+
+    .progress-steps .step .text{
         font-size: 1em;
     }
 
@@ -141,5 +145,41 @@
 
     .progress-steps .step.active .number{
         box-shadow: 0 0 0 3px #ffc107;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .paymentGateway-container{
+        flex-direction: row;
+        padding: 0 50px;
+    }
+
+    .progress-steps .step .spacer{
+        width: 180px;
+        height: 4px;
+    }
+
+    .progress-steps .step.active .text{
+        font-size: 1.2em;
+    }
+
+    .progress-steps .step .text{
+        font-size: 1.2em;
+    }
+
+    .progress-steps .step .number{
+        font-size: 1em;
+    }
+
+    .progress-steps .step.active .number{
+        font-size: 1em;
+    }
+
+    .progress-steps .step .number {
+        box-shadow: 0 0 0 4px #6d6d6d;
+    }
+
+    .progress-steps .step.active .number{
+        box-shadow: 0 0 0 4px #ffc107;
     }
 }

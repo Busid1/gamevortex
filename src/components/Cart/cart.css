@@ -21,6 +21,17 @@
     min-height: 70px;
 }
 
+.resumeGameTitle-box{
+    width: 60px;
+}
+
+.resumeGameTitle-box>span{
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
 .gameTitle {
     font-size: .9em;
     text-shadow: 2px 2px 2px #000;
@@ -206,8 +217,24 @@
         flex: 0;
     }
 
+    .gameDetails-box{
+        margin-top: 200px;
+    }
+
     .gameplay-box{
         height: 350px;
+    }
+
+    .gameOptions-container{
+        flex-wrap: nowrap;
+    }
+
+    .gameFrontPage{
+        display: flex;
+    }
+
+    .gameBackgroundContainer {
+        height: 300px;
     }
 
     .gameDetails-box{
@@ -215,7 +242,7 @@
     }
 
     .gameDetails-box, #otherGames-container, #cardGames-container, #tags-games-box{
-        width: 70%;
+        width: 80%;
     }
 }
 
@@ -257,11 +284,7 @@
     }
 
     .gameBackgroundContainer{
-        height: 560px;
-    }
-
-    .gameFrontPage{
-        max-width: 70%;
+        height: 350px;
     }
 
     .gameplay-box{

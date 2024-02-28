@@ -12,6 +12,20 @@ export const removeFromCart = (id) => {
     }
 }
 
+export const addToFav = (id) => {
+    return {
+        type: "ADD_FAV",
+        payload: id
+    }
+}
+
+export const removeFromFav = (id) => {
+    return {
+        type: "REMOVE_FAV",
+        payload: id
+    }
+}
+
 export const searchGame = (title) => {
     return {
         type: "SEARCH_GAME",

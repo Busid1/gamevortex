@@ -14,7 +14,7 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput, title
     const creditCardData = useSelector(state => state.creditCard.slice(-1)[0]);
     const creditCardErrors = useSelector(state => state.creditCardErrors.slice(-1)[0]);
     const [lastCreditCard, setLastCreditCard] = useState("");
-
+    console.log(gamesInCart);
     const creditCardComponent = creditCardData ? (
         <div className="creditCardBox">
             <h3>Card holder: {lastCreditCard.cardHolder}</h3>
@@ -77,7 +77,7 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput, title
             <img className="rounded-start" src={game.image} alt={game.title} />
             <div className="d-flex flex-column justify-content-center">
                 <Link to={`/${game.title}`} className="gameTitle text-warning">
-                    {titleLength(game.title, 16)}
+                    {game.title}
                 </Link>
                 <span className="gamePrice">{game.price}</span>
                 <div id={game.id} className="d-flex gap-1 align-items-center">
@@ -218,8 +218,8 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput, title
                             {
                                 filterGames.map(game => {
                                     return (
-                                        <div key={game.id}>
-                                            <span>{titleLength(game.title, 8)}</span>
+                                        <div className="resumeGameTitle-box" key={game.id}>
+                                            <span>{game.title}</span>
                                             <hr className="my-2" />
                                         </div>
                                     )
