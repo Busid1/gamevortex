@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import Payment from "../Payment/Payment";
 import PaymentGateway from "../PaymentGateway/PaymentGateway";
+import { HOME_URL } from "../../App";
 
 export default function Cart({ handleRemoveFromCart, inputRef, focusInput, titleLength }) {
     const [gamesInCart, setGamesInCart] = useState(useSelector(state => state.gamesInCart));
@@ -76,7 +77,7 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput, title
         <div key={game.id} className="cart-box bg-secondary shadow rounded d-flex gap-3">
             <img className="rounded-start" src={game.image} alt={game.title} />
             <div className="d-flex flex-column justify-content-center">
-                <Link to={`/${game.title}`} className="gameTitle text-warning">
+                <Link to={`/${HOME_URL}/${game.title}`} className="gameTitle text-warning">
                     {game.title}
                 </Link>
                 <span className="gamePrice">{game.price}</span>

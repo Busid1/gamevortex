@@ -97,7 +97,9 @@ export default function FrontPage({ id, title, price, description, image, frontP
             <div className="card-body-main d-flex flex-column justify-content-center align-items-start">
                 <div className="navbar-brand text-white">
                     <div className="d-flex flex-column">
-                        <Link to={`/${HOME_URL}/${title}`} className="card-title-main text-warning">{title}</Link>
+                        <Link to={`/${HOME_URL}/${title}`} className="card-title-main text-warning">
+                            {title}
+                        </Link>
                         <span ref={changeFocus} className="frontPageCard-price">{price}</span>
                     </div>
                     <div id="frontPageBtns-box" className="d-flex w-100 gap-3">
