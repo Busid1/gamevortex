@@ -1,10 +1,10 @@
 import "./header.css";
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { removeFromCart, isDeploy } from "../../redux/actions";
+import { removeFromCart } from "../../redux/actions";
 import SearchBar from "../SearchBar/SearchBar";
 import { Link } from "react-router-dom";
-import Favorite from "../Favorites/Favorites";
+import { HOME_URL } from "../../App";
 
 export default function Header({ cartCount, onSearch, searchGame, videogames, handleRemoveFromCart }) {
     const [cartGamesPrev, setCartGamesPrev] = useState([]);
@@ -80,12 +80,12 @@ export default function Header({ cartCount, onSearch, searchGame, videogames, ha
         <header className={isScrollY ? "headerBackground" : ""}>
             <nav>
                 <div>
-                    <Link to={"/GameVortex"} className="navbar-brand logo-box text-black">
+                    <Link to={`/${HOME_URL}`} className="navbar-brand logo-box text-black">
                         <img src="https://cdn.glitch.global/2c9253f6-1a6e-48eb-a381-f462c9c635d5/gameVortexLogo-yellow.png?v=1707151175584" alt={"gameVortex-logo"} />
                     </Link>
                     <SearchBar onSearch={onSearch} searchGame={searchGame} videogames={videogames} />
                     <div ref={cartHeaderRef} className="cartHeader-container text-warning">
-                        <Link to={'cart'} className="d-flex cartIcon-box text-warning">
+                        <Link to={`/${HOME_URL}/cart`} className="d-flex cartIcon-box text-warning">
                             <div className="material-symbols-outlined position-relative" id="cart-icon">
                                 shopping_cart_checkout
                                 <span id="push-cart"
@@ -108,7 +108,7 @@ export default function Header({ cartCount, onSearch, searchGame, videogames, ha
                                                     <div>
                                                         <img className="shadow" src={game.image} alt={game.title} />
                                                         <div className="cartPrev-body d-flex flex-column w-75">
-                                                            <Link onClick={handleClosePrevGames} className="text-warning" to={`/${game.title}`}>
+                                                            <Link to={`/${HOME_URL}/${game.title}`} onClick={handleClosePrevGames} className="text-warning">
                                                                 {game.title}
                                                             </Link>
                                                             <div className="cartPrev-bottom d-flex align-items-center justify-content-between">
@@ -143,7 +143,7 @@ export default function Header({ cartCount, onSearch, searchGame, videogames, ha
                             {isPrevClose ? 'arrow_drop_down' : 'arrow_drop_up'}
                         </span>
                     </div>
-                    <Link to="/favorites">
+                    <Link to={`/${HOME_URL}/favorites`}>
                         <button id="favoriteHeader-btn">
                             <i className="fas fa-heart"></i>
                         </button>

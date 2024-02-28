@@ -1,6 +1,7 @@
 import "./footer.css";
 import React, { useState } from "react";
 import validation from "./validation";
+import { HOME_URL } from "../../App";
 
 export default function Footer() {
     const [isFocused, setIsFocused] = useState({
@@ -46,9 +47,9 @@ export default function Footer() {
             <div className="d-flex flex-column align-items-center py-3">
                 <div className="d-flex align-items-center justify-content-evenly">
                     <span className="copyright">© 2024 Copyright:</span>
-                    <a className="footerLogo-box" href="#">
+                    <Link className="footerLogo-box" to={`/${HOME_URL}`}>
                         <img className="gameVortex-logo" src="https://cdn.glitch.global/2c9253f6-1a6e-48eb-a381-f462c9c635d5/gameVortexLogo-black.png?v=1707151189847" alt="gameVortex-logo" />
-                    </a>
+                    </Link>
                 </div>
                 <hr className="w-50 m-2" />
             </div>

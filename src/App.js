@@ -9,6 +9,8 @@ import GameDetails from './components/GameDetails/GameDetails';
 import Cart from './components/Cart/Cart';
 import Tags from './components/Tags/Tags';
 import Favorite from './components/Favorites/Favorites';
+export const HOME_URL = "GameVortex";
+export const API_URL = `https://bow-rebel-apartment.glitch.me/${HOME_URL}`;
 
 function App() {
   const [videogames, setVideogames] = useState([]);
@@ -27,9 +29,6 @@ function App() {
   $(function () {
     $('[data-toggle="tooltip"]').tooltip();
   })
-
-  const HOME_URL = "GameVortex";
-  const API_URL = `https://bow-rebel-apartment.glitch.me/${HOME_URL}`;
 
   useEffect(() => {
     async function gamesData() {
