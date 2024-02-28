@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { addToCart, removeFromCart } from "../../redux/actions";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { HOME_URL } from "../../App";
 
 export default function FrontPage({ id, title, price, description, image, frontPageImage, handleAddToCart, handleRemoveFromCart }) {
     const location = useLocation();
@@ -16,7 +17,7 @@ export default function FrontPage({ id, title, price, description, image, frontP
     const [delAlert, setDelAlert] = useState(false);
 
     useEffect(() => {
-        if (location.pathname !== "/") {
+        if (location.pathname !== `/${HOME_URL}`) {
             localStorage.setItem(id, JSON.stringify({ [id]: true }));
         }
     }, []);
@@ -89,14 +90,14 @@ export default function FrontPage({ id, title, price, description, image, frontP
 
     return (
         <div className="frontPage-container">
-            <Link to={`/${title}`} className="frontPageImage-box d-flex align-items-center justify-content-end">
+            <Link to={`/${HOME_URL}/${title}`} className="frontPageImage-box d-flex align-items-center justify-content-end">
                 <img src={frontPageImage} alt={title} />
                 <div className="frontPage-gradient"></div>
             </Link>
             <div className="card-body-main d-flex flex-column justify-content-center align-items-start">
                 <div className="navbar-brand text-white">
                     <div className="d-flex flex-column">
-                        <Link to={`/${title}`} className="card-title-main text-warning">{title}</Link>
+                        <Link to={`/${HOME_URL}/${title}`} className="card-title-main text-warning">{title}</Link>
                         <span ref={changeFocus} className="frontPageCard-price">{price}</span>
                     </div>
                     <div id="frontPageBtns-box" className="d-flex w-100 gap-3">

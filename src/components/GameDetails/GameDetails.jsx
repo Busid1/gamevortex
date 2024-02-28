@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { addToCart, removeFromCart } from "../../redux/actions";
 import Carousel from "../Carousel/Carousel";
 import Buttons from "../Buttons/Buttons";
-import { HOME_URL, API_URL } from "../../App";
+import { API_URL } from "../../App";
 
 export default function GameDetails({ videogames, handleAddToCart, handleRemoveFromCart, titleLength }) {
     const [specificGame, setSpecificGame] = useState([]);
@@ -30,7 +30,7 @@ export default function GameDetails({ videogames, handleAddToCart, handleRemoveF
 
         async function gameDetails() {
             try {
-                const response = await axios.get(`${API_URL}/${HOME_URL}/${game}`)
+                const response = await axios.get(`${API_URL}/${game}`)
                 setSpecificGame(response.data[0]);
                 filterOtherGames();
             }
@@ -41,6 +41,7 @@ export default function GameDetails({ videogames, handleAddToCart, handleRemoveF
         }
         gameDetails()
     }, [game, specificGame.id, videogames]);
+    console.log(API_URL);
 
     const dispatch = useDispatch();
 
