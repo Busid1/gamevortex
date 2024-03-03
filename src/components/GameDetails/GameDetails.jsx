@@ -8,6 +8,7 @@ import { addToCart, removeFromCart } from "../../redux/actions";
 import Carousel from "../Carousel/Carousel";
 import Buttons from "../Buttons/Buttons";
 import { API_URL } from "../../App";
+import Comments from "../Comments/Comments";
 
 export default function GameDetails({ videogames, handleAddToCart, handleRemoveFromCart, titleLength }) {
     const [specificGame, setSpecificGame] = useState([]);
@@ -121,47 +122,23 @@ export default function GameDetails({ videogames, handleAddToCart, handleRemoveF
         handlePlatformValue();
     }, [title]);
 
-    const [comments, setComments] = useState([]);
-    const [newComment, setNewComment] = useState('');
-    const [editingCommentId, setEditingCommentId] = useState(null);
-    const [editedComment, setEditedComment] = useState('');
-
-    const handleCommentChange = (e) => {
-        setNewComment(e.target.value);
-    };
-
-    const handleEditCommentChange = (e) => {
-        setEditedComment(e.target.value);
-    };
-
-    const handlePostComment = () => {
-        if (newComment.trim() !== '') {
-            setComments([...comments, newComment]);
-            setNewComment('');
+    const [cartBtnBottom, setCartBtnBottom] = useState(false);
+    const handleCartBtnBottom = () => {
+        if (window.scrollY > 400) {
+            setCartBtnBottom(true);
         }
-    };
-
-    const handleEdit = (id, comment) => {
-        setEditingCommentId(id);
-        setEditedComment(comment);
-    };
-
-    const handleSaveEdit = () => {
-        if (editedComment.trim() !== '') {
-            const updatedComments = comments.map((comment, index) =>
-                // If the index matches editCommentId then replace the old comment with the new comment 
-                index === editingCommentId ? editedComment : comment
-            );
-            setComments(updatedComments);
-            setEditingCommentId(null);
-            setEditedComment('');
+        else {
+            setCartBtnBottom(false);
         }
-    };
+    }
 
-    const handleDelete = (id) => {
-        const updatedComments = comments.filter((comment, index) => index !== id);
-        setComments(updatedComments);
-    };
+    useEffect(() => {
+        window.addEventListener('scroll', handleCartBtnBottom);
+
+        return () => {
+            window.removeEventListener('scroll', handleCartBtnBottom);
+        };
+    }, []);
 
     return (
         <div className="gameDetails-container">
@@ -200,6 +177,20 @@ export default function GameDetails({ videogames, handleAddToCart, handleRemoveF
                                 </div>
                             </div>
                         </div>
+                        <div className="d-flex align-items-center w-100">
+                            <button
+                                className="btn btn-danger"
+                                onClick={() => handleRemoveFav(title)}>
+                                <i className="fas fa-heart"></i>
+                            </button>
+                            <button ref={cartBtnRef} onClick={() => handleFalseCart(id)}
+                                className="w-100 btn btn-warning d-flex justify-content-center align-items-center gap-2">
+                                Add to cart
+                                <span className="material-symbols-outlined">
+                                    add_shopping_cart
+                                </span>
+                            </button>
+                        </div>
                         <div className="d-flex gap-2">
                             <span>Tags:</span>
                             <div className="d-flex flex-wrap gap-2">
@@ -230,49 +221,10 @@ export default function GameDetails({ videogames, handleAddToCart, handleRemoveF
                         ) : (null)
                     }
                 </div>
-                <div className="comment-container w-100">
-                    <h3 className="text-warning">Comments</h3>
-                    <div className="comment-box">
-                        <div className="d-flex flex-column align-items-center gap-3">
-                            <textarea
-                                value={newComment}
-                                onChange={handleCommentChange}
-                                placeholder="Write your comment here..."
-                            ></textarea>
-                            <button className="btn btn-primary" onClick={handlePostComment}>Post Comment</button>
-                        </div>
-                        <ul className="d-flex flex-wrap m-0 p-0">
-                            {comments.map((comment, index) => (
-                                <li className="d-flex gap-3" key={index}>
-                                    {editingCommentId === index ? (
-                                        <div>
-                                            <textarea
-                                                value={editedComment}
-                                                onChange={handleEditCommentChange}
-                                            ></textarea>
-                                            <button onClick={handleSaveEdit}>Save</button>
-                                        </div>
-                                    ) : (
-                                        <div className="d-flex posted-comment">
-                                            <p className="m-0">{comment}</p>
-                                            <button id="editComment-btn" onClick={() => handleEdit(index, comment)}>
-                                                <span className="material-symbols-outlined text-warning">
-                                                    edit
-                                                </span>
-                                            </button>
-                                            <button id="deleteComment-btn" className="d-flex align-items-center gap-2" onClick={() => handleDelete(index)}>
-                                                <span className="fas fa-trash-alt text-danger"></span>
-                                            </button>
-                                        </div>
-                                    )}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
+                <Comments />
             </div>
             {
-                isStock ?
+                isStock && cartBtnBottom ?
                     <div id="detailBtns-box" className="d-flex align-items-center gap-3">
                         {
                             handleIsTrue(id) ? (
@@ -288,7 +240,8 @@ export default function GameDetails({ videogames, handleAddToCart, handleRemoveF
                             )
                         }
                     </div>
-                    : null
+                    :
+                    null
             }
             <div id="otherGames-container" className="d-flex flex-column">
                 <h3 className="text-left text-warning mt-3">Related games</h3>
@@ -314,6 +267,6 @@ export default function GameDetails({ videogames, handleAddToCart, handleRemoveF
                 </div>
             </div>
             <Buttons />
-        </div>
+        </div >
     )
 }

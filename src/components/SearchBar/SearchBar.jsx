@@ -1,8 +1,9 @@
 import "./searchbar.css";
 import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
+import { HOME_URL } from "../../App";
 
-export default function SearchBar({ videogames }) {
+export default function SearchBar({ videogames, searchBarDeploy, handleSearchBarDeploy }) {
     const gameListBox = useRef();
     const inputList = useRef();
     const [gameList, setGameList] = useState(false);
@@ -21,7 +22,7 @@ export default function SearchBar({ videogames }) {
     }
 
     const handleOnChange = (e) => {
-        if(e.target.value === ""){
+        if (e.target.value === "") {
             setGameList(false);
         }
     }
@@ -31,17 +32,18 @@ export default function SearchBar({ videogames }) {
     }
 
     return (
-        <div className="searchBar-container d-flex">
+        <div className={searchBarDeploy ? "searchBar-container" : "searchBar-container searchBarDeploy-container"}>
             <form className="d-flex">
-                <input ref={inputList} onKeyUp={handleSearchGame} 
+                <input ref={inputList} onKeyUp={handleSearchGame}
                     onChange={handleOnChange}
-                    className="w-100 search-bar px-2"
+                    className="w-100 search-bar"
                     placeholder="Minecraft, Valheim..."
                     type="search" />
             </form>
+
             <ul
                 ref={gameListBox}
-                className="gameSearched-box p-0"
+                className={"gameSearched-box"}
                 style={{
                     overflowY: gameList.length > 8 ? "scroll" : "hidden",
                     maxHeight: "230px"
@@ -55,17 +57,15 @@ export default function SearchBar({ videogames }) {
                                 className="gameSearched-item my-1 px-2 py-1"
                                 key={id}
                             >
-                                <Link className="gameSearched-link lh-lg" to={`/${title}`}>
+                                <Link className="gameSearched-link lh-lg" to={`/${HOME_URL}/${title}`}>
                                     <img src={image} alt={title} />
-                                    <span>{ title }</span>
+                                    <span>{title}</span>
                                 </Link>
                             </li>
                         );
                     })
                     : null}
             </ul>
-
-
         </div>
     )
 }

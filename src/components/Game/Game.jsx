@@ -139,7 +139,7 @@ export default function Game({ id, title, price, description, image, prevGamepla
         } else {
             setIsFav(false);
         }
-    }, [title]); // Run effect when title changes
+    }, [title]);
 
     const handleAddFav = () => {
         localStorage.setItem(title, JSON.stringify({ [title]: true }));

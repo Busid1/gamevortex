@@ -1,9 +1,8 @@
-import { useEffect, useState, } from "react";
 import { useSelector } from "react-redux";
 import Game from "../Game/Game";
-import "./favorites.css"
+import "./wishlist.css"
 
-export default function Favorites() {
+export default function Wishlist() {
     const reduxfavorites = useSelector(state => state.favGames);
     const favorites = reduxfavorites.filter((elem, index, arr) => {
         // Usa `findIndex` para encontrar el índice del primer elemento con el mismo ID
@@ -12,8 +11,8 @@ export default function Favorites() {
         return firstIndex === index;
     });
     return (
-        <section className="favorites-container">
-            <div className="favorites-box">
+        <section className="wishlist-container">
+            <div className="wishlist-box">
                 {
                     favorites.map(game => {
                         return (

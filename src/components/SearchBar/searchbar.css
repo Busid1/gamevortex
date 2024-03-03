@@ -1,10 +1,17 @@
 .searchBar-container{
-    flex: .7;
-    max-width: 100%;
+    display: none;
+    flex: 0;
+    width: 0;
     justify-content: center;
     align-self: center;
     position: relative;
-    height: 27px;
+    height: 25px;
+}
+
+.searchBar-container.searchBarDeploy-container{
+    display: flex;
+    flex: 1;
+    transition: all .3s linear;
 }
 
 .searchBar-container > form{
@@ -33,6 +40,7 @@
     top: 100%;
     left: 0%;
     margin-top: 5px;
+    padding: 0;
     z-index: 5;
     border-radius: 5px;
     width: 100%;
@@ -68,7 +76,7 @@
 }
 
 .gameSearched-link>img{
-    max-width: 12%;
+    max-width: 15%;
     object-fit: contain;
     border-radius: 5px;
 }

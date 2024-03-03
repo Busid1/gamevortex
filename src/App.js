@@ -8,7 +8,7 @@ import axios from "axios";
 import GameDetails from './components/GameDetails/GameDetails';
 import Cart from './components/Cart/Cart';
 import Tags from './components/Tags/Tags';
-import Favorite from './components/Favorites/Favorites';
+import Wishlist from './components/Wishlist/Wishlist';
 export const HOME_URL = "GameVortex";
 export const API_URL = `https://bow-rebel-apartment.glitch.me/${HOME_URL}`;
 
@@ -96,7 +96,7 @@ function App() {
       <Routes>
         <Route path={`/${HOME_URL}`} element={<Games videogames={videogames} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} titleLength={titleLength} />}></Route>
         <Route path={`/${HOME_URL}/:game`} element={<GameDetails handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} videogames={videogames} titleLength={titleLength} />} />
-        <Route path={`/${HOME_URL}/favorites`} element={<Favorite titleLength={titleLength} />} />
+        <Route path={`/${HOME_URL}/wishlist`} element={<Wishlist titleLength={titleLength} />} />
         {
           location.pathname !== `/${HOME_URL}` ? (<Route path={`/${HOME_URL}/games/tag`} element={<Tags videogames={videogames} titleLength={titleLength} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} />}></Route>) : (null)
         }
