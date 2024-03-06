@@ -14,7 +14,7 @@
     bottom: 0;
     width: 100%;
     background-color: rgb(0, 0, 0, .8);
-    z-index: 6;
+    z-index: 100;
     overflow: hidden;
 }
 
@@ -59,7 +59,7 @@
     box-shadow: 0 0 4px 2px #121212;
     user-select: none;
     border-radius: 10px;
-    object-fit: cover;
+    object-fit: contain;
     height: 100%;
     width: 100%;
 }

@@ -14,7 +14,7 @@
     }
 
     .carousel-container.zoomActive>.carousel-box{
-        width: 90%;
+        width: 80%;
     }
     
     .carousel-container.zoomActive>.carousel-box>.carousel-item>img {
@@ -23,12 +23,20 @@
 }
 
 @media (min-width: 1024px) {
+    .carousel-container.zoomActive>.carousel-box{
+        width: 85%;
+    }
+
     .carouselBtn-box>button {
         font-size: 70px;
     }
 }
 
 @media (min-width: 1440px) {
+    .carousel-container.zoomActive>.carousel-box{
+        width: 65%;
+    }
+
     .carouselBtn-box>button {
         font-size: 90px;
     }

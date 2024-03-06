@@ -97,6 +97,45 @@
     color: #ccc;
 }
 
+#favoriteFillGD-btn{
+    animation: favoriteFillAn .3s ease-in-out;
+}
+
+#favoriteGD-btn{
+    animation: favoriteAn .3s ease-in-out;
+}
+
+#topCart-btn:hover span{
+    animation: shakeCartAn .5s ease-in-out alternate;
+}
+
+#topCart-btn:focus span{
+    animation: topCartAn .6s ease-in-out;
+}
+
+@keyframes topCartAn {
+    0% {
+        transform: translateX(0px) rotate(-25deg);
+    }
+
+    50%{
+        transform: translateX(200px);
+    }
+
+    100% {
+        transform: rotate(0deg) translateX(300px);
+    }
+}
+
+#topDelete-btn>span {
+    transform: scale(1);
+    transition: transform .5s linear;
+}
+
+#topDelete-btn:focus>span {
+    transform: scale(1.2);
+}
+
 .description-box>p {
     letter-spacing: 1px;
 }

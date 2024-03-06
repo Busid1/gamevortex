@@ -7,7 +7,7 @@ import { addToCart, removeFromCart, addToFav, removeFromFav } from "../../redux/
 import { useLocation } from "react-router-dom";
 import { HOME_URL } from "../../App";
 
-export default function Game({ id, title, price, description, image, prevGameplay, handleAddToCart, handleRemoveFromCart, titleLength }) {
+export default function Game({ id, title, price, description, image, prevGameplay, handleIsTrue, handleAddToCart, handleRemoveFromCart }) {
     const location = useLocation();
     const popoverList = useRef();
     const dispatch = useDispatch();
@@ -68,12 +68,6 @@ export default function Game({ id, title, price, description, image, prevGamepla
             }
         }, 500)
     };
-
-    const handleIsTrue = (gameId) => {
-        const getIsTrue = localStorage.getItem(gameId);
-        const parseIstrue = JSON.parse(getIsTrue);
-        return parseIstrue && parseIstrue[gameId];
-    }
 
     useEffect(() => {
         const popover = new bootstrap.Popover(popoverList.current, {
@@ -144,7 +138,7 @@ export default function Game({ id, title, price, description, image, prevGamepla
     const handleAddFav = () => {
         localStorage.setItem(title, JSON.stringify({ [title]: true }));
         setIsFav(true);
-        dispatch(addToFav({ id, title, price, description, image, prevGameplay, handleAddToCart, handleRemoveFromCart, titleLength }));
+        dispatch(addToFav({ id, title, price, description, image, prevGameplay, handleAddToCart, handleRemoveFromCart }));
     };
 
     const handleRemoveFav = () => {

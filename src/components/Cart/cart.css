@@ -307,6 +307,12 @@
         height: 40px;
     }
 
+    .gameSearched-link>img {
+        max-width: 10%;
+        object-fit: contain;
+        border-radius: 5px;
+    }
+
     .cartGamesPrev-box {
         width: 360px;
         max-height: 400px;

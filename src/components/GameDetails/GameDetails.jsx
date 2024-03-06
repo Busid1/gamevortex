@@ -4,18 +4,18 @@ import axios from "axios";
 import "./gamedetails.css";
 import Game from "../Game/Game";
 import { useDispatch } from "react-redux";
-import { addToCart, removeFromCart } from "../../redux/actions";
+import { addToCart, removeFromCart, addToFav, removeFromFav } from "../../redux/actions";
 import Carousel from "../Carousel/Carousel";
 import Buttons from "../Buttons/Buttons";
 import { API_URL } from "../../App";
 import Comments from "../Comments/Comments";
 
-export default function GameDetails({ videogames, handleAddToCart, handleRemoveFromCart, titleLength }) {
+export default function GameDetails({ videogames, handleIsTrue, handleAddToCart, handleRemoveFromCart }) {
     const [specificGame, setSpecificGame] = useState([]);
     const [otherVideogames, setOtherVideogames] = useState([]);
     const [isSet, setIsSet] = useState(false);
     const { game } = useParams();
-    const { id, title, description, price, image, background, screenshots, gameplay, tags, stock } = specificGame;
+    const { id, title, description, price, image, background, screenshots, gameplay, prevGameplay, tags, stock } = specificGame;
     useEffect(() => {
         const filterOtherGames = () => {
             if (videogames) {
@@ -42,7 +42,6 @@ export default function GameDetails({ videogames, handleAddToCart, handleRemoveF
         }
         gameDetails()
     }, [game, specificGame.id, videogames]);
-    console.log(API_URL);
 
     const dispatch = useDispatch();
 
@@ -96,12 +95,6 @@ export default function GameDetails({ videogames, handleAddToCart, handleRemoveF
         }, 500)
     };
 
-    const handleIsTrue = (gameId) => {
-        const getIsTrue = localStorage.getItem(gameId);
-        const parseIstrue = JSON.parse(getIsTrue)
-        return parseIstrue && parseIstrue[gameId];
-    }
-
     const [isStock, setIsStock] = useState(false);
     const [logoStock, setLogoStock] = useState("");
     const platformRef = useRef();
@@ -140,6 +133,29 @@ export default function GameDetails({ videogames, handleAddToCart, handleRemoveF
         };
     }, []);
 
+    const [isFav, setIsFav] = useState(false);
+    useEffect(() => {
+        const getIsTrue = localStorage.getItem(title);
+        const parseIsTrue = JSON.parse(getIsTrue);
+        if (parseIsTrue && parseIsTrue[title]) {
+            setIsFav(true);
+        } else {
+            setIsFav(false);
+        }
+    }, [title]);
+
+    const handleAddFav = () => {
+        localStorage.setItem(title, JSON.stringify({ [title]: true }));
+        setIsFav(true);
+        dispatch(addToFav({ id, title, price, description, image, prevGameplay, handleAddToCart, handleRemoveFromCart }));
+    };
+
+    const handleRemoveFav = () => {
+        localStorage.removeItem(title);
+        setIsFav(false);
+        dispatch(removeFromFav(id));
+    };
+
     return (
         <div className="gameDetails-container">
             <div className="gameBackgroundContainer">
@@ -177,20 +193,50 @@ export default function GameDetails({ videogames, handleAddToCart, handleRemoveF
                                 </div>
                             </div>
                         </div>
-                        <div className="d-flex align-items-center w-100">
-                            <button
-                                className="btn btn-danger"
-                                onClick={() => handleRemoveFav(title)}>
-                                <i className="fas fa-heart"></i>
-                            </button>
-                            <button ref={cartBtnRef} onClick={() => handleFalseCart(id)}
-                                className="w-100 btn btn-warning d-flex justify-content-center align-items-center gap-2">
-                                Add to cart
-                                <span className="material-symbols-outlined">
-                                    add_shopping_cart
-                                </span>
-                            </button>
-                        </div>
+                        {
+                            isStock ?
+                                <div className="d-flex align-items-center w-100">
+                                    {
+                                        isFav ?
+                                            <button
+                                                id="favoriteFillGD-btn"
+                                                className="btn btn-danger"
+                                                onClick={() => handleRemoveFav(title)}>
+                                                <i className="text-warning fas fa-heart"></i>
+                                            </button>
+                                            :
+                                            <button
+                                                id="favoriteGD-btn"
+                                                className="btn btn-danger"
+                                                onClick={() => handleAddFav(title)}>
+                                                <i className="fas fa-heart"></i>
+                                            </button>
+                                    }
+                                    {
+                                        handleIsTrue(id) ? (
+                                            <button ref={cartBtnRef} onClick={() => handleFalseCart(id)}
+                                                id="topCart-btn"
+                                                className="position-relative w-100 btn btn-warning d-flex justify-content-center align-items-center gap-2">
+                                                Add to cart
+                                                <span className="material-symbols-outlined">
+                                                    add_shopping_cart
+                                                </span>
+                                            </button>
+                                        ) : (
+                                            <button ref={delBtnRef} onClick={() => handleTrueCart(id)}
+                                                id="topDelete-btn"
+                                                className="w-100 btn btn-danger d-flex justify-content-center align-items-center gap-2">
+                                                Delete from cart
+                                                <span class="material-symbols-outlined">
+                                                    delete
+                                                </span>
+                                            </button>
+                                        )
+                                    }
+                                </div>
+                                :
+                                null
+                        }
                         <div className="d-flex gap-2">
                             <span>Tags:</span>
                             <div className="d-flex flex-wrap gap-2">
@@ -250,9 +296,9 @@ export default function GameDetails({ videogames, handleAddToCart, handleRemoveF
                         otherVideogames.map(otherGame => {
                             return (
                                 <Game
+                                    handleIsTrue={handleIsTrue}
                                     handleAddToCart={handleAddToCart}
                                     handleRemoveFromCart={handleRemoveFromCart}
-                                    titleLength={titleLength}
                                     key={otherGame.id}
                                     id={otherGame.id}
                                     title={otherGame.title}

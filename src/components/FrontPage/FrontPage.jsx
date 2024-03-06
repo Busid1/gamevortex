@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { HOME_URL } from "../../App";
 
-export default function FrontPage({ id, title, price, description, image, frontPageImage, handleAddToCart, handleRemoveFromCart }) {
+export default function FrontPage({ id, title, price, description, image, frontPageImage, handleIsTrue, handleAddToCart, handleRemoveFromCart }) {
     const location = useLocation();
     const popoverList = useRef();
     const dispatch = useDispatch();
@@ -73,12 +73,6 @@ export default function FrontPage({ id, title, price, description, image, frontP
             }
         }, 700)
     };
-
-    const handleIsTrue = (gameId) => {
-        const getIsTrue = localStorage.getItem(gameId);
-        const parseIstrue = JSON.parse(getIsTrue)
-        return parseIstrue && parseIstrue[gameId];
-    }
 
     useEffect(() => {
         const popover = new bootstrap.Popover(popoverList.current, {

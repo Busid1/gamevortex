@@ -82,6 +82,12 @@ function App() {
     }
   }
 
+  const handleIsTrue = (gameId) => {
+    const getIsTrue = localStorage.getItem(gameId);
+    const parseIstrue = JSON.parse(getIsTrue);
+    return parseIstrue && parseIstrue[gameId];
+  }
+
   return (
     <div>
       {
@@ -94,13 +100,13 @@ function App() {
         location.pathname === HOME_URL ? (<Tags />) : (null)
       }
       <Routes>
-        <Route path={`/${HOME_URL}`} element={<Games videogames={videogames} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} titleLength={titleLength} />}></Route>
-        <Route path={`/${HOME_URL}/:game`} element={<GameDetails handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} videogames={videogames} titleLength={titleLength} />} />
-        <Route path={`/${HOME_URL}/wishlist`} element={<Wishlist titleLength={titleLength} />} />
+        <Route path={`/${HOME_URL}`} element={<Games handleIsTrue={handleIsTrue} videogames={videogames} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} />}></Route>
+        <Route path={`/${HOME_URL}/:game`} element={<GameDetails handleIsTrue={handleIsTrue} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} videogames={videogames} />} />
+        <Route path={`/${HOME_URL}/wishlist`} element={<Wishlist handleIsTrue={handleIsTrue} />} />
         {
           location.pathname !== `/${HOME_URL}` ? (<Route path={`/${HOME_URL}/games/tag`} element={<Tags videogames={videogames} titleLength={titleLength} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} />}></Route>) : (null)
         }
-        <Route path={`/${HOME_URL}/cart`} element={<Cart titleLength={titleLength} handleRemoveFromCart={handleRemoveFromCart} inputRef={inputRef} focusInput={focusInput} />} />
+        <Route path={`/${HOME_URL}/cart`} element={<Cart handleRemoveFromCart={handleRemoveFromCart} inputRef={inputRef} focusInput={focusInput} />} />
       </Routes>
       <Footer />
     </div>

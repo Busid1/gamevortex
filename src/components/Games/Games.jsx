@@ -3,7 +3,7 @@ import Game from "../Game/Game";
 import FrontPage from "../FrontPage/FrontPage";
 import Buttons from "../Buttons/Buttons";
 
-export default function Games({ videogames, handleAddToCart, handleRemoveFromCart, titleLength }) {
+export default function Games({ handleIsTrue, videogames, handleAddToCart, handleRemoveFromCart }) {
     return (
         <section id="home-container" className="d-flex flex-column w-100 align-items-center">
             {
@@ -11,6 +11,7 @@ export default function Games({ videogames, handleAddToCart, handleRemoveFromCar
                     if (game.id === 1) {
                         return (
                             <FrontPage
+                                handleIsTrue={handleIsTrue}
                                 handleAddToCart={handleAddToCart}
                                 handleRemoveFromCart={handleRemoveFromCart}
                                 key={game.id}
@@ -38,9 +39,9 @@ export default function Games({ videogames, handleAddToCart, handleRemoveFromCar
                             if (game.id !== 1) {
                                 return (
                                     <Game
+                                        handleIsTrue={handleIsTrue}
                                         handleAddToCart={handleAddToCart}
                                         handleRemoveFromCart={handleRemoveFromCart}
-                                        titleLength={titleLength}
                                         key={game.id}
                                         id={game.id}
                                         title={game.title}
