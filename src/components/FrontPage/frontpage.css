@@ -22,7 +22,7 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to left, rgba(0, 0, 0, 0), rgb(17, 22, 26, .9) 100%);
+    background: linear-gradient(to bottom, transparent, #171c21);
     backdrop-filter: 5px;
 }
 

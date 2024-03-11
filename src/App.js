@@ -9,8 +9,8 @@ import GameDetails from './components/GameDetails/GameDetails';
 import Cart from './components/Cart/Cart';
 import Tags from './components/Tags/Tags';
 import Wishlist from './components/Wishlist/Wishlist';
-export const HOME_URL = "GameVortex";
-export const API_URL = `https://bow-rebel-apartment.glitch.me/${HOME_URL}`;
+export const HOME_URL = "/GameVortex";
+export const API_URL = `https://bow-rebel-apartment.glitch.me${HOME_URL}`;
 
 function App() {
   const [videogames, setVideogames] = useState([]);
@@ -91,22 +91,30 @@ function App() {
   return (
     <div>
       {
-        location.pathname !== `/${HOME_URL}/cart` ?
+        location.pathname !== `${HOME_URL}/cart` ?
           <Header cartCount={cartCount} onSearch={onSearch} videogames={videogames} titleLength={titleLength} handleRemoveFromCart={handleRemoveFromCart} searchGame={searchGame} />
           :
           (null)
       }
-      {
-        location.pathname === HOME_URL ? (<Tags />) : (null)
-      }
       <Routes>
-        <Route path={`/${HOME_URL}`} element={<Games handleIsTrue={handleIsTrue} videogames={videogames} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} />}></Route>
-        <Route path={`/${HOME_URL}/:game`} element={<GameDetails handleIsTrue={handleIsTrue} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} videogames={videogames} />} />
-        <Route path={`/${HOME_URL}/wishlist`} element={<Wishlist handleIsTrue={handleIsTrue} />} />
+        <Route path={HOME_URL} element={<Games handleIsTrue={handleIsTrue} videogames={videogames} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} />}></Route>
+        <Route path={`${HOME_URL}/:game`} element={<GameDetails handleIsTrue={handleIsTrue} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} videogames={videogames} />} />
+        <Route path={`${HOME_URL}/wishlist`} element={<Wishlist handleIsTrue={handleIsTrue} />} />
         {
-          location.pathname !== `/${HOME_URL}` ? (<Route path={`/${HOME_URL}/games/tag`} element={<Tags videogames={videogames} titleLength={titleLength} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} />}></Route>) : (null)
+          location.pathname !== `${HOME_URL}` ?
+            (<Route
+              path={`${HOME_URL}/games/:tag`}
+              element={<Tags videogames={videogames}
+                handleIsTrue={handleIsTrue}
+                handleAddToCart={handleAddToCart}
+                handleRemoveFromCart={handleRemoveFromCart}
+              />}
+            >
+            </Route>)
+            :
+            (null)
         }
-        <Route path={`/${HOME_URL}/cart`} element={<Cart handleRemoveFromCart={handleRemoveFromCart} inputRef={inputRef} focusInput={focusInput} />} />
+        <Route path={`${HOME_URL}/cart`} element={<Cart handleRemoveFromCart={handleRemoveFromCart} inputRef={inputRef} focusInput={focusInput} />} />
       </Routes>
       <Footer />
     </div>

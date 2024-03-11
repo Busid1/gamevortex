@@ -148,7 +148,7 @@ export default function Game({ id, title, price, description, image, prevGamepla
     };
 
     useEffect(() => {
-        if (location.pathname === "/") {
+        if (location.pathname === HOME_URL) {
             localStorage.setItem(id, JSON.stringify({ [id]: true }));
         }
 
@@ -157,8 +157,8 @@ export default function Game({ id, title, price, description, image, prevGamepla
 
     return (
         <div id="card-item_game" className="card rounded-3 my-3 bg-black d-flex align-items-center border-0">
-            <div to={`/${HOME_URL}/${title}`} className="navbar-brand text-white card-body">
-                <Link to={`/${HOME_URL}/${title}`} className="img-games-box">
+            <div to={`${HOME_URL}/${title}`} className="navbar-brand text-white card-body">
+                <Link to={`${HOME_URL}/${title}`} className="img-games-box">
                     <img className="img-games" src={image} alt={title} />
                     <video ref={videoRef} autoPlay={false} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut} playsInline loop muted preload="none" className="prevGameplay" src={prevGameplay}></video>
                 </Link>
@@ -176,7 +176,7 @@ export default function Game({ id, title, price, description, image, prevGamepla
                 }
                 <div className="card-body-bottom">
                     <div className="titlePrice-box">
-                        <Link className="card-title" to={`/${HOME_URL}/${title}`}>
+                        <Link className="card-title" to={`${HOME_URL}/${title}`}>
                             {title}
                         </Link>
                         <span ref={changeFocus} className="card-price border border-dark badge bg-danger rounded-pill">{price}</span>

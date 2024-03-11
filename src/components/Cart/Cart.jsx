@@ -77,7 +77,7 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput, title
         <div key={game.id} className="cart-box bg-secondary shadow rounded d-flex gap-3">
             <img className="rounded-start" src={game.image} alt={game.title} />
             <div className="d-flex flex-column justify-content-center">
-                <Link to={`/${HOME_URL}/${game.title}`} className="gameTitle text-warning">
+                <Link to={`${HOME_URL}/${game.title}`} className="gameTitle text-warning">
                     {game.title}
                 </Link>
                 <span className="gamePrice">{game.price}</span>

@@ -3,12 +3,21 @@
     padding-bottom: 60px;
 }
 
+#cardGames-container{
+    margin-top: 20px;
+}
+
+.homeFilter-box{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .homeTitle-box{
     display: flex;
     align-items: center;
     justify-content: flex-start;
     color: #ffc107;
-    margin-top: 20px;
     margin-left: 40px;
 }
 
@@ -20,6 +29,25 @@
 
 .homeTitle{
     text-transform: capitalize;
+}
+
+#filter-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #121212;
+    border-radius: 10px;
+    padding: 10px;
+    outline: none;
+    border: none;
+    color: #fff;
+    gap: 10px;
+}
+
+#filter-btn>span{
+    display: flex;
+    align-items: center;
+    font-size: 1.3em;
 }
 
 #cardGames-box {

@@ -1,5 +1,7 @@
 .tag-container{
-    display: none;
+    display: flex;
+    justify-content: space-between;
+    min-height: calc(100vh - 212px);
 }
 
 #tags-games-box{
@@ -11,8 +13,6 @@
     align-items: center;
     justify-content: flex-start;
     color: #ffc107;
-    width: 100%;
-    margin-top: 20px;
 }
 
 .tagTitle-box > h2{
@@ -32,14 +32,20 @@
 }
 
 .tag-box{
-    width: 100%;
-    z-index: 3;
+    display: flex;
+    flex-wrap: wrap;
+    width: 200px;
+    top: 30px;
     position: absolute;
-    backdrop-filter: blur(15px);
+    visibility: hidden;
+    gap: 20px;
+    padding: 10px;
+    background-color: #121212;
+    border-radius: 5px;
 }
 
-.tag-box > div{
-    height: 40px;
+.tag-box>a{
+    color: #fff;
 }
 
 #tag-games{
@@ -57,9 +63,9 @@
 }
 
 .currentTag:hover{
-    background-color: rgb(255, 193, 5, .9);
-    color: #121212;
     text-shadow: 1px 1px 2px #121212;
+    color: #ffc107;
+    text-decoration: underline;
 }
 
 .currentTag.focused{
@@ -71,5 +77,9 @@
 }
 
 #notFound-box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
     height: calc(100vh - 212px);
 }

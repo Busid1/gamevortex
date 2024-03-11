@@ -27,11 +27,19 @@ export default function Games({ handleIsTrue, videogames, handleAddToCart, handl
                 })
             }
             <div id="cardGames-container">
-                <div className="homeTitle-box">
-                    <h2 className="homeTitle">Home</h2>
-                    <span id="leftRow-icon" className="material-symbols-outlined">
-                        chevron_right
-                    </span>
+                <div className="homeFilter-box">
+                    <div className="homeTitle-box">
+                        <h2 className="homeTitle">Home</h2>
+                        <span id="leftRow-icon" className="material-symbols-outlined">
+                            chevron_right
+                        </span>
+                    </div>
+                    <button id="filter-btn">
+                        Filter
+                        <span className="text-warning material-symbols-outlined">
+                            tune
+                        </span>
+                    </button>
                 </div>
                 <div id="cardGames-box" className="d-flex flex-wrap justify-content-evenly">
                     {

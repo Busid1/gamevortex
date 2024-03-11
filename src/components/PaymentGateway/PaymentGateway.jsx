@@ -5,7 +5,7 @@ import { HOME_URL } from "../../App";
 export default function PaymentGateway() {
     return (
         <div className="paymentGateway-container">
-            <Link to={`/${HOME_URL}`} title="home" className="gameVortexCart-logo"></Link>
+            <Link to={`${HOME_URL}`} title="home" className="gameVortexCart-logo"></Link>
             <div className="progress-steps">
                 <div>
                     <span className="step active">
