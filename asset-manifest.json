@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/GameVortex/static/css/main.f005b290.css",
-    "main.js": "/GameVortex/static/js/main.c3116486.js",
-    "static/media/mastercard-card.png": "/GameVortex/static/media/mastercard-card.c90a2a57d9c51e12b903.png",
-    "static/media/visa-card.png": "/GameVortex/static/media/visa-card.c85da82f0431a32984d8.png",
-    "index.html": "/GameVortex/index.html",
-    "main.f005b290.css.map": "/GameVortex/static/css/main.f005b290.css.map",
-    "main.c3116486.js.map": "/GameVortex/static/js/main.c3116486.js.map"
+    "main.css": "/gamevortex/static/css/main.fe051e29.css",
+    "main.js": "/gamevortex/static/js/main.474c63cb.js",
+    "static/media/mastercard-card.png": "/gamevortex/static/media/mastercard-card.c90a2a57d9c51e12b903.png",
+    "static/media/visa-card.png": "/gamevortex/static/media/visa-card.c85da82f0431a32984d8.png",
+    "index.html": "/gamevortex/index.html",
+    "main.fe051e29.css.map": "/gamevortex/static/css/main.fe051e29.css.map",
+    "main.474c63cb.js.map": "/gamevortex/static/js/main.474c63cb.js.map"
   },
   "entrypoints": [
-    "static/css/main.f005b290.css",
-    "static/js/main.c3116486.js"
+    "static/css/main.fe051e29.css",
+    "static/js/main.474c63cb.js"
   ]
 }
