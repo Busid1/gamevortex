@@ -15,7 +15,7 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput, title
     const creditCardData = useSelector(state => state.creditCard.slice(-1)[0]);
     const creditCardErrors = useSelector(state => state.creditCardErrors.slice(-1)[0]);
     const [lastCreditCard, setLastCreditCard] = useState("");
-    console.log(gamesInCart);
+
     const creditCardComponent = creditCardData ? (
         <div className="creditCardBox">
             <h3>Card holder: {lastCreditCard.cardHolder}</h3>
@@ -121,7 +121,7 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput, title
 
     const buyGameAlertTimeout = () => setTimeout(() => {
         setIsBuyGameAlert(false);
-        window.location.href = 'http://localhost:3000';
+        window.location.href = 'http://127.0.0.1:3000/gamevortex';
     }, 11000);
 
     const [closePayment, setClosePayment] = useState(false);

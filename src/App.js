@@ -9,7 +9,7 @@ import GameDetails from './components/GameDetails/GameDetails';
 import Cart from './components/Cart/Cart';
 import Tags from './components/Tags/Tags';
 import Wishlist from './components/Wishlist/Wishlist';
-export const HOME_URL = "/GameVortex";
+export const HOME_URL = "/gamevortex";
 export const API_URL = `https://bow-rebel-apartment.glitch.me${HOME_URL}`;
 
 function App() {

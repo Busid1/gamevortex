@@ -1,4 +1,4 @@
-.tag-container{
+/* .tag-container{
     display: flex;
     justify-content: space-between;
     min-height: calc(100vh - 212px);
@@ -28,23 +28,6 @@
 #leftRow-icon{
     display: flex;
     align-items: center;
-    color: #fff;
-}
-
-.tag-box{
-    display: flex;
-    flex-wrap: wrap;
-    width: 200px;
-    top: 30px;
-    position: absolute;
-    visibility: hidden;
-    gap: 20px;
-    padding: 10px;
-    background-color: #121212;
-    border-radius: 5px;
-}
-
-.tag-box>a{
     color: #fff;
 }
 
@@ -82,4 +65,4 @@
     justify-content: center;
     width: 100%;
     height: calc(100vh - 212px);
-}
+} */
