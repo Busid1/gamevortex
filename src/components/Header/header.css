@@ -48,45 +48,6 @@ header>nav {
     cursor: pointer;
 }
 
-.categories-container{
-    display: flex;
-    flex-direction: column;
-    position: relative;
-}
-
-.categories-container:hover .tag-box {
-    visibility: visible;
-    transition: all .3s linear;
-}
-
-.categories-box{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    cursor: pointer;
-}
-
-.categories-box>span{
-    color: #ccc;
-}
-
-.categories-box>button{
-    display: flex;
-    color: #ffc107;
-    background: none;
-    border: none;
-    padding: 5px;
-}
-
-.categories-box>button>span{
-    transition: all .1s linear;
-}
-
-.categories-box:hover > button> span{
-    transform: rotate(180deg);
-}
-
 #cart-icon {
     display: flex;
     align-items: center;

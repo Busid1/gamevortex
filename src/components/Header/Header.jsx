@@ -5,7 +5,6 @@ import { removeFromCart } from "../../redux/actions";
 import SearchBar from "../SearchBar/SearchBar";
 import { Link } from "react-router-dom";
 import { HOME_URL } from "../../App";
-import Tags from "../Tags/Tags";
 
 export default function Header({ cartCount, onSearch, searchGame, videogames, handleRemoveFromCart }) {
     const [cartGamesPrev, setCartGamesPrev] = useState([]);
@@ -99,35 +98,6 @@ export default function Header({ cartCount, onSearch, searchGame, videogames, ha
                     {searchBarDeploy ? "search" : "close"}
                 </span>
                 <SearchBar handleSearchBarDeploy={handleSearchBarDeploy} searchBarDeploy={searchBarDeploy} onSearch={onSearch} searchGame={searchGame} videogames={videogames} />
-                <div className="categories-container">
-                    <div className="categories-box">
-                        <span>Categories</span>
-                        <button>
-                            <span className="material-symbols-outlined">
-                                expand_less
-                            </span>
-                        </button>
-                    </div>
-                    <div className="tag-box">
-                        <Link to={`${HOME_URL}/games/action`}>Action</Link>
-                        <Link to={`${HOME_URL}/games/survival`}>Survival</Link>
-                        <Link to={`${HOME_URL}/games/racing`}>Racing</Link>
-                        <Link to={`${HOME_URL}/games/sandbox`}>Sandbox</Link>
-                        {/* This function below "handleFocus" clear the current tag */}
-                        <div className="d-flex align-items-center btn-group">
-                            <span className="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Other
-                            </span>
-                            <ul className="dropdown-menu">
-                                <li><Link to={`${HOME_URL}/games/terror`} className="dropdown-item" href="#">Terror</Link></li>
-                                <li><Link to={`${HOME_URL}/games/RPG`} className="dropdown-item" href="#">RPG</Link></li>
-                                <li><Link to={`${HOME_URL}/games/shooter`} className="dropdown-item" href="#">Shooter</Link></li>
-                                <li><hr className="dropdown-divider" /></li>
-                                <li><Link to={`${HOME_URL}`} className="dropdown-item" href="#">All tags...</Link></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
                 {
                     searchBarDeploy ?
                         <div ref={cartHeaderRef} className="cartHeader-container">

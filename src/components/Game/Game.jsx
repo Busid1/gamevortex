@@ -70,11 +70,14 @@ export default function Game({ id, title, price, description, image, prevGamepla
     };
 
     useEffect(() => {
-        const popover = new bootstrap.Popover(popoverList.current, {
-            title: title,
-            content: description,
-            trigger: "focus"
-        })
+        // Verificar si title tiene un valor definido
+        if (title) {
+            const popover = new bootstrap.Popover(popoverList.current, {
+                title: title,
+                content: description,
+                trigger: "focus"
+            });
+        }
     }, []);
 
     // Play and pause the prevGameplay

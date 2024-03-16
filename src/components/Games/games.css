@@ -1,57 +1,180 @@
-#home-container{
+#home-container {
     min-height: calc(100vh - 50px);
     padding-bottom: 60px;
 }
 
-#cardGames-container{
-    margin-top: 20px;
-}
-
-.homeFilter-box{
+.homeFilter-box {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
+    margin: 0 20px;
 }
 
-.homeTitle-box{
+.homeLinks-box {
     display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    color: #ffc107;
-    margin-left: 40px;
-}
-
-.homeTitle-box > h2{
-    display: flex;
-    align-items: center;
-    font-size: 1.7em;
-}
-
-.homeTitle{
-    text-transform: capitalize;
-}
-
-#filter-btn{
-    display: flex;
-    align-items: center;
     justify-content: center;
-    background-color: #121212;
+    gap: 30px;
+}
+
+.homeLink {
+    display: flex;
+    color: #fff;
+    text-transform: capitalize;
+    position: relative;
+    bottom: 20px;
+    margin: 0;
+    font-weight: 500;
+    font-size: 1.3em;
+}
+
+.homeLink::after {
+    content: "";
+    display: block;
+    width: 100%;
+    border-bottom: 2px solid #ffc107;
+    /* Color y grosor del subrayado */
+    position: absolute;
+    bottom: -3px;
+    /* Ajusta esto para la distancia entre el subrayado y el texto */
+}
+
+.homeLink.noActive {
+    color: #ccc;
+}
+
+.homeLink.noActive::after {
+    border: none;
+}
+
+.filter-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+#filter-btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-left: auto;
+    padding: 5px 10px;
     border-radius: 10px;
-    padding: 10px;
     outline: none;
     border: none;
-    color: #fff;
     gap: 10px;
+    background-color: transparent;
+    color: #fff;
+    background-color: #121212;
 }
 
-#filter-btn>span{
+#filter-btn>span {
     display: flex;
     align-items: center;
     font-size: 1.3em;
+}
+
+.categories-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    background-color: #121212;
+    width: 100%;
+    height: 100%;
+    top: 100%;
+    left: 0;
+    z-index: 9999;
+    gap: 10px;
+    padding: 10px;
+    transition: all .2s linear;
+}
+
+.categories-container.show {
+    left: 0;
+    top: 0;
+    overflow-y: scroll;
+}
+
+.tag-container,
+.platform-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 10px;
+    border-radius: 10px;
+}
+
+.tag-box{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    background-color: #1c1c1c;
+    border-radius: 10px;
+}
+
+.tag-container>div{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.gameTags-list {
+    display: flex;
+    align-items: center;
+    text-transform: capitalize;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+    padding: 5px;
+    line-height: 30px;
+    gap: 10px;
+}
+
+.gameTags-list>span {
+    font-size: 1.1em;
+}
+
+.gameTags-list>button {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    color: #fff;
+    font-size: 1.4em;
+}
+
+.savedTags-box {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    gap: 10px;
+    color: #ccc;
+}
+
+.savedTags-list{
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    background-color: #272727;
+    padding: 0 3px;
+}
+
+.savedTags-list>button{
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    color: #fff;
+    font-size: 1em;
 }
 
 #cardGames-box {
     width: 100%;
     gap: 50px 20px;
 }
-
