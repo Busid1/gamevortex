@@ -1,0 +1,29 @@
+.arrowUp-box{
+    display: flex;
+    position: fixed;
+    overflow: hidden;
+    bottom: 2%;
+    right: 5%;
+    padding: 10px;
+    border: none;
+    border-radius: 100%;
+    cursor: pointer;
+    z-index: 1;
+    overflow: hidden;
+    box-shadow: 0 0 4px 3px #121212;
+}
+
+.arrowDown-box{
+    display: flex;
+    position: fixed;
+    overflow: hidden;
+    bottom: 3%;
+    right: 4.5%;
+    padding: 10px;
+    border: none;
+    border-radius: 100%;
+    cursor: pointer;
+    z-index: 2;
+    overflow: hidden;
+    box-shadow: 0 0 4px 3px #121212;
+}

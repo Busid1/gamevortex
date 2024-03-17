@@ -1,0 +1,364 @@
+.cart-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.cartGamesResume-box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    min-height: calc(100vh - 522px);
+    width: 90%;
+}
+
+.cart-box {
+    width: 100%;
+    max-height: 120px;
+    min-height: 70px;
+}
+
+.resumeGameTitle-box{
+    width: 60px;
+}
+
+.resumeGameTitle-box>span{
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.gameTitle {
+    font-size: .9em;
+    text-shadow: 2px 2px 2px #000;
+}
+
+.gamePrice, .gameAmount{
+    font-size: .7em;
+}
+
+.gameTitle:hover {
+    text-decoration: underline;
+}
+
+.cart-box>img {
+    display: flex;
+    object-fit: cover;
+    width: 30%;
+}
+
+.cart-box>div{
+    width: 70%;
+}
+
+.cartGamesBox {
+    width: 100%;
+    gap: 30px;
+}
+
+.cartBtns{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20px;
+    width: 20px;
+    font-size: .8em;
+}
+
+.resumeGamesBox {
+    min-width: 280px;
+    align-self: center;
+    margin-top: 20px;
+}
+
+.creditCardBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 200px;
+    width: 200px;
+}
+
+.creditCardBox>h3 {
+    display: flex;
+    flex-direction: column;
+    font-size: 1em;
+}
+
+.buyGameAlert {
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    text-align: center;
+    width: 300px;
+    right: 30%;
+    top: 40%;
+    padding: 10px;
+    margin: 0;
+    gap: 10px;
+}
+
+.spinner,
+.spinner:after {
+    display: block;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.spinner {
+    background-color: transparent;
+    border-top: 5px solid rgb(66, 139, 202);
+    border-right: 0px solid rgb(66, 139, 202);
+    border-bottom: 5px solid rgb(66, 139, 202);
+    border-left: 0px solid rgba(66, 139, 202, .2);
+    animation: spinner 3s linear infinite;
+}
+
+@keyframes spinner {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+ 
+/* ------------ Responsive ------------- */
+@media screen and (min-width: 425px) {
+    .logo-box{
+        width: 100px;
+    }
+    
+    #cart-icon{
+        font-size: 1.4em;
+    }
+
+    #wishlistHeader-icon{
+        font-size: 1.3em;
+    }
+    
+    .cart-box {
+        max-width: 80%;
+        align-self: center;
+    }
+
+    .frontPageCard-price{
+        font-size: .9em;
+    }
+
+    .homeTitle-box{
+        margin-left: 0px;
+    }
+
+    #card-item_game{
+        width: 220px;
+    }
+
+    .gameDetails-box, #otherGames-container, #cardGames-container, #tags-games-box{
+        width: 80%;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .logo-box{
+        width: 120px;
+    }
+
+    #search-icon{
+        display: none;
+    }
+
+    .frontPage-container{
+        height: 320px;
+    }
+
+    .searchBar-container{
+        display: flex;
+        flex: .8;
+        height: 30px;
+        width: 100px;
+    }
+
+    .search-bar{
+        font-size: 1.1em;
+    }
+
+    .cartGamesPrev-box {
+        width: 250px;
+    }
+ 
+    .card-title-main{
+        font-size: 1.5em;
+    }
+
+    .frontPageCard-price{
+        font-size: 1em;
+    }
+
+    #card-item_game{
+        width: 240px;
+    }
+
+    .cart-box {
+        align-self: none;
+    }
+
+    .cartGamesResume-box {
+        flex-direction: row;
+    }
+
+    .resumeGamesBox{
+        min-width: 320px;
+        align-self: flex-start;
+    }
+
+    .gameDetails-box{
+        margin-top: 200px;
+    }
+
+    .gameplay-box{
+        height: 350px;
+    }
+
+    .gameOptions-container{
+        flex-wrap: nowrap;
+    }
+
+    .gameFrontPage{
+        display: flex;
+    }
+
+    .gameBackgroundContainer {
+        height: 300px;
+    }
+
+    .gameDetails-box{
+        gap: 20px;
+    }
+
+    .gameDetails-box, #otherGames-container, #cardGames-container, #tags-games-box{
+        width: 80%;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    header{
+        height: 60px;
+    }
+
+    .logo-box{
+        width: 150px;
+    }
+
+    #cart-icon{
+        font-size: 1.6em;
+    }
+
+    .cartGamesPrev-box {
+        width: 300px;
+    }
+
+    .frontPage-container{
+        height: 400px;
+    }
+
+    #card-item_game{
+        width: 260px;
+    }
+
+    .cartGamesResume-box{
+        width: 80%;
+    }
+
+    .cart-box{
+        max-height: 100px;
+    }
+
+    .gameBackgroundContainer{
+        height: 350px;
+    }
+
+    .gameplay-box{
+        height: 350px;
+    }
+
+    .gameDetails-box, #otherGames-container, #cardGames-container, #tags-games-box{
+        width: 60%;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    header{
+        height: 70px;
+    }
+
+    .logo-box{
+        width: 170px;
+    }
+
+    .searchBar-container{
+        height: 40px;
+    }
+
+    .gameSearched-link>img {
+        max-width: 10%;
+        object-fit: contain;
+        border-radius: 5px;
+    }
+
+    .cartGamesPrev-box {
+        width: 360px;
+        max-height: 400px;
+        gap: 15px;
+    }
+
+    .separator{
+        margin-top: 20px;
+    }
+
+    .frontPage-container{
+        height: 460px;
+    }
+
+    .searchBar-container{
+        width: 30%;
+    }
+
+    #card-item_game{
+        width: 280px;
+    }
+
+    .gameplay-box{
+        width: 85%;
+    }
+
+    .gameDetails-box{
+        gap: 40px;
+    }
+
+    .gameDetails-box, #otherGames-container, #cardGames-container, #tags-games-box{
+        width: 55%;
+    }
+}
+
+@media screen and (min-width: 2560px) {
+    .frontPage-container{
+        height: 600px;
+    }
+    
+    .gameplay-box{
+        height: 700px;
+        width: 80%;
+    }
+
+    .gameDetails-box{
+        gap: 40px;
+    }
+}

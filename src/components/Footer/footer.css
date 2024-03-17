@@ -1,0 +1,133 @@
+#contactSocial-box{
+    width: 100%; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+#contact-box{
+    flex: .5;
+}
+
+#socialWebs-box{
+    display: flex;
+    align-items: center;
+    justify-self: flex-start;
+    flex: .3;
+    height: 100%;
+}
+
+#socialWebs-box > ul{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.input-container{
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.custom-input {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    border-bottom: 2px solid #ccc;
+    padding: 10px;
+    transition: border-color .3s ease;
+    margin: 12px 0;
+    color: #fff;
+    width: 100%;
+}
+
+.custom-input.focused {
+    border-color: #00aaff;
+    color: #ffc107;
+}
+
+.footerNav-item{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footerNav-item > a{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.footerNav-item > a > i{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 27px;
+    height: 40px;
+    width: 40px;
+    margin-right: 10px;
+    transition: all .2s linear;
+    background-color: #fff;
+}
+
+.footerNav-item > a > i:hover{
+    background-color: #ffc107;
+}
+
+.footerNav-item > a > span{
+    color: #fff;
+    text-decoration: underline;
+    transition: all .2s linear;
+}
+
+.footerNav-item > a > span:hover{
+    color: #00aaff;
+}
+
+.copyright{
+    font-size: 1em;
+}
+
+.footerLogo-box{
+    width: 30%;
+}
+
+.footerLogo-box > img{
+    width: 100%;
+}
+
+
+@media only screen and (min-width: 425px) {
+    .copyright{
+        font-size: 1.1em;
+    }
+
+    .footerLogo-box{
+        width: 25%;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .copyright{
+        font-size: 1.2em;
+    }
+
+    .footerLogo-box{
+        width: 20%;
+    }
+}
+
+@media only screen and (min-width: 1440px) {
+    .copyright{
+        font-size: 1.4em;
+    }
+
+    .footerLogo-box{
+        width: 10%;
+    }
+}

@@ -1,0 +1,68 @@
+/* .tag-container{
+    display: flex;
+    justify-content: space-between;
+    min-height: calc(100vh - 212px);
+}
+
+#tags-games-box{
+    margin: 40px 0;
+}
+
+.tagTitle-box{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    color: #ffc107;
+}
+
+.tagTitle-box > h2{
+    display: flex;
+    align-items: center;
+    font-size: 1.7em;
+}
+
+.tagTitle{
+    text-transform: capitalize;
+}
+
+#leftRow-icon{
+    display: flex;
+    align-items: center;
+    color: #fff;
+}
+
+#tag-games{
+    gap: 50px 20px;
+}
+
+.currentTag{
+    display: flex;
+    align-items: center;
+    color: #fff;
+    text-shadow: 1px 1px 2px #ffc107;
+    padding: 3px 5px;
+    transition: all .3s;
+    height: 100%;
+}
+
+.currentTag:hover{
+    text-shadow: 1px 1px 2px #121212;
+    color: #ffc107;
+    text-decoration: underline;
+}
+
+.currentTag.focused{
+    background-color: #ffc107;
+    color: #121212;
+    border-radius: 10px;
+    text-shadow: 1px 1px 2px #121212;
+    height: 30px;
+}
+
+#notFound-box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: calc(100vh - 212px);
+} */
