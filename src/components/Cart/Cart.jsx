@@ -7,8 +7,9 @@ import { Link } from "react-router-dom";
 import Payment from "../Payment/Payment";
 import PaymentGateway from "../PaymentGateway/PaymentGateway";
 import { HOME_URL } from "../../App";
+import randomstring from "randomstring";
 
-export default function Cart({ handleRemoveFromCart, inputRef, focusInput, titleLength }) {
+export default function Cart({ handleRemoveFromCart, inputRef, focusInput }) {
     const [gamesInCart, setGamesInCart] = useState(useSelector(state => state.gamesInCart));
     const [gameCounts, setGameCounts] = useState({}); // Inicialmente, no hay cantidades para ningún juego
     //Accedemos al ultimo array ya que este tendra todos los valores validos de la tarjeta y asi no se duplican los elementos
@@ -113,25 +114,24 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput, title
 
     const [isBuyGame, setIsBuyGame] = useState(false);
     const [isSpinner, setIsSpinner] = useState(true);
-    const [isBuyGameAlert, setIsBuyGameAlert] = useState(true);
+    const [isBuyGameAlert, setIsBuyGameAlert] = useState(false);
 
     const spinnerTimeout = () => setTimeout(() => {
         setIsSpinner(false);
     }, 1000);
 
-    const buyGameAlertTimeout = () => setTimeout(() => {
-        setIsBuyGameAlert(false);
-        window.location.href = 'http://127.0.0.1:3000/gamevortex';
-    }, 11000);
+    const buyGameAlertTimeout = () => {
+        setIsBuyGameAlert(!isBuyGameAlert);
+    };
 
     const [closePayment, setClosePayment] = useState(false);
     const handleClosePayment = () => {
-        if (closePayment) {
-            setClosePayment(false);
-        }
-        else {
-            setClosePayment(true);
-        }
+        setClosePayment(!closePayment);
+    }
+
+    const [isPaymentCorrect, setIsPaymentCorrect] = useState(false);
+    const handlePaymentCorrect = () => {
+        setIsPaymentCorrect(!isPaymentCorrect);
     }
 
     const [editPayment, setEditPayment] = useState(false);
@@ -153,23 +153,14 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput, title
             setClosePayment(true);
         }
         else {
+            handlePaymentCorrect();
             setAddPayment(false);
             setClosePayment(false);
             setLastCreditCard({ ...creditCardData })
         }
     }
 
-    const [counter, setCounter] = useState(11);
-
-    const decreaseCounter = () => {
-        if (counter > 0) {
-            setCounter(prevCounter => prevCounter - 1);
-        }
-        else {
-            setCounter(0);
-        }
-    }
-
+    const [isActivateCode, setIsActivateCode] = useState(false);
     const handleBuyGame = () => {
         let isAnyGame = Object.keys(filterGames).length;
         let isErrors = Object.keys(creditCardErrors).length;
@@ -178,7 +169,7 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput, title
             setIsBuyGame(true);
             spinnerTimeout();
             buyGameAlertTimeout();
-            setInterval(decreaseCounter, 1000);
+            setIsActivateCode(true);
         }
         else {
             setIsBuyGame(false);
@@ -203,9 +194,13 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput, title
             }
         }
     }
+
     return (
         <div className="cart-container text-white pb-4">
-            <PaymentGateway />
+            <PaymentGateway
+                isPaymentCorrect={creditCardValid}
+                isActivateCode={isActivateCode}
+            />
             <div className="cartGamesResume-box">
                 <div className="cartGamesBox d-flex flex-column">
                     {gamesAddsInCart}
@@ -263,7 +258,6 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput, title
                         </div>
                     </div>
                     <span>Total: {total.toFixed(2)}$</span>
-
                     {
                         creditCardValid ?
                             <button id="editPayment" onClick={() => { handleEditPayment(); focusInput(); }} className="d-flex align-items-center gap-2 fs-6 btn btn-info shadow mt-3">
@@ -292,21 +286,31 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput, title
                                 </span>
                             </button>
                             {isBuyGameAlert ?
-                                <div style={{ display: isBuyGame ? "flex" : "none" }} className="buyGameAlert alert alert-success" role="alert">
+                                <div style={{ display: isBuyGame ? "flex" : "none" }} className="activationCode-container">
                                     {isSpinner ?
                                         <span className="spinner"></span>
                                         :
-                                        <div>
-                                            <p className="buyGameMessage">La compra se ha realizado satisfactoriamente.
+                                        <div className="activationCode-box">
+                                            <p className="buyGameMessage">
+                                                The purchase was successfully.
+                                                <br></br>
+                                                The game/s code is below this message:
                                             </p>
-                                            <p>Revise el correo que le acabamos de mandar con las claves de los juegos comprados:)</p>
-                                            <span className="material-symbols-outlined">
-                                                send
-                                            </span>
-                                            <span className="material-symbols-outlined">
-                                                mark_email_unread
-                                            </span>
-                                            <p>Sera redirigido a la pagina principal en {counter} segundos.</p>
+                                            <div className="d-flex flex-column gap-2">
+                                                {
+                                                    filterGames.map(({ title, id }) => (
+                                                        <div key={id} className="d-flex justify-content-between gap-3">
+                                                            <span className="text-warning" key={id}>{title}</span>
+                                                            <span className="text-warning" key={id}>{randomstring.generate({ length: 10, charset: 'alphanumeric' })}</span>
+                                                        </div>
+                                                    ))
+                                                }
+                                            </div>
+                                            <Link to={HOME_URL} className="d-flex justify-content-center mt-3">
+                                                <button className="btn btn-primary">
+                                                    Go to home page
+                                                </button>
+                                            </Link>
                                         </div>
                                     }
                                 </div>
@@ -319,6 +323,7 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput, title
 
                     {
                         closePayment ? <Payment
+                            handlePaymentCorrect={handlePaymentCorrect}
                             handleClosePayment={handleClosePayment}
                             handleAddPayment={handleAddPayment}
                             creditCardData={creditCardData}

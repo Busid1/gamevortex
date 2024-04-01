@@ -89,17 +89,25 @@
     font-size: 1em;
 }
 
-.buyGameAlert {
-    flex-direction: column;
+.activationCode-container {
     align-items: center;
-    position: absolute;
-    text-align: center;
-    width: 300px;
-    right: 30%;
-    top: 40%;
-    padding: 10px;
-    margin: 0;
-    gap: 10px;
+    justify-content: center;
+    position: fixed;
+    height: 100vh;
+    width: 100%;
+    bottom: 0%;
+    left: 0%;
+    background: radial-gradient(transparent, rgb(18, 18, 18, .8));
+    z-index: 1000;
+}
+
+.activationCode-box{
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(18, 18, 18, .8);
+    border-radius: 5px;
+    padding: 15px;
+    backdrop-filter: blur(10px);
 }
 
 .spinner,

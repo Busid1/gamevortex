@@ -28,14 +28,13 @@ function App() {
 
   $(function () {
     $('[data-toggle="tooltip"]').tooltip();
-  })
+  });
 
   useEffect(() => {
     async function gamesData() {
       try {
-        const response = await axios(API_URL);
-        console.log(response);
-
+        const response = await axios.get(API_URL);
+        console.log(response.data);
         setVideogames(response.data);
       } catch (error) {
         console.error(error);
@@ -70,7 +69,6 @@ function App() {
         console.log(err);
       })
   }
-
 
   const titleLength = (title, value) => {
     if (typeof title === 'string' && title.length > value) {

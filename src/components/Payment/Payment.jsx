@@ -46,11 +46,6 @@ export default function Payment({ handleClosePayment, handleAddPayment, inputRef
 
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(creditCard(userData));
-        dispatch(creditCardErrors(errors));
-    }, [handleAddPayment])
-
     const handleBlur = (event) => {
         const { name } = event.target;
         setShowErrors({
@@ -66,12 +61,12 @@ export default function Payment({ handleClosePayment, handleAddPayment, inputRef
         if (name === 'cardHolder' && !/^\D*$/.test(value)) {
             return;
         }
-        if(name === 'cardExpirationMonth' && /^[\s]*$/.test(value)){
+        if (name === 'cardExpirationMonth' && /^[\s]*$/.test(value)) {
             return;
-        } 
-        if(name === 'cardExpirationYear' && /^[\s]*$/.test(value)){
+        }
+        if (name === 'cardExpirationYear' && /^[\s]*$/.test(value)) {
             return;
-        }     
+        }
         // Validate if there´s only numbers in the field card
         if (name === 'cardNumber' && !/^\d*$/.test(value)) {
             return;
@@ -86,6 +81,11 @@ export default function Payment({ handleClosePayment, handleAddPayment, inputRef
             [name]: value,
         });
     };
+
+    useEffect(() => {
+        dispatch(creditCard(userData));
+        dispatch(creditCardErrors(errors));
+    }, [handleChange])
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -198,9 +198,8 @@ export default function Payment({ handleClosePayment, handleAddPayment, inputRef
                                             </div>
                                         </form>
                                         <div className='d-flex flex-column justify-content-evenly'>
-                                            <button type='submit' 
-                                                onSubmit={handleSubmit}
-                                                onClick={isErrors(showErrors, errors) ? handleAddPayment : null} 
+                                            <button type='submit'
+                                                onClick={() => isErrors(showErrors, errors) ? handleAddPayment() : null}
                                                 className='btn btn-warning shadow mt-3'>Add credit card
                                             </button>
                                         </div>
