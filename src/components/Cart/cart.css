@@ -352,7 +352,7 @@
     }
 
     .gameDetails-box, #otherGames-container, #cardGames-container, #tags-games-box{
-        width: 55%;
+        width: 70%;
     }
 }
 

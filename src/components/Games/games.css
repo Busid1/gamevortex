@@ -198,15 +198,16 @@
 
 #cardGames-container{
     display: flex;
+    justify-content: space-evenly;
     flex-direction: column;
     width: 100%;
-    overflow-x: auto;
 }
 
 #cardGames-box{
     display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
     gap: 20px;
-    width: fit-content;
 }
 
 #cardGames-container::-webkit-scrollbar {

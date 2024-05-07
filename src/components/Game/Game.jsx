@@ -14,18 +14,15 @@ export default function Game({ id, title, price, description, image, prevGamepla
     const cartBtnRef = useRef(null);
     const delBtnRef = useRef(null);
     const changeFocus = useRef(null);
-    const [cartAlert, setCartAlert] = useState(false);
-    const [delAlert, setDelAlert] = useState(false);
 
     const handleTrueCart = (gameId) => {
-        const localId = localStorage.getItem(gameId);
-
+        const localData = localStorage.getItem(gameId);
         setTimeout(() => {
-            if (localId) {
+            if (localData) {
                 localStorage.removeItem(gameId);
                 localStorage.setItem(id, JSON.stringify({ [gameId]: true }))
-                handleRemoveFromCart();
                 dispatch(removeFromCart(id));
+                handleRemoveFromCart(id);
             }
             else {
                 localStorage.setItem(id, JSON.stringify({ [gameId]: true }))
@@ -33,25 +30,20 @@ export default function Game({ id, title, price, description, image, prevGamepla
 
             if (delBtnRef && delBtnRef.current) {
                 delBtnRef.current.blur();
-                setDelAlert(true);
                 changeFocus.current.focus();
-
-                setTimeout(() => {
-                    setDelAlert(false);
-                }, 1000);
             }
         }, 500)
     };
 
     const handleFalseCart = (gameId) => {
-        const localId = localStorage.getItem(gameId);
-
+        const localData = localStorage.getItem(gameId);
         setTimeout(() => {
-            if (localId) {
+            if (localData) {
+                const localDataParse = JSON.parse(localData);
                 localStorage.removeItem(gameId);
                 localStorage.setItem(id, JSON.stringify({ [gameId]: false }))
-                handleAddToCart();
-                dispatch(addToCart({ id, title, price, description, image }));
+                dispatch(addToCart({ id, title, price, image }));
+                handleAddToCart(id, title, price, image, localDataParse[gameId]);
             }
             else {
                 localStorage.setItem(id, JSON.stringify({ [gameId]: true }))
@@ -59,12 +51,7 @@ export default function Game({ id, title, price, description, image, prevGamepla
 
             if (cartBtnRef && cartBtnRef.current) {
                 cartBtnRef.current.blur();
-                setCartAlert(true);
                 changeFocus.current.focus();
-
-                setTimeout(() => {
-                    setCartAlert(false);
-                }, 1000);
             }
         }, 500)
     };
@@ -89,6 +76,7 @@ export default function Game({ id, title, price, description, image, prevGamepla
             });
         }
     };
+
     const handleMouseOut = () => {
         if (videoRef.current) {
             videoRef.current.pause();
@@ -159,7 +147,7 @@ export default function Game({ id, title, price, description, image, prevGamepla
     }, []);
 
     return (
-        <div id="card-item_game" className="card rounded-3 my-3 bg-black d-flex align-items-center border-0">
+        <div id="card-item_game" className="card rounded-3 my-3 d-flex align-items-center border-0">
             <div to={`${HOME_URL}/${title}`} className="navbar-brand text-white card-body">
                 <Link to={`${HOME_URL}/${title}`} className="img-games-box">
                     <img className="img-games" src={image} alt={title} />
@@ -182,10 +170,15 @@ export default function Game({ id, title, price, description, image, prevGamepla
                         <Link className="card-title" to={`${HOME_URL}/${title}`}>
                             {title}
                         </Link>
-                        <span ref={changeFocus} className="card-price border border-dark badge bg-danger rounded-pill">{price}</span>
+                        <button ref={popoverList} type="button"
+                            data-bs-custom-class="custom-popover" id="info-btn"
+                            className="btn text-white d-flex align-items-center"
+                            data-container="body">
+                            <i className="fas fa-info-circle"></i>
+                        </button>
                     </div>
 
-                    {
+                    {/* {
                         cartAlert ?
                             <div id="addGameCart-alert" className="alert alert-success alert-dismissible p-1" role="alert">
                                 <p className="m-0 px-2">The game was added to cart</p>
@@ -199,43 +192,46 @@ export default function Game({ id, title, price, description, image, prevGamepla
                                 <p className="m-0 px-2">The game was remove from cart</p>
                             </div>
                             : null
-                    }
+                    } */}
+                    <div id="btns-box" className="d-flex w-100 justify-content-between">
+                        <span ref={changeFocus} className="card-price">{price}</span>
+                        {
+                            handleIsTrue(id) ? (
+                                <button id="delete-btn" ref={delBtnRef} onClick={() => handleTrueCart(id)}
+                                    className="d-flex align-items-center gap-2">
+                                    Delete
+                                    <i className="fas fa-trash-alt"></i>
+                                </button>
+                            )
+                                :
+                                (
+                                    <button
+                                        onMouseMove={handleMouseMove}
+                                        id="cart-btn"
+                                        ref={cartBtnRef}
+                                        onClick={() => { handleFalseCart(id); handleAnimAddToCart() }}
+                                        className="d-flex align-items-center gap-2">
+                                        Add to cart
+                                        <span className="material-symbols-outlined">
+                                            add_shopping_cart
+                                        </span>
+                                        {cartAnimation && (
+                                            <animated.img
+                                                src={image}
+                                                style={{
+                                                    ...animationProps,
+                                                    position: 'fixed',
+                                                    width: '80px',
+                                                    height: '50px',
+                                                    borderRadius: '10px'
+                                                }}
+                                            ></animated.img>
+                                        )}
+                                    </button>
+                                )
+                        }
+                    </div>
                 </div>
-            </div>
-            <div id="btns-box" className="d-flex w-100 justify-content-evenly">
-                <button ref={popoverList} type="button" data-bs-custom-class="custom-popover" id="info-btn" className="btn btn-secondary d-flex align-items-center gap-2" data-container="body">
-                    <i className="fas fa-info-circle"></i>
-                </button>
-                {
-                    handleIsTrue(id) ? (
-                        <button
-                            onMouseMove={handleMouseMove}
-                            id="cart-btn"
-                            ref={cartBtnRef}
-                            onClick={() => { handleFalseCart(id); handleAnimAddToCart() }}
-                            className="btn btn-warning d-flex align-items-center gap-2">
-                            <span className="material-symbols-outlined">
-                                add_shopping_cart
-                            </span>
-                            {cartAnimation && (
-                                <animated.img
-                                    src={image}
-                                    style={{
-                                        ...animationProps,
-                                        position: 'fixed',
-                                        width: '80px',
-                                        height: '50px',
-                                        borderRadius: '10px'
-                                    }}
-                                ></animated.img>
-                            )}
-                        </button>
-                    ) : (
-                        <button id="delete-btn" ref={delBtnRef} onClick={() => handleTrueCart(id)} className="btn btn-danger d-flex align-items-center gap-2">
-                            <i className="fas fa-trash-alt"></i>
-                        </button>
-                    )
-                }
             </div>
         </div>
 

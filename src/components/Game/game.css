@@ -1,8 +1,13 @@
+:root{
+    --card-item-color: rgb(18, 18, 18);
+}
+
 #card-item_game {
     width: 200px;
-    height: 180px;
-    box-shadow: 2px 2px 5px 1px #000;
-    position: relative;
+    box-shadow: 0px 0px 3px 1px var(--card-item-color);
+    background-color: var(--card-item-color);
+    backdrop-filter: blur(5px);
+    padding-bottom: 5px;
 }
 
 button {
@@ -58,14 +63,15 @@ button {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    padding: 7px 12px;
+    gap: 7px;
+    border-top: 2px dashed #ffc107;
 }
 
 .titlePrice-box {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-top: 2px dashed #ffc107;
-    padding: 7px 10px;
 }
 
 .card-title {
@@ -84,27 +90,13 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 50px;
-    height: 23px;
-    font-size: .7em;
-    color: #ffc107;
+    font-size: 1.2em;
+    color: #fff;
     text-shadow: 2px 2px 2px #121212;
-}
-
-#btns-box {
-    position: absolute;
-    top: 100%;
-    margin: 10px 0;
-}
-
-#btns-box>button {
-    text-shadow: 1px 1px 2px #121212;
-    box-shadow: 2px 2px 4px 1px #000;
 }
 
 .card-title:hover {
     text-decoration: underline;
-    background-color: rgb(0, 0, 0, .5);
     transition: all .3s linear;
 }
 
@@ -169,17 +161,32 @@ button {
     } 
 }
 
-#info-btn,
-#cart-btn,
-#delete-btn {
+#info-btn{
+    padding: 0;
+}
+
+#delete-btn,
+#cart-btn{
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 40px;
-    width: 40px;
-    border-radius: 100%;
-    overflow: hidden;
-    position: relative;
+    height: 33px;
+    width: 140px;
+    font-size: 14px;
+    border-radius: 7px;
+    color: #121212;
+    font-weight: 600;
+    text-wrap: nowrap;
+}
+
+#delete-btn{
+    background-image: linear-gradient(0deg, #dc3545 50%, #e04958 80%);
+}
+
+#cart-btn{
+    background-image: linear-gradient(0deg, #ffc107 50%, #f7d160 80%);
+    border: 2px solid #f7d160;
+    box-shadow: inset 0 0 0.25rem 1px #f7d160;
 }
 
 #cart-btn>img{
@@ -189,8 +196,8 @@ button {
 #cart-btn>span {
     font-size: 18px;
     transition: transform .2s ease-in-out;
-    position: absolute;
     overflow: hidden;
+    font-weight: 600;
 }
 
 #cart-btn:hover span {

@@ -45,12 +45,3 @@
 .card-title-main:hover {
     text-decoration: underline;
 }
-
-#frontPageBtns-box{
-    margin-top: 10px;
-}
-
-#frontPageBtns-box>button {
-    text-shadow: 1px 1px 2px #121212;
-    box-shadow: 2px 2px 4px 1px #000;
-}

@@ -6,7 +6,7 @@ import Buttons from "../Buttons/Buttons";
 import { Link } from "react-router-dom";
 import { HOME_URL } from "../../App";
 
-export default function Games({ handleIsTrue, videogames, handleAddToCart, handleRemoveFromCart }) {
+export default function Games({ cartCount, handleIsTrue, videogames, handleAddToCart, handleRemoveFromCart }) {
     const [isCategories, setIsCategories] = useState(true);
     const handleToggleCategories = () => {
         setIsCategories(!isCategories);
@@ -60,7 +60,7 @@ export default function Games({ handleIsTrue, videogames, handleAddToCart, handl
     const handleShowTags = () => {
         setIsShowTags(!isShowTags);
     }
-
+    
     const [isShowPlatform, setIsShowPlatform] = useState(true);
     const handleShowPlatform = () => {
         setIsShowPlatform(!isShowPlatform);
@@ -218,6 +218,7 @@ export default function Games({ handleIsTrue, videogames, handleAddToCart, handl
                             gamesFilteredByTag.map(game => {
                                 return (
                                     <Game
+                                        cartCount={cartCount}
                                         handleIsTrue={handleIsTrue}
                                         handleAddToCart={handleAddToCart}
                                         handleRemoveFromCart={handleRemoveFromCart}
@@ -236,6 +237,7 @@ export default function Games({ handleIsTrue, videogames, handleAddToCart, handl
                                 if (game.id !== 1) {
                                     return (
                                         <Game
+                                            cartCount={cartCount}
                                             handleIsTrue={handleIsTrue}
                                             handleAddToCart={handleAddToCart}
                                             handleRemoveFromCart={handleRemoveFromCart}
@@ -252,8 +254,7 @@ export default function Games({ handleIsTrue, videogames, handleAddToCart, handl
                             })
                     }
                 </div>
-                {/* Beta */}
-                <h3 className="text-white w-100 mt-5">New</h3>
+                {/* <h3 className="text-white w-100 mt-5">New</h3>
                 <div id="cardGames-box">
                     {
                         videogames.map(game => {
@@ -275,7 +276,7 @@ export default function Games({ handleIsTrue, videogames, handleAddToCart, handl
                             }
                         })
                     }
-                </div>
+                </div> */}
             </div>
             <Buttons />
         </section>

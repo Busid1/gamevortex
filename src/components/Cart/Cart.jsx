@@ -8,14 +8,21 @@ import Payment from "../Payment/Payment";
 import PaymentGateway from "../PaymentGateway/PaymentGateway";
 import { HOME_URL } from "../../App";
 import randomstring from "randomstring";
+import { getDoc, doc } from "firebase/firestore";
+import { db } from "../Login/app/firebase";
+import { auth } from "../Login/app/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import useFirestore from "../Login/app/firestore";
 
-export default function Cart({ handleRemoveFromCart, inputRef, focusInput }) {
+export default function Cart({ cartCount, handleRemoveFromCart, inputRef, focusInput }) {
     const [gamesInCart, setGamesInCart] = useState(useSelector(state => state.gamesInCart));
     const [gameCounts, setGameCounts] = useState({}); // Inicialmente, no hay cantidades para ningún juego
     //Accedemos al ultimo array ya que este tendra todos los valores validos de la tarjeta y asi no se duplican los elementos
     const creditCardData = useSelector(state => state.creditCard.slice(-1)[0]);
     const creditCardErrors = useSelector(state => state.creditCardErrors.slice(-1)[0]);
     const [lastCreditCard, setLastCreditCard] = useState("");
+    const [firestoreData, setFirestoreData] = useState([]);
+    const { handleDeleteFirestoreField } = useFirestore();
 
     const creditCardComponent = creditCardData ? (
         <div className="creditCardBox">
@@ -27,6 +34,26 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput }) {
     ) : (null);
 
     useEffect(() => {
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                try {
+                    const docRef = doc(db, "usersData", user.uid);
+                    const docSnap = await getDoc(docRef);
+
+                    if (docSnap.exists()) {
+                        const cartGames = docSnap.data().cart;
+                        setFirestoreData(cartGames);
+                    } else {
+                        console.log("No such document!");
+                    }
+                } catch (error) {
+                    console.error("Error getting documents: ", error);
+                }
+            }
+        })
+    }, []);
+
+    useEffect(() => {
         // Obtener las claves del objeto gameCounts
         const keys = Object.keys(gameCounts);
 
@@ -35,7 +62,7 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput }) {
 
         // Establecer el objeto inicializado en 1 en el estado
         setGameCounts(initialGameCounts);
-    }, [])
+    }, []);
 
     const dispatch = useDispatch();
 
@@ -58,7 +85,7 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput }) {
         }));
     };
 
-    const filterGames = gamesInCart.filter((elem, index, arr) => {
+    const filterGames = firestoreData === undefined ? gamesInCart : firestoreData.filter((elem, index, arr) => {
         // Usa `findIndex` para encontrar el índice del primer elemento con el mismo ID
         const firstIndex = arr.findIndex((el) => el.id === elem.id);
         // Devuelve `true` solo si el índice actual coincide con el primer índice encontrado
@@ -67,11 +94,12 @@ export default function Cart({ handleRemoveFromCart, inputRef, focusInput }) {
 
     const filterDelGame = (id) => {
         const newGamesInCart = filterGames.filter(game => game.id !== id)
-        setGamesInCart(newGamesInCart);
+        setFirestoreData(newGamesInCart);
         handleRemoveFromCart();
         localStorage.removeItem(id);
         localStorage.setItem(id, JSON.stringify({ [id]: true }));
         dispatch(removeFromCart(id));
+        handleDeleteFirestoreField(id);
     }
 
     const gamesAddsInCart = filterGames.map((game) => (

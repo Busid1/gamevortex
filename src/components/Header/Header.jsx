@@ -5,6 +5,9 @@ import { removeFromCart } from "../../redux/actions";
 import SearchBar from "../SearchBar/SearchBar";
 import { Link } from "react-router-dom";
 import { HOME_URL } from "../../App";
+import Logout from "../Login/app/Logout";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../Login/app/firebase";
 
 export default function Header({ cartCount, onSearch, searchGame, videogames, handleRemoveFromCart }) {
     const [cartGamesPrev, setCartGamesPrev] = useState([]);
@@ -12,16 +15,28 @@ export default function Header({ cartCount, onSearch, searchGame, videogames, ha
     const [isScrollY, setIsScrollY] = useState(false);
     const reduxGamesInCart = useSelector(state => state.gamesInCart);
     const dispatch = useDispatch();
+    const [isLogin, setIsLogin] = useState(false);
+    const [pfp, setPfp] = useState("");
+
+    useEffect(() => {
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                setIsLogin(true);
+                if (user.photoURL) {
+                    setPfp(user.photoURL);
+                }
+            }
+            else {
+                setIsLogin(false);
+                setPfp("https://i.pinimg.com/564x/5d/2a/d1/5d2ad10c1f4e6b0136e8abddb6205102.jpg");
+            }
+        })
+    }, []);
 
     useEffect(() => {
         // Actualiza gamesInCart cuando state.gamesInCart cambie
         setCartGamesPrev(reduxGamesInCart);
     }, [reduxGamesInCart]); // Este efecto se ejecuta cada vez que reduxGamesInCart cambie
-
-    // Si gamesInCart está vacío, muestra un mensaje de depuración
-    if (cartGamesPrev.length === 0) {
-        console.log("cart empty...");
-    }
 
     const [isPrevClose, setIsPrevClose] = useState(false);
     const handleClosePrevGames = () => {
@@ -163,6 +178,21 @@ export default function Header({ cartCount, onSearch, searchGame, videogames, ha
                                     <span className="fas fa-heart"></span>
                                 </button>
                             </Link>
+                            {
+                                isLogin ?
+                                    (<li className="nav-item dropdown">
+                                        <button className="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <img className="user-profile" src={pfp} alt="" />
+                                        </button>
+                                        <ul className="dropdown-menu">
+                                            <Logout />
+                                        </ul>
+                                    </li>)
+                                    :
+                                    (<button data-bs-toggle="modal" data-bs-target="#signupModal" className="btn material-symbols-outlined text-warning">
+                                        account_circle
+                                    </button>)
+                            }
                         </div>
                         :
                         null

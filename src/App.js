@@ -9,13 +9,20 @@ import GameDetails from './components/GameDetails/GameDetails';
 import Cart from './components/Cart/Cart';
 import Tags from './components/Tags/Tags';
 import Wishlist from './components/Wishlist/Wishlist';
+import Login from './components/Login/Login';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth, db } from './components/Login/app/firebase';
+import { doc, getDoc } from 'firebase/firestore';
+import useFirestore from './components/Login/app/firestore';
+
 export const HOME_URL = "/gamevortex";
-export const API_URL = `https://bow-rebel-apartment.glitch.me${HOME_URL}`;
+export const API_URL = `https://gamevortex.glitch.me${HOME_URL}`;
 
 function App() {
   const [videogames, setVideogames] = useState([]);
   const [searchGame, setSearchGame] = useState([]);
   const location = useLocation();
+  const { user, handleUpdateFirestoreField, handleDeleteFirestoreField } = useFirestore();
 
   // Crea una referencia
   const inputRef = useRef(null);
@@ -34,7 +41,6 @@ function App() {
     async function gamesData() {
       try {
         const response = await axios.get(API_URL);
-        console.log(response.data);
         setVideogames(response.data);
       } catch (error) {
         console.error(error);
@@ -45,19 +51,53 @@ function App() {
   }, []);
 
   const [cartCount, setCartCount] = useState(0);
+  const [isGameInCart, setIsGameInCart] = useState([]);
 
-  const handleAddToCart = () => {
-    setCartCount(cartCount + 1);
+  const handleAddToCart = (id, title, price, image, isGameInCartValue) => {
+    setCartCount(prevCount => prevCount + 1);
+    handleUpdateFirestoreField(id, title, price, image, isGameInCartValue);
   }
 
-  const handleRemoveFromCart = () => {
-    if (cartCount < 1) {
-      setCartCount(0);
-    }
-    else {
-      setCartCount(cartCount - 1);
-    }
+  const handleRemoveFromCart = (id) => {
+    setCartCount(prevCount => Math.max(prevCount - 1, 0));
+    handleDeleteFirestoreField(id, cartCount);
   }
+
+  const handleIsTrue = (id) => {
+    const gameInCart = isGameInCart.find(item => item.id === id);
+    console.log(gameInCart);
+    return gameInCart ? gameInCart.isGameInCart : false;
+  }
+
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          const docRef = doc(db, "usersData", user.uid);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            const cartCountFS = docSnap.data().cartCount;
+            const isGameInCart = docSnap.data().cart;
+            setIsGameInCart(isGameInCart);
+
+            if (cartCountFS < 0) {
+              setCartCount(0);
+            }
+            else {
+              setCartCount(cartCountFS);
+            }
+          } else {
+            console.log("No such document!");
+          }
+        } catch (error) {
+          console.error("Error getting documents: ", error);
+        }
+      }
+    })
+
+    return () => unsubscribe();
+  }, [cartCount]);
 
   const onSearch = (title) => {
     axios(`${API_URL}/${title}`)
@@ -80,42 +120,52 @@ function App() {
     }
   }
 
-  const handleIsTrue = (gameId) => {
-    const getIsTrue = localStorage.getItem(gameId);
-    const parseIstrue = JSON.parse(getIsTrue);
-    return parseIstrue && parseIstrue[gameId];
-  }
 
   return (
     <div>
       {
-        location.pathname !== `${HOME_URL}/cart` ?
-          <Header cartCount={cartCount} onSearch={onSearch} videogames={videogames} titleLength={titleLength} handleRemoveFromCart={handleRemoveFromCart} searchGame={searchGame} />
+        videogames.length === 23 ?
+          <div>
+            {
+              location.pathname !== `${HOME_URL}/cart` ?
+                <Header cartCount={cartCount} onSearch={onSearch} videogames={videogames} titleLength={titleLength} handleRemoveFromCart={handleRemoveFromCart} handleAddToCart={handleAddToCart} searchGame={searchGame} />
+                :
+                (null)
+            }
+            <Routes>
+              <Route path={HOME_URL}
+                element={<Games cartCount={cartCount} handleIsTrue={handleIsTrue} videogames={videogames} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} />}></Route>
+              <Route path={`${HOME_URL}/:game`} element={<GameDetails handleIsTrue={handleIsTrue} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} videogames={videogames} />} />
+              <Route path={`${HOME_URL}/wishlist`} element={<Wishlist handleIsTrue={handleIsTrue} />} />
+              {
+                location.pathname !== `${HOME_URL}` ?
+                  (<Route
+                    path={`${HOME_URL}/games/:tag`}
+                    element={<Tags videogames={videogames}
+                      handleIsTrue={handleIsTrue}
+                      handleAddToCart={handleAddToCart}
+                      handleRemoveFromCart={handleRemoveFromCart}
+                    />}
+                  >
+                  </Route>)
+                  :
+                  (null)
+              }
+              <Route path={`${HOME_URL}/cart`} element={<Cart handleRemoveFromCart={handleRemoveFromCart} inputRef={inputRef} focusInput={focusInput} />} />
+            </Routes>
+            <Login />
+            <Footer />
+          </div>
           :
-          (null)
+          (
+            <div className="spinner-container">
+              <div className="spinner-border text-light" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          )
       }
-      <Routes>
-        <Route path={HOME_URL} element={<Games handleIsTrue={handleIsTrue} videogames={videogames} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} />}></Route>
-        <Route path={`${HOME_URL}/:game`} element={<GameDetails handleIsTrue={handleIsTrue} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} videogames={videogames} />} />
-        <Route path={`${HOME_URL}/wishlist`} element={<Wishlist handleIsTrue={handleIsTrue} />} />
-        {
-          location.pathname !== `${HOME_URL}` ?
-            (<Route
-              path={`${HOME_URL}/games/:tag`}
-              element={<Tags videogames={videogames}
-                handleIsTrue={handleIsTrue}
-                handleAddToCart={handleAddToCart}
-                handleRemoveFromCart={handleRemoveFromCart}
-              />}
-            >
-            </Route>)
-            :
-            (null)
-        }
-        <Route path={`${HOME_URL}/cart`} element={<Cart handleRemoveFromCart={handleRemoveFromCart} inputRef={inputRef} focusInput={focusInput} />} />
-      </Routes>
-      <Footer />
-    </div>
+    </div >
   )
 }
 
