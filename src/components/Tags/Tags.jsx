@@ -4,7 +4,6 @@ import axios from "axios";
 import { useLocation, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Game from "../Game/Game";
-import { HOME_URL } from "../../App";
 
 export default function Tags({ id, handleAddToCart, handleIsTrue, handleRemoveFromCart }) {
     const [gameTag, setGameTag] = useState([])

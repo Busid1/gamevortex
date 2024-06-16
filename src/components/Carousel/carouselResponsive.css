@@ -38,7 +38,7 @@
     }
 
     .carouselBtn-box>button {
-        font-size: 90px;
+        font-size: 65px;
     }
 
     .closeBtn-box>.close{
@@ -48,7 +48,7 @@
 
 @media (min-width: 2560px) {
     .carouselBtn-box>button {
-        font-size: 180px;
+        font-size: 100px;
     }
 
     .closeBtn-box>.close{

@@ -1,27 +1,27 @@
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc, addDoc, collection } from "firebase/firestore";
 import { db } from "./firebase";
 import showMessage from "./showMessage";
 import { signOut } from "firebase/auth";
 import { auth } from "./firebase";
 
-export const loginCheck = async user => {
+export const loginCheck = async (user, videogames) => {
     if (user) {
         try {
-            const docRef = doc(db, "usersData", user.uid);
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
+            const userDocRef = doc(db, "users", user.uid);
+            const userDocSnap = await getDoc(userDocRef);
+            if (userDocSnap.exists()) {
                 console.log("Welcome");
             } else {
                 await setDoc(doc(db, "users", user.uid), {
-                    ...user.providerData[0]
-                });
-                await setDoc(doc(db, "usersData", user.uid), {
+                    displayName: user.displayName,
+                    email: user.email,
+                    photoURL: user.photoURL,
+                    uid: user.uid,
                     cart: [],
-                    cartCount: 0,
                     whislist: [],
                 });
+                
             }
-            console.log(user);
         } catch (error) {
             await signOut(auth);
             console.error("Error getting documents: ", error);
@@ -29,3 +29,4 @@ export const loginCheck = async user => {
         }
     }
 }
+

@@ -10,11 +10,8 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../Login/app/firebase";
 
 export default function Header({ cartCount, onSearch, searchGame, videogames, handleRemoveFromCart }) {
-    const [cartGamesPrev, setCartGamesPrev] = useState([]);
     const cartHeaderRef = useRef();
     const [isScrollY, setIsScrollY] = useState(false);
-    const reduxGamesInCart = useSelector(state => state.gamesInCart);
-    const dispatch = useDispatch();
     const [isLogin, setIsLogin] = useState(false);
     const [pfp, setPfp] = useState("");
 
@@ -25,53 +22,18 @@ export default function Header({ cartCount, onSearch, searchGame, videogames, ha
                 if (user.photoURL) {
                     setPfp(user.photoURL);
                 }
-            }
-            else {
+                else {
+                    setPfp("https://i.pinimg.com/564x/5d/2a/d1/5d2ad10c1f4e6b0136e8abddb6205102.jpg");
+                }
+            }  
+            else{
                 setIsLogin(false);
-                setPfp("https://i.pinimg.com/564x/5d/2a/d1/5d2ad10c1f4e6b0136e8abddb6205102.jpg");
             }
         })
-    }, []);
-
-    useEffect(() => {
-        // Actualiza gamesInCart cuando state.gamesInCart cambie
-        setCartGamesPrev(reduxGamesInCart);
-    }, [reduxGamesInCart]); // Este efecto se ejecuta cada vez que reduxGamesInCart cambie
-
-    const [isPrevClose, setIsPrevClose] = useState(false);
-    const handleClosePrevGames = () => {
-        setIsPrevClose(!isPrevClose);
-    };
-
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            // Si el elemento pulsado no es el cartHeader o uno de sus descendientes
-            if (cartHeaderRef.current && !cartHeaderRef.current.contains(event.target)) {
-                setIsPrevClose(false);
-                // Aquí puedes realizar las acciones que desees cuando el cartHeader no sea pulsado
-            }
-        };
-
-        // Agregamos el event listener al documento para detectar clics fuera del cartHeader
-        document.addEventListener('mousedown', handleClickOutside);
-
-        // Es importante limpiar el event listener al desmontar el componente
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-
-    const filterDelGame = (id) => {
-        const newGamesInCart = cartGamesPrev.filter(game => game.id !== id)
-        setCartGamesPrev(newGamesInCart);
-        handleRemoveFromCart();
-        localStorage.removeItem(id);
-        localStorage.setItem(id, JSON.stringify({ [id]: true }));
-        dispatch(removeFromCart(id));
-    }
+    }, [pfp]);
 
     const handleScrollY = () => {
-        if (window.scrollY > 10) {
+        if (window.scrollY > 200) {
             setIsScrollY(true);
         }
         else {
@@ -80,20 +42,18 @@ export default function Header({ cartCount, onSearch, searchGame, videogames, ha
     }
 
     useEffect(() => {
-        if (cartCount >= 1) {
-            setIsPrevClose(true);
-        }
-
         window.addEventListener('scroll', handleScrollY);
 
         return () => {
             window.removeEventListener('scroll', handleScrollY);
         };
-    }, [cartCount]);
+    }, []);
 
     const [searchBarDeploy, setSearchBarDeploy] = useState(true);
+    const [searchBarFocus, setSearchBarFocus] = useState(false);
     const handleSearchBarDeploy = () => {
         setSearchBarDeploy(!searchBarDeploy);
+        setSearchBarFocus(!searchBarFocus);
     }
 
     return (
@@ -109,14 +69,14 @@ export default function Header({ cartCount, onSearch, searchGame, videogames, ha
                 }
                 <span id="search-icon"
                     onClick={handleSearchBarDeploy}
-                    className="text-warning material-symbols-outlined">
+                    className="text-white material-symbols-outlined">
                     {searchBarDeploy ? "search" : "close"}
                 </span>
-                <SearchBar handleSearchBarDeploy={handleSearchBarDeploy} searchBarDeploy={searchBarDeploy} onSearch={onSearch} searchGame={searchGame} videogames={videogames} />
+                <SearchBar searchBarFocus={searchBarFocus} handleSearchBarDeploy={handleSearchBarDeploy} searchBarDeploy={searchBarDeploy} onSearch={onSearch} searchGame={searchGame} videogames={videogames} />
                 {
                     searchBarDeploy ?
                         <div ref={cartHeaderRef} className="cartHeader-container">
-                            <Link to={`${HOME_URL}/cart`} className="d-flex cartIcon-box text-warning">
+                            <Link to={`${HOME_URL}/cart`} className="d-flex cartIcon-box text-white">
                                 <div className="material-symbols-outlined position-relative" id="cart-icon">
                                     shopping_cart_checkout
                                     <span id="push-cart"
@@ -126,72 +86,30 @@ export default function Header({ cartCount, onSearch, searchGame, videogames, ha
                                 </div>
                             </Link>
                             {
-                                isPrevClose ?
-                                    <ul className="cartGamesPrev-box"
-                                        style={{
-                                            overflowY: cartGamesPrev.length > 3 ? "scroll" : "hidden",
-                                        }}>
-                                        <h3 className="cartPrev-title">Cart preview</h3>
-                                        {
-                                            cartGamesPrev.length !== 0 ?
-                                                cartGamesPrev.map(game => (
-                                                    <li className="cartGamePrev-item" key={game.id}>
-                                                        <div>
-                                                            <img className="shadow" src={game.image} alt={game.title} />
-                                                            <div className="cartPrev-body d-flex flex-column w-75">
-                                                                <Link to={`${HOME_URL}/${game.title}`} onClick={handleClosePrevGames} className="text-warning">
-                                                                    {game.title}
-                                                                </Link>
-                                                                <div className="cartPrev-bottom d-flex align-items-center justify-content-between">
-                                                                    <span className="text-white">{game.price}</span>
-                                                                    <button
-                                                                        onClick={() => filterDelGame(game.id)}
-                                                                        className="p-1 bg-transparent border-0 cursor-pointer">
-                                                                        <i className="fas fa-trash-alt text-danger" aria-hidden="true"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <hr className="separator" />
-                                                    </li>
-                                                ))
-                                                :
-                                                <li className="emptyCart-box text-white">Empty cart...
-                                                    <span className="fs-5 text-white material-symbols-outlined">
-                                                        shopping_cart_off
-                                                    </span>
-                                                </li>
-                                        }
-                                    </ul> : null
-                            }
-                            {
-                                isPrevClose ?
-                                    <span className="startDeploy-icon text-warning material-symbols-outlined">
-                                        change_history
-                                    </span> : null
-                            }
-                            <span onClick={handleClosePrevGames} className="deployPrevGames-icon text-warning material-symbols-outlined">
-                                {isPrevClose ? 'arrow_drop_down' : 'arrow_drop_up'}
-                            </span>
-                            <Link to={`${HOME_URL}/wishlist`}>
-                                <button id="wishlistHeader-icon">
-                                    <span className="fas fa-heart"></span>
-                                </button>
-                            </Link>
-                            {
                                 isLogin ?
-                                    (<li className="nav-item dropdown">
-                                        <button className="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <img className="user-profile" src={pfp} alt="" />
-                                        </button>
-                                        <ul className="dropdown-menu">
-                                            <Logout />
+                                    (
+                                        <ul className="m-0 p-0">
+                                            <li className="nav-item dropdown">
+                                                <button className="nav-link dropdown-toggle text-white" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <img className="user-profile" src={pfp} alt="profile-picture" />
+                                                </button>
+                                                <ul className="dropdown-menu">
+                                                    <Logout />
+                                                    <li>
+                                                        <Link className="dropdown-item" to={`${HOME_URL}/wishlist`}>
+                                                            Wishlist
+                                                        </Link>
+                                                    </li>
+                                                </ul>
+                                            </li>
                                         </ul>
-                                    </li>)
+                                    )
                                     :
-                                    (<button data-bs-toggle="modal" data-bs-target="#signupModal" className="btn material-symbols-outlined text-warning">
-                                        account_circle
-                                    </button>)
+                                    (
+                                        <button data-bs-toggle="modal" data-bs-target="#signupModal" className="btn p-0 material-symbols-outlined text-white">
+                                            account_circle
+                                        </button>
+                                    )
                             }
                         </div>
                         :

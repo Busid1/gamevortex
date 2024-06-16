@@ -1,11 +1,3 @@
-.frontPage-container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 220px;
-    position: relative;
-}
-
 .frontPageImage-box {
     display: flex;
     height: 100%;
@@ -16,32 +8,31 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    mask-image: linear-gradient(rgb(18, 18, 18), transparent);
 }
 
-.frontPage-gradient {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to bottom, transparent, #171c21);
-    backdrop-filter: 5px;
-}
-
-.card-body-main {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    position: absolute;
-    left: 10%;
-    top: 5%;
-    z-index: 2;
-}
-
-.card-title-main {
+.frontPageCard-title {
     text-shadow: 2px 2px 2px #000;
     font-size: 1.3em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 100%;
 }
 
-.card-title-main:hover {
+.frontPageCard-title:hover {
     text-decoration: underline;
+}
+
+.frontPageCard-price{
+    display: flex;
+    align-items: center;
+    text-shadow: 2px 2px 2px #000;
+    height: 100%;
+}
+
+.carousel-indicators{
+    position: absolute;
+    top: 100%;
+    right: 0%;
+    margin-top: 10px;
 }

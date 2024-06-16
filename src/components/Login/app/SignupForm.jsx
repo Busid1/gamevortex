@@ -53,10 +53,10 @@ export default function SignupForm() {
                     </div>
                     <div className="modal-body">
                         <form ref={signupFormRef} id="signup-form" onSubmit={handleSignupSubmit}>
-                            <label htmlFor="email" className="form-label text-white">Email:</label>
+                            <label htmlFor="email" className="text-white">Email:</label>
                             <input type="email" id="signup-email"
+                                placeholder="gamevortex@gamevortex.com"
                                 className="form-control mb-3"
-                                placeholder="Email"
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -69,7 +69,7 @@ export default function SignupForm() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
-                            <button type="submit" className="btn btn-primary">Register</button>
+                            <button type="submit" className="btn btn-primary w-100 mb-3">Register</button>
                         </form>
                         <div className="d-flex align-items-center gap-2 mt-3">
                             <p className="text-white m-0">Do you already have an account?</p>

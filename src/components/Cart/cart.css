@@ -8,21 +8,38 @@
 
 .cartGamesResume-box{
     display: flex;
-    align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     flex-direction: column;
-    min-height: calc(100vh - 522px);
+    min-height: calc(100vh);
     width: 90%;
+    gap: 30px;
+}
+
+.resumeGamesBox{
+    justify-content: space-evenly;
+    min-height: 200px;
 }
 
 .cart-box {
     width: 100%;
     max-height: 120px;
     min-height: 70px;
+    background-color: #202020;
+    padding: 15px;
+}
+
+.emptyCart-box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    background-color: #202020;
+    min-height: 200px;
+    max-width: 500px;
 }
 
 .resumeGameTitle-box{
-    width: 60px;
+    width: 100px;
 }
 
 .resumeGameTitle-box>span{
@@ -30,6 +47,7 @@
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    width: 100%;
 }
 
 .gameTitle {
@@ -56,8 +74,12 @@
 }
 
 .cartGamesBox {
-    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
     gap: 30px;
+    width: 100%;
 }
 
 .cartBtns{
@@ -70,9 +92,9 @@
 }
 
 .resumeGamesBox {
+    display: flex;
     min-width: 280px;
-    align-self: center;
-    margin-top: 20px;
+    background-color: rgb(32, 32, 32);
 }
 
 .creditCardBox {
@@ -139,6 +161,32 @@
 
  
 /* ------------ Responsive ------------- */
+@media screen and (min-width: 320px) {
+    .frontPage-container{
+        height: 40vh;
+    }
+
+    .frontPage-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        z-index: 2;
+        width: 230px;
+    }
+
+    .frontPage-description{
+        display: block;
+        display: -webkit-box;
+        text-wrap: wrap;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 5px;
+    }
+}
+
 @media screen and (min-width: 425px) {
     .logo-box{
         width: 100px;
@@ -150,11 +198,6 @@
 
     #wishlistHeader-icon{
         font-size: 1.3em;
-    }
-    
-    .cart-box {
-        max-width: 80%;
-        align-self: center;
     }
 
     .frontPageCard-price{
@@ -169,7 +212,7 @@
         width: 220px;
     }
 
-    .gameDetails-box, #otherGames-container, #cardGames-container, #tags-games-box{
+    .gameDetails-box, #otherGames-container, #tags-games-box{
         width: 80%;
     }
 }
@@ -184,7 +227,7 @@
     }
 
     .frontPage-container{
-        height: 320px;
+        height: 60vh;
     }
 
     .searchBar-container{
@@ -198,12 +241,24 @@
         font-size: 1.1em;
     }
 
-    .cartGamesPrev-box {
-        width: 250px;
-    }
- 
     .card-title-main{
         font-size: 1.5em;
+    }
+
+    .frontPage-content{
+        position: absolute;
+        left: 12%;
+        width: 400px;
+    }
+
+    .frontPage-description{
+        display: block;
+        display: -webkit-box;
+        text-wrap: wrap;
+        -webkit-line-clamp: 8;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        margin-bottom: 5px;
     }
 
     .frontPageCard-price{
@@ -215,7 +270,7 @@
     }
 
     .cart-box {
-        align-self: none;
+        align-self: flex-start;
     }
 
     .cartGamesResume-box {
@@ -251,8 +306,12 @@
         gap: 20px;
     }
 
+    #cardGames-box > button {
+        display: flex;
+    }
+
     .gameDetails-box, #otherGames-container, #cardGames-container, #tags-games-box{
-        width: 80%;
+        width: 90%;
     }
 }
 
@@ -269,12 +328,8 @@
         font-size: 1.6em;
     }
 
-    .cartGamesPrev-box {
-        width: 300px;
-    }
-
     .frontPage-container{
-        height: 400px;
+        height: 110vh;
     }
 
     #card-item_game{
@@ -331,8 +386,16 @@
         margin-top: 20px;
     }
 
-    .frontPage-container{
-        height: 460px;
+    /* .frontPage-container{
+        height: 110vh;
+    } */
+
+    .frontPageCard-title{
+        font-size: 1.5em;
+    }
+
+    .frontPageCard-price{
+        font-size: 1.2em;
     }
 
     .searchBar-container{
@@ -358,7 +421,7 @@
 
 @media screen and (min-width: 2560px) {
     .frontPage-container{
-        height: 600px;
+        height: 150vh;
     }
     
     .gameplay-box{

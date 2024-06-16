@@ -25,8 +25,6 @@ export default function Buttons() {
         document.body.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
     }
 
-    
-
     return (
         <div>
             {

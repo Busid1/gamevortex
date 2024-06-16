@@ -1,0 +1,60 @@
+.frontPage-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+
+.frontPage-box {
+    display: flex;
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.frontPageCarousel-item.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    visibility: visible;
+    width: 100%;
+    height: 100%;
+}
+
+.frontPageCarousel-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all .3s linear;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+.frontPageCarouselBtn-box{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.frontPageCarouselBtn-box>button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
+    color: #fff;
+    text-shadow: 1px 1px 3px #000;
+    cursor: pointer;
+    transition: all .5s linear;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}

@@ -65,27 +65,7 @@ export default function Cart({ cartCount, handleRemoveFromCart, inputRef, focusI
     }, []);
 
     const dispatch = useDispatch();
-
-    const increaseCount = (gameId) => {
-        setGameCounts((prevCounts) => ({
-            // Hace una copia de lo que haya anteriormente
-            ...prevCounts,
-            // Se pasa por parametro el id del juego, despues determina si hay algo en el id 
-            // pasado por parametro en caso de no haber nada se establece en 0 y se suma 1.
-            [gameId]: (prevCounts[gameId] || 1) + 1,
-        }));
-    };
-
-    const decreaseCount = (gameId) => {
-        setGameCounts((prevCounts) => ({
-            ...prevCounts,
-            // Esto es similar a lo otro solo que aqui se usa esta funcion 'Math.max()' para
-            // impedir que se llegue a numeros negativos.
-            [gameId]: Math.max((prevCounts[gameId] || 1) - 1, 1),
-        }));
-    };
-
-    const filterGames = firestoreData === undefined ? gamesInCart : firestoreData.filter((elem, index, arr) => {
+    const filterGames = firestoreData.length > 0 ? firestoreData : gamesInCart.filter((elem, index, arr) => {
         // Usa `findIndex` para encontrar el índice del primer elemento con el mismo ID
         const firstIndex = arr.findIndex((el) => el.id === elem.id);
         // Devuelve `true` solo si el índice actual coincide con el primer índice encontrado
@@ -95,6 +75,7 @@ export default function Cart({ cartCount, handleRemoveFromCart, inputRef, focusI
     const filterDelGame = (id) => {
         const newGamesInCart = filterGames.filter(game => game.id !== id)
         setFirestoreData(newGamesInCart);
+        setGamesInCart(newGamesInCart);
         handleRemoveFromCart();
         localStorage.removeItem(id);
         localStorage.setItem(id, JSON.stringify({ [id]: true }));
@@ -103,8 +84,8 @@ export default function Cart({ cartCount, handleRemoveFromCart, inputRef, focusI
     }
 
     const gamesAddsInCart = filterGames.map((game) => (
-        <div key={game.id} className="cart-box bg-secondary shadow rounded d-flex gap-3">
-            <img className="rounded-start" src={game.image} alt={game.title} />
+        <div key={game.id} className="cart-box shadow rounded d-flex gap-3">
+            <img className="rounded" src={game.image} alt={game.title} />
             <div className="d-flex flex-column justify-content-center">
                 <Link to={`${HOME_URL}/${game.title}`} className="gameTitle text-warning">
                     {game.title}
@@ -230,136 +211,98 @@ export default function Cart({ cartCount, handleRemoveFromCart, inputRef, focusI
                 isActivateCode={isActivateCode}
             />
             <div className="cartGamesResume-box">
-                <div className="cartGamesBox d-flex flex-column">
-                    {gamesAddsInCart}
-                </div>
-                <div className="bg-secondary rounded py-3 resumeGamesBox d-flex flex-column align-items-center">
-                    <h2 className="m-0">Resume</h2>
-
-                    <div className="d-flex gap-4 mt-2">
-                        <div className="d-flex flex-column gap-3">
-                            <span className="text-warning">Game</span>
-                            {
-                                filterGames.map(game => {
-                                    return (
-                                        <div className="resumeGameTitle-box" key={game.id}>
-                                            <span>{game.title}</span>
-                                            <hr className="my-2" />
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
-                        <div className="d-flex flex-column gap-3">
-                            <span className="text-warning">Amount</span>
-                            {
-                                filterGames.map(game => {
-                                    return (
-                                        <div key={game.id}>
-                                            {
-                                                gameCounts[game.id] ?
-                                                    (<span>{gameCounts[game.id]}</span>) :
-                                                    (<span>{gameCounts[game.id] = 1}</span>)
-                                            }
-
-                                            <hr className="my-2" />
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
-                        <div className="d-flex flex-column gap-3">
-                            <span className="text-warning">Price</span>
-                            {
-                                filterGames.map(game => {
-                                    return (
-                                        <div key={game.id}>
-                                            {
-                                                gameCounts[game.id] ? (<span>{(parseFloat(game.price) * gameCounts[game.id]).toFixed(2)}$</span>
-                                                ) : (<span>{game.price}$</span>)
-                                            }
-                                            <hr className="my-2" />
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
-                    </div>
-                    <span>Total: {total.toFixed(2)}$</span>
+                <div className="cartGamesContainer w-100">
+                    <h2>Cart</h2>
                     {
-                        creditCardValid ?
-                            <button id="editPayment" onClick={() => { handleEditPayment(); focusInput(); }} className="d-flex align-items-center gap-2 fs-6 btn btn-info shadow mt-3">
-                                Edit payment
-                                <span className="material-symbols-outlined">
-                                    credit_card_gear
-                                </span>
-                            </button>
+                        gamesInCart.length === 0 && firestoreData.length === 0 ?
+                            <div className="emptyCart-box">
+                                <h3>The cart is empty :(</h3>
+                            </div>
                             :
-                            <button onClick={() => { handleClosePayment(); focusInput(); }} className="d-flex align-items-center gap-2 fs- btn btn-warning shadow mt-3">
-                                Add payment
-                                <span className="material-symbols-outlined">
-                                    add_card
-                                </span>
-                            </button>
+                            <div className="cartGamesBox">
+                                {gamesAddsInCart}
+                            </div>
                     }
-
-                    {lastCreditCard && creditCardData ? creditCardComponent : null}
-
-                    {creditCardValid ? (
-                        <div>
-                            <button onClick={handleBuyGame} className="d-flex align-items-center gap-2 fs-5 btn btn-success shadow mt-3">
-                                Buy game/s
-                                <span className="material-symbols-outlined">
-                                    payments
-                                </span>
-                            </button>
-                            {isBuyGameAlert ?
-                                <div style={{ display: isBuyGame ? "flex" : "none" }} className="activationCode-container">
-                                    {isSpinner ?
-                                        <span className="spinner"></span>
-                                        :
-                                        <div className="activationCode-box">
-                                            <p className="buyGameMessage">
-                                                The purchase was successfully.
-                                                <br></br>
-                                                The game/s code is below this message:
-                                            </p>
-                                            <div className="d-flex flex-column gap-2">
-                                                {
-                                                    filterGames.map(({ title, id }) => (
-                                                        <div key={id} className="d-flex justify-content-between gap-3">
-                                                            <span className="text-warning" key={id}>{title}</span>
-                                                            <span className="text-warning" key={id}>{randomstring.generate({ length: 10, charset: 'alphanumeric' })}</span>
-                                                        </div>
-                                                    ))
-                                                }
-                                            </div>
-                                            <Link to={HOME_URL} className="d-flex justify-content-center mt-3">
-                                                <button className="btn btn-primary">
-                                                    Go to home page
-                                                </button>
-                                            </Link>
-                                        </div>
-                                    }
-                                </div>
+                </div>
+                <div className="resumeGamesContainer">
+                    <h2 className="">Resume</h2>
+                    <div className="rounded py-3 resumeGamesBox d-flex flex-column align-items-center">
+                        <span>Total: {total.toFixed(2)}$</span>
+                        {
+                            creditCardValid ?
+                                <button id="editPayment" onClick={() => { handleEditPayment(); focusInput(); }} className="d-flex align-items-center gap-2 fs-6 btn btn-info shadow mt-3">
+                                    Edit payment
+                                    <span className="material-symbols-outlined">
+                                        credit_card_gear
+                                    </span>
+                                </button>
                                 :
-                                (null)
-                            }
+                                <button onClick={() => { handleClosePayment(); focusInput(); }} className="d-flex align-items-center gap-2 fs- btn btn-warning shadow mt-3">
+                                    Add payment
+                                    <span className="material-symbols-outlined">
+                                        add_card
+                                    </span>
+                                </button>
+                        }
 
-                        </div>
-                    ) : null}
+                        {lastCreditCard && creditCardData ? creditCardComponent : null}
 
-                    {
-                        closePayment ? <Payment
-                            handlePaymentCorrect={handlePaymentCorrect}
-                            handleClosePayment={handleClosePayment}
-                            handleAddPayment={handleAddPayment}
-                            creditCardData={creditCardData}
-                            inputRef={inputRef}
-                            isErrors={isErrors}
-                        /> :
-                            null
-                    }
+                        {creditCardValid ? (
+                            <div>
+                                <button onClick={handleBuyGame} className="d-flex align-items-center gap-2 fs-5 btn btn-success shadow mt-3">
+                                    Buy game/s
+                                    <span className="material-symbols-outlined">
+                                        payments
+                                    </span>
+                                </button>
+                                {isBuyGameAlert ?
+                                    <div style={{ display: isBuyGame ? "flex" : "none" }} className="activationCode-container">
+                                        {isSpinner ?
+                                            <span className="spinner"></span>
+                                            :
+                                            <div className="activationCode-box">
+                                                <p className="buyGameMessage">
+                                                    The purchase was successfully.
+                                                    <br></br>
+                                                    The game/s code is below this message:
+                                                </p>
+                                                <div className="d-flex flex-column gap-2">
+                                                    {
+                                                        filterGames.map(({ title, id }) => (
+                                                            <div key={id} className="d-flex justify-content-between gap-3">
+                                                                <span className="text-warning" key={id}>{title}</span>
+                                                                <span className="text-warning" key={id}>{randomstring.generate({ length: 10, charset: 'alphanumeric' })}</span>
+                                                            </div>
+                                                        ))
+                                                    }
+                                                </div>
+                                                <Link to={HOME_URL} className="d-flex justify-content-center mt-3">
+                                                    <button className="btn btn-primary">
+                                                        Go to home page
+                                                    </button>
+                                                </Link>
+                                            </div>
+                                        }
+                                    </div>
+                                    :
+                                    (null)
+                                }
+
+                            </div>
+                        ) : null}
+
+                        {
+                            closePayment ? <Payment
+                                handlePaymentCorrect={handlePaymentCorrect}
+                                handleClosePayment={handleClosePayment}
+                                handleAddPayment={handleAddPayment}
+                                creditCardData={creditCardData}
+                                inputRef={inputRef}
+                                isErrors={isErrors}
+                            /> :
+                                null
+                        }
+                    </div>
                 </div>
             </div>
         </div>

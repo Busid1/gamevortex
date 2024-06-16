@@ -1,38 +1,26 @@
-#home-container {
-    min-height: calc(100vh - 50px);
-    padding-bottom: 60px;
-}
-
 .homeFilter-box {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
-    margin: 0 20px;
     gap: 20px;
-}
-
-.homeLinks-box {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    position: relative;
+    width: 100%;
 }
 
 .homeLink {
     display: flex;
     color: #fff;
     text-transform: capitalize;
-    bottom: 20px;
+    bottom: 0px;
     margin: 0;
     font-weight: 500;
     font-size: 1.3em;
+    position: relative;
 }
 
 .homeLink::after {
     content: "";
     display: block;
-    width: 25%;
+    width: 100%;
     border-bottom: 2px solid #ffc107;
     position: absolute;
     bottom: -5px;
@@ -46,31 +34,15 @@
     border: none;
 }
 
-.filter-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-}
-
 #filter-btn {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    margin-left: auto;
-    padding: 5px 10px;
     border-radius: 10px;
     outline: none;
     border: none;
     gap: 10px;
     background-color: transparent;
     color: #fff;
-    background-color: #121212;
-}
-
-#filter-btn>span {
-    display: flex;
-    align-items: center;
     font-size: 1.3em;
 }
 
@@ -201,15 +173,59 @@
     justify-content: space-evenly;
     flex-direction: column;
     width: 100%;
+    position: relative;
+    bottom: 50px;
+    gap: 15px;
 }
 
-#cardGames-box{
-    display: flex;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
+#cardGames-box {
+    position: relative;
+}
+
+.cardGames-content {
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
     gap: 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 
-#cardGames-container::-webkit-scrollbar {
-    display: none; /* Altura de la barra de desplazamiento */
+#cardGames-box > button {
+    display: none;
+    align-self: center;
+    justify-content: center;
+    font-size: 30px;
+    color: #fff;
+    text-shadow: 1px 1px 3px #000;
+    cursor: pointer;
+    height: 100%;
+    width: 45px;
+    transition: all .5s linear;
+    border: none;
+    padding: 0;
+    z-index: 1;
+}
+
+.cardGamesBtn-left{
+    position: absolute;
+    align-items: center;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 10px 0 0;
+    background: linear-gradient(to right, rgba(18, 18, 18), transparent);
+}
+
+.cardGamesBtn-right{
+    position: absolute;
+    align-items: center;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: linear-gradient(to left, rgba(18, 18, 18), transparent);
+}
+
+.cardGames-content::-webkit-scrollbar {
+    display: none;
 }

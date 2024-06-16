@@ -1,4 +1,58 @@
-.modal-content{
-    background-color: rgb(32, 32, 32, .7);
-    backdrop-filter: blur(10px);
+.modal-content {
+    background-color: rgba(32, 32, 32, 0.7);
+    backdrop-filter: blur(5px);
+}
+
+.form-control {
+    background-color: transparent;
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid #fff;
+    color: #fff;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-bottom: 1px solid #f7d160;
+    background-color: transparent;
+    color: #fff;
+}
+
+.form-control::placeholder {
+    color: #ccc;
+}
+
+#registerBtn {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    background-color: #fff;
+}
+
+.login-separator {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+    margin: 10px auto;
+    width: 80%;
+}
+
+.login-separator::before,
+.login-separator::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #fff;
+}
+
+.login-separator:not(:empty)::before {
+    margin-right: .25em;
+}
+
+.login-separator:not(:empty)::after {
+    margin-left: .25em;
+}
+
+#google-logo {
+    width: 25px;
 }

@@ -6,14 +6,12 @@ import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { HOME_URL } from "../../App";
 
-export default function FrontPage({ id, title, price, description, image, frontPageImage, handleIsTrue, handleAddToCart, handleRemoveFromCart }) {
+export default function FrontPage({ id, title, price, description, image, background, handleAddToCart, handleRemoveFromCart, currentSlide }) {
     const location = useLocation();
     const dispatch = useDispatch();
     const cartBtnRef = useRef(null);
     const delBtnRef = useRef(null);
     const changeFocus = useRef(null);
-    const [cartAlert, setCartAlert] = useState(false);
-    const [delAlert, setDelAlert] = useState(false);
 
     useEffect(() => {
         if (location.pathname !== `/${HOME_URL}`) {
@@ -21,108 +19,87 @@ export default function FrontPage({ id, title, price, description, image, frontP
         }
     }, []);
 
-    const handleTrueCart = (gameId) => {
-        const localId = localStorage.getItem(gameId);
+    // State and effect for game in cart
+    const [isInCart, setIsInCart] = useState(false);
+    useEffect(() => {
+        const getIsTrue = localStorage.getItem(id);
+        const parseIsTrue = JSON.parse(getIsTrue);
+        if (parseIsTrue && parseIsTrue[id]) {
+            setIsInCart(true);
+        } else {
+            setIsInCart(false);
+        }
+    }, [id]);
 
+    // Function to add game to cart
+    const handleTrueCart = () => {
         setTimeout(() => {
-            if (localId) {
-                localStorage.removeItem(gameId);
-                localStorage.setItem(id, JSON.stringify({ [gameId]: true }))
-                handleRemoveFromCart();
-                dispatch(removeFromCart(id));
-            }
-            else {
-                localStorage.setItem(id, JSON.stringify({ [gameId]: true }))
-            }
-
-            if (delBtnRef && delBtnRef.current) {
-                delBtnRef.current.blur();
-                setDelAlert(true);
-                changeFocus.current.focus();
-
-                setTimeout(() => {
-                    setDelAlert(false);
-                }, 1000);
-            }
-        }, 700)
+            setIsInCart(true);
+        }, 500)
+        handleAddToCart(id, title, price, image);
+        localStorage.setItem(id, JSON.stringify({ [id]: true }));
+        dispatch(addToCart({ id, title, price, description, image }));
     };
 
-    const handleFalseCart = (gameId) => {
-        const localId = localStorage.getItem(gameId);
-
-        setTimeout(() => {
-            if (localId) {
-                localStorage.removeItem(gameId);
-                localStorage.setItem(id, JSON.stringify({ [gameId]: false }))
-                handleAddToCart();
-                dispatch(addToCart({ id, title, price, description, image }));
-            }
-            else {
-                localStorage.setItem(id, JSON.stringify({ [gameId]: true }))
-            }
-
-            if (cartBtnRef && cartBtnRef.current) {
-                cartBtnRef.current.blur();
-                setCartAlert(true);
-                changeFocus.current.focus();
-
-                setTimeout(() => {
-                    setCartAlert(false);
-                }, 1000);
-            }
-        }, 700)
+    // Function to remove game from cart
+    const handleFalseCart = () => {
+        handleRemoveFromCart(id);
+        localStorage.removeItem(id);
+        setIsInCart(false);
+        dispatch(removeFromCart(id));
     };
 
     return (
-        <div className="frontPage-container">
-            <Link to={`${HOME_URL}/${title}`} className="frontPageImage-box d-flex align-items-center justify-content-end">
-                <img src={frontPageImage} alt={title} />
-                <div className="frontPage-gradient"></div>
-            </Link>
-            <div className="card-body-main d-flex flex-column justify-content-center align-items-start">
+        <>
+            <div className="frontPageImage-box d-flex align-items-center justify-content-end">
+                <img src={background} alt={title} />
+            </div>
+            <div className="frontPage-content">
                 <div className="navbar-brand text-white d-flex flex-column gap-2">
                     <div className="d-flex flex-column">
-                        <Link to={`${HOME_URL}/${title}`} className="card-title-main text-warning">
-                            {title}
-                        </Link>
+                        <div className="d-flex justify-content-between align-items-center">
+                            <Link to={`${HOME_URL}/${title}`} className="frontPageCard-title text-warning">
+                                {title}
+                            </Link>
+                        </div>
+                        <p className="frontPage-description">{description}</p>
+                    </div>
+                    <div id="frontPageBtns-box" className="d-flex align-items-center w-100 gap-3">
+                        {
+                            isInCart ?
+                                (
+                                    <button id="delete-btn" ref={delBtnRef} onClick={() => handleFalseCart(id)}
+                                        className="d-flex align-items-center gap-2">
+                                        Delete
+                                        <i className="fas fa-trash-alt"></i>
+                                    </button>
+                                )
+                                :
+                                (
+                                    <button
+                                        id="cart-btn"
+                                        ref={cartBtnRef}
+                                        onClick={() => handleTrueCart(id)}
+                                        className="d-flex align-items-center gap-2">
+                                        Add to cart
+                                        <span className="material-symbols-outlined">
+                                            add_shopping_cart
+                                        </span>
+                                    </button>
+                                )
+                        }
                         <span ref={changeFocus} className="frontPageCard-price">{price}</span>
                     </div>
-                    <div id="frontPageBtns-box" className="d-flex w-100 gap-3">
-                        {
-                            handleIsTrue(id) ? (
-                                <button id="cart-btn" ref={cartBtnRef} onClick={() => handleFalseCart(id)} 
-                                    className="btn btn-warning d-flex align-items-center gap-2">
-                                    Add to cart
-                                    <span className="material-symbols-outlined">
-                                        add_shopping_cart
-                                    </span>
-                                </button>
-                            ) : (
-                                <button id="delete-btn" ref={delBtnRef} onClick={() => handleTrueCart(id)} 
-                                    className="btn btn-danger d-flex align-items-center gap-2">
-                                    Delete from cart
-                                    <i className="fas fa-trash-alt"></i>
-                                </button>
-                            )
-                        }
-                    </div>
+                </div>
+                <div className="carousel-indicators">
+                    {
+                        Array.from({ length: 5 }).map((_, index) => (
+                            <button key={index} type="button" data-bs-target=".frontPageCarousel-item" data-bs-slide-to={currentSlide}
+                                className={`${index === currentSlide ? 'active' : 'inactive'}`} aria-current="true" aria-label="Slide 1"></button>
+                        ))
+                    }
                 </div>
             </div>
-            {
-                cartAlert ?
-                    <div id="addGameCart-alert" className="alert alert-success alert-dismissible p-1" role="alert">
-                        <p className="m-0 px-2">The game was added to cart</p>
-                    </div>
-                    : null
-            }
-
-            {
-                delAlert ?
-                    <div id="delGameCart-alert" className="alert alert-warning alert-dismissible p-1" role="alert">
-                        <p className="m-0 px-2">The game was remove from cart</p>
-                    </div>
-                    : null
-            }
-        </div>
+        </>
     )
 }

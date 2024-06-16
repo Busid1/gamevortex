@@ -1,9 +1,9 @@
 import "./searchbar.css";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { HOME_URL } from "../../App";
 
-export default function SearchBar({ videogames, searchBarDeploy, handleSearchBarDeploy }) {
+export default function SearchBar({ videogames, searchBarDeploy, searchBarFocus }) {
     const gameListBox = useRef();
     const inputList = useRef();
     const [gameList, setGameList] = useState(false);
@@ -27,6 +27,12 @@ export default function SearchBar({ videogames, searchBarDeploy, handleSearchBar
         }
     }
 
+    useEffect(()=>{
+        if(searchBarFocus){
+            inputList.current.focus();
+        }
+    }, [searchBarFocus])
+
     const disableSearchBox = () => {
         setGameList(false);
     }
@@ -38,7 +44,8 @@ export default function SearchBar({ videogames, searchBarDeploy, handleSearchBar
                     onChange={handleOnChange}
                     className="w-100 search-bar"
                     placeholder="Minecraft, Valheim..."
-                    type="search" />
+                    type="search"
+                    />
             </form>
 
             <ul
@@ -57,7 +64,7 @@ export default function SearchBar({ videogames, searchBarDeploy, handleSearchBar
                                 className="gameSearched-item my-1 px-2 py-1"
                                 key={id}
                             >
-                                <Link className="gameSearched-link lh-lg" to={`/${HOME_URL}/${title}`}>
+                                <Link className="gameSearched-link lh-lg" to={`/${title}`}>
                                     <img src={image} alt={title} />
                                     <span>{title}</span>
                                 </Link>

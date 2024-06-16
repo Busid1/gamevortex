@@ -1,13 +1,14 @@
 :root{
-    --card-item-color: rgb(18, 18, 18);
+    --card-item-color: #202020;
 }
 
 #card-item_game {
     width: 200px;
-    box-shadow: 0px 0px 3px 1px var(--card-item-color);
     background-color: var(--card-item-color);
     backdrop-filter: blur(5px);
+    box-shadow: 0px 0px 0px 5px rgba(0, 0, 0, 0.05);
     padding-bottom: 5px;
+    scroll-snap-align: center;
 }
 
 button {
@@ -63,7 +64,7 @@ button {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 7px 12px;
+    padding: 7px;
     gap: 7px;
     border-top: 2px dashed #ffc107;
 }
@@ -86,11 +87,17 @@ button {
     width: 170px;
 }
 
+.btns-box{
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+}
+
 .card-price {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2em;
+    font-size: 1em;
     color: #fff;
     text-shadow: 2px 2px 2px #121212;
 }
@@ -170,9 +177,9 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 33px;
-    width: 140px;
-    font-size: 14px;
+    height: 30px;
+    flex-grow: .5;
+    font-size: .8em;
     border-radius: 7px;
     color: #121212;
     font-weight: 600;

@@ -12,14 +12,15 @@ import Wishlist from './components/Wishlist/Wishlist';
 import Login from './components/Login/Login';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth, db } from './components/Login/app/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, getDocs, setDoc } from 'firebase/firestore';
 import useFirestore from './components/Login/app/firestore';
-
-export const HOME_URL = "/gamevortex";
-export const API_URL = `https://gamevortex.glitch.me${HOME_URL}`;
+import Home from './components/Home/Home';
+import { useVideogames } from './contexts/VideogamesContext';
+export const HOME_URL = "";
+export const API_URL = `https://gamevortex.glitch.me/gamevortex`;
 
 function App() {
-  const [videogames, setVideogames] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchGame, setSearchGame] = useState([]);
   const location = useLocation();
   const { user, handleUpdateFirestoreField, handleDeleteFirestoreField } = useFirestore();
@@ -37,19 +38,6 @@ function App() {
     $('[data-toggle="tooltip"]').tooltip();
   });
 
-  useEffect(() => {
-    async function gamesData() {
-      try {
-        const response = await axios.get(API_URL);
-        setVideogames(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    // When the component is mounted the function 'allGames()' will be executed
-    gamesData();
-  }, []);
-
   const [cartCount, setCartCount] = useState(0);
   const [isGameInCart, setIsGameInCart] = useState([]);
 
@@ -65,39 +53,8 @@ function App() {
 
   const handleIsTrue = (id) => {
     const gameInCart = isGameInCart.find(item => item.id === id);
-    console.log(gameInCart);
     return gameInCart ? gameInCart.isGameInCart : false;
   }
-
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        try {
-          const docRef = doc(db, "usersData", user.uid);
-          const docSnap = await getDoc(docRef);
-          if (docSnap.exists()) {
-            const cartCountFS = docSnap.data().cartCount;
-            const isGameInCart = docSnap.data().cart;
-            setIsGameInCart(isGameInCart);
-
-            if (cartCountFS < 0) {
-              setCartCount(0);
-            }
-            else {
-              setCartCount(cartCountFS);
-            }
-          } else {
-            console.log("No such document!");
-          }
-        } catch (error) {
-          console.error("Error getting documents: ", error);
-        }
-      }
-    })
-
-    return () => unsubscribe();
-  }, [cartCount]);
 
   const onSearch = (title) => {
     axios(`${API_URL}/${title}`)
@@ -124,24 +81,25 @@ function App() {
   return (
     <div>
       {
-        videogames.length === 23 ?
+        isLoading ?
           <div>
             {
-              location.pathname !== `${HOME_URL}/cart` ?
-                <Header cartCount={cartCount} onSearch={onSearch} videogames={videogames} titleLength={titleLength} handleRemoveFromCart={handleRemoveFromCart} handleAddToCart={handleAddToCart} searchGame={searchGame} />
+              location.pathname !== `/cart` ?
+                <Header cartCount={cartCount} onSearch={onSearch} titleLength={titleLength} handleRemoveFromCart={handleRemoveFromCart} handleAddToCart={handleAddToCart} searchGame={searchGame} />
                 :
                 (null)
             }
             <Routes>
               <Route path={HOME_URL}
-                element={<Games cartCount={cartCount} handleIsTrue={handleIsTrue} videogames={videogames} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} />}></Route>
-              <Route path={`${HOME_URL}/:game`} element={<GameDetails handleIsTrue={handleIsTrue} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} videogames={videogames} />} />
-              <Route path={`${HOME_URL}/wishlist`} element={<Wishlist handleIsTrue={handleIsTrue} />} />
+                element={<Home cartCount={cartCount} handleIsTrue={handleIsTrue} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} />}>
+              </Route>
+              <Route path={`/:game`} element={<GameDetails handleIsTrue={handleIsTrue} handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} />} />
+              <Route path={`/wishlist`} element={<Wishlist handleIsTrue={handleIsTrue} />} />
               {
-                location.pathname !== `${HOME_URL}` ?
+                location.pathname !== "/" ?
                   (<Route
-                    path={`${HOME_URL}/games/:tag`}
-                    element={<Tags videogames={videogames}
+                    path={`/games/:tag`}
+                    element={<Tags
                       handleIsTrue={handleIsTrue}
                       handleAddToCart={handleAddToCart}
                       handleRemoveFromCart={handleRemoveFromCart}
@@ -151,7 +109,7 @@ function App() {
                   :
                   (null)
               }
-              <Route path={`${HOME_URL}/cart`} element={<Cart handleRemoveFromCart={handleRemoveFromCart} inputRef={inputRef} focusInput={focusInput} />} />
+              <Route path={`/cart`} element={<Cart handleRemoveFromCart={handleRemoveFromCart} inputRef={inputRef} focusInput={focusInput} />} />
             </Routes>
             <Login />
             <Footer />

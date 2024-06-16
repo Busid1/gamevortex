@@ -1,24 +1,25 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router";
-import axios from "axios";
 import "./gamedetails.css";
 import Game from "../Game/Game";
 import { useDispatch } from "react-redux";
 import { addToCart, removeFromCart, addToFav, removeFromFav } from "../../redux/actions";
 import Carousel from "../Carousel/Carousel";
 import Buttons from "../Buttons/Buttons";
-import { API_URL } from "../../App";
 import Comments from "../Comments/Comments";
+import { useVideogames } from "../../contexts/VideogamesContext";
 
-export default function GameDetails({ videogames, handleIsTrue, handleAddToCart, handleRemoveFromCart }) {
+export default function GameDetails({ handleIsTrue, handleAddToCart, handleRemoveFromCart }) {
+    const { game } = useParams();
+    const videogames = useVideogames();
     const [specificGame, setSpecificGame] = useState([]);
     const [otherVideogames, setOtherVideogames] = useState([]);
     const [isSet, setIsSet] = useState(false);
-    const { game } = useParams();
     const { id, title, description, price, image, background, screenshots, gameplay, prevGameplay, tags, stock } = specificGame;
+
     useEffect(() => {
         const filterOtherGames = () => {
-            if (videogames) {
+            if (videogames && tags) {
                 const filterRelatedGames = videogames.filter(otherGame => {
                     return (
                         otherGame.id !== specificGame.id && // Evita que se renderice el mismo juego otra vez
@@ -29,19 +30,12 @@ export default function GameDetails({ videogames, handleIsTrue, handleAddToCart,
             }
         }
 
-        async function gameDetails() {
-            try {
-                const response = await axios.get(`${API_URL}/${game}`)
-                setSpecificGame(response.data[0]);
-                filterOtherGames();
-            }
-
-            catch (err) {
-                console.log(err)
-            }
+        if(videogames.length > 0){
+            const filterSpecificGame = videogames.filter(videogame => videogame.title === game)
+            setSpecificGame(filterSpecificGame[0])
+            filterOtherGames()
         }
-        gameDetails()
-    }, [game, specificGame.id, videogames]);
+    }, [videogames]);
 
     const dispatch = useDispatch();
 
@@ -156,6 +150,13 @@ export default function GameDetails({ videogames, handleIsTrue, handleAddToCart,
         dispatch(removeFromFav(id));
     };
 
+    // Inicializar ScrollReveal
+    ScrollReveal().reveal('.reveal', {
+        delay: 50, // retraso en milisegundos
+        interval: 100, // intervalo entre elementos
+        reset: false // para que los elementos se vuelvan a ocultar al hacer scroll hacia arriba
+    });
+
     return (
         <div className="gameDetails-container">
             <div className="gameBackgroundContainer">
@@ -227,7 +228,7 @@ export default function GameDetails({ videogames, handleIsTrue, handleAddToCart,
                                                 id="topDelete-btn"
                                                 className="w-100 btn btn-danger d-flex justify-content-center align-items-center gap-2">
                                                 Delete from cart
-                                                <span class="material-symbols-outlined">
+                                                <span className="material-symbols-outlined">
                                                     delete
                                                 </span>
                                             </button>

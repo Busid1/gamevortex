@@ -71,7 +71,8 @@ export default function SigninForm() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
-                            <button type="submit" className="btn btn-primary w-100 mb-3">Login</button>
+                            <button type="submit" className="btn btn-primary w-100">Login</button>
+                            <div className="login-separator">Or</div>
                             <GoogleLogin />
                             <div className="d-flex align-items-center gap-2 mt-3">
                                 <p className="text-white m-0">Don´t you already have an account?</p>

@@ -1,6 +1,5 @@
 import { signOut } from "firebase/auth";
 import { auth } from "./firebase.js";
-import { useRef } from "react";
 
 export default function Logout() {
     

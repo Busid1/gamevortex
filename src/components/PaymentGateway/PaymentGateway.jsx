@@ -1,11 +1,10 @@
 import { Link } from "react-router-dom";
 import "./paymentGateway.css";
-import { HOME_URL } from "../../App";
 
 export default function PaymentGateway({ isPaymentCorrect, isActivateCode }) {
     return (
         <div className="paymentGateway-container">
-            <Link to={`${HOME_URL}`} title="home" className="gameVortexCart-logo"></Link>
+            <Link to="/" title="home" className="gameVortexCart-logo"></Link>
             <div className="progress-steps">
                 <div>
                     <span className="step active">
