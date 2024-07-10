@@ -1,4 +1,4 @@
-import { doc, getDoc, updateDoc, increment, setDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc, increment, setDoc, collection, getDocs, addDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { useState, useEffect } from "react";
 import { auth, db } from "./firebase";
@@ -14,10 +14,10 @@ export default function useFirestore() {
     return () => unsubscribe();
   }, []);
 
-  async function handleUpdateFirestoreField(id, title, price, image, isGameInCartValue) {
+  async function handleAddGameToUserCart({ id, title, price, image }) {
     if (user) {
       try {
-        const userDocRef = doc(db, "games", user.uid);
+        const userDocRef = doc(db, "users", user.uid);
         const userDocSnap = await getDoc(userDocRef);
 
         if (userDocSnap.exists()) {
@@ -27,8 +27,7 @@ export default function useFirestore() {
             existingCart = [];
           }
           // Fusionar el nuevo objeto con el array existente
-          const updatedCart = [...existingCart, { id, title, price, image, isGameInCart: isGameInCartValue }];
-
+          const updatedCart = [...existingCart, { id, title, price, image }];
           const filterDuplicateGames = updatedCart.filter((elem, index, arr) => {
             // Usa `findIndex` para encontrar el índice del primer elemento con el mismo ID
             const firstIndex = arr.findIndex((el) => el.id === elem.id);
@@ -37,12 +36,10 @@ export default function useFirestore() {
           });
 
           // Actualizar el documento con el nuevo array de objetos
-          await updateDoc(userDocRef, { cart: filterDuplicateGames, cartCount: filterDuplicateGames.length });
+          await updateDoc(userDocRef, { cart: filterDuplicateGames });
         } else {
-          await setDoc(doc(db, "games", user.uid), {
+          await setDoc(doc(db, "users", user.uid), {
             cart: [],
-            cartCount: 0,
-            whislist: [],
           });
         }
       } catch (e) {
@@ -51,22 +48,186 @@ export default function useFirestore() {
     }
   }
 
-  async function handleDeleteFirestoreField(id, cartCount) {
+  async function handleRemoveGameFromUserCart(id) {
     if (user) {
-      const updatedCartCount = Math.max(0, cartCount - 1); // Asegura que el contador no sea menor que 0
-
       try {
-        const userDocRef = doc(db, "games", user.uid);
+        const userDocRef = doc(db, "users", user.uid);
         const userDocSnap = (await getDoc(userDocRef)).data().cart;
         const updatedCart = userDocSnap.filter(game => game.id !== id);
-        await updateDoc(userDocRef, { cart: updatedCart, cartCount: updatedCartCount });
+        await updateDoc(userDocRef, { cart: updatedCart });
       } catch (e) {
         console.error("Error deleting field: ", e);
       }
     }
-
   }
 
+  async function handleAddGameToUserWishlist({ id, title, price, image, description }) {
+    if (user) {
+      try {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
 
-  return { user, handleUpdateFirestoreField, handleDeleteFirestoreField };
+        if (userDocSnap.exists()) {
+          let existingWishlist = userDocSnap.data().wishlist || [];
+          // Si existingCart no es un array, inicialízalo como un array vacío
+          if (!Array.isArray(existingWishlist)) {
+            existingWishlist = [];
+          }
+          // Fusionar el nuevo objeto con el array existente
+          const updatedWishlist = [...existingWishlist, { id, title, price, image, description }];
+          const filterDuplicateGames = updatedWishlist.filter((elem, index, arr) => {
+            // Usa `findIndex` para encontrar el índice del primer elemento con el mismo ID
+            const firstIndex = arr.findIndex((el) => el.id === elem.id);
+            // Devuelve `true` solo si el índice actual coincide con el primer índice encontrado
+            return firstIndex === index;
+          });
+
+          // Actualizar el documento con el nuevo array de objetos
+          await updateDoc(userDocRef, { wishlist: filterDuplicateGames });
+        } else {
+          await setDoc(doc(db, "users", user.uid), {
+            wishlist: [],
+          });
+        }
+      } catch (e) {
+        console.error("Error updating document: ", e);
+      }
+    }
+  }
+
+  async function handleRemoveGameFromUserWishlist(id) {
+    if (user) {
+      try {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnap = (await getDoc(userDocRef)).data().wishlist;
+        const updatedWishlist = userDocSnap.filter(game => game.id !== id);
+        await updateDoc(userDocRef, { wishlist: updatedWishlist });
+      } catch (e) {
+        console.error("Error deleting field: ", e);
+      }
+    }
+  }
+
+  async function handleAddCommentToUserGame(id, gameComment) {
+    if (user) {
+      try {
+        const userDocRef = doc(db, "comments", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+        let updatedComments;
+
+        if (userDocSnap.exists()) {
+          let existingData = userDocSnap.data();
+          let existingComments = existingData.gameComments || [];
+
+          // Si existingComments no es un array, inicialízalo como un array vacío
+          if (!Array.isArray(existingComments)) {
+            existingComments = [];
+          }
+
+          // Encontrar el índice del comentario existente por id
+          const existingIndex = existingComments.findIndex((comment) => comment.id === id);
+
+          if (existingIndex !== -1) {
+            // Si el comentario ya existe, añade el nuevo comentario al array de gameComment
+            existingComments[existingIndex].gameComment.push(gameComment);
+          } else {
+            // Si el comentario no existe, añade un nuevo objeto de comentario
+            existingComments.push({
+              id: id,
+              gameComment: [gameComment]
+            });
+          }
+
+          updatedComments = existingComments;
+        } else {
+          // Si el documento no existe, crea un nuevo array de comentarios
+          updatedComments = [{
+            id: id,
+            gameComment: [gameComment]
+          }];
+        }
+
+        await setDoc(userDocRef, {
+          userCommentPhoto: user.photoURL,
+          gameComments: updatedComments,
+        }, { merge: true }); // Merge para mantener otros campos del documento
+
+      } catch (e) {
+        console.error("Error updating document: ", e);
+      }
+    }
+  }
+
+  async function handleRemoveCommentFromUserGame(id, commentIndex) {
+    if (user) {
+      try {
+        const userDocRef = doc(db, "comments", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+        
+        if (userDocSnap.exists()) {
+          let existingData = userDocSnap.data();
+          let existingComments = existingData.gameComments || [];
+  
+          // Encontrar el videojuego por id
+          const gameIndex = existingComments.findIndex(game => game.id === id);
+  
+          if (gameIndex !== -1) {
+            // Eliminar el comentario en el índice especificado
+            existingComments[gameIndex].gameComment.splice(commentIndex, 1);
+            
+            // Guardar los datos actualizados
+            await updateDoc(userDocRef, {
+              gameComments: existingComments,
+            }, { merge: true });
+          }
+        } else {
+          console.error("No se encontró el documento.");
+        }
+      } catch (e) {
+        console.error("Error deleting comment: ", e);
+      }
+    }
+  }
+
+  async function handleEditCommentFromUserGame(commentIndex, newComment) {
+    if (user) {
+      try {
+        const userDocRef = doc(db, "comments", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+        
+        if (userDocSnap.exists()) {
+          let existingData = userDocSnap.data();
+          let existingComments = existingData.gameComments || [];
+  
+          // Encontrar el videojuego por id
+          const gameIndex = existingComments.findIndex(game => game.id === id);
+  
+          if (gameIndex !== -1) {
+            // Eliminar el comentario en el índice especificado
+            existingComments[gameIndex].gameComment.splice(commentIndex, 1, newComment);
+            
+            // Guardar los datos actualizados
+            await updateDoc(userDocRef, {
+              gameComments: existingComments,
+            }, { merge: true });
+          }
+        } else {
+          console.error("No se encontró el documento.");
+        }
+      } catch (e) {
+        console.error("Error deleting comment: ", e);
+      }
+    }
+  }
+  
+  return {
+    user,
+    handleAddGameToUserCart,
+    handleRemoveGameFromUserCart,
+    handleAddGameToUserWishlist,
+    handleRemoveGameFromUserWishlist,
+    handleAddCommentToUserGame,
+    handleRemoveCommentFromUserGame,
+    handleEditCommentFromUserGame
+  };
 }

@@ -2,13 +2,17 @@ import "./searchbar.css";
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { HOME_URL } from "../../App";
+import { useVideogames } from "../../contexts/VideogamesContext";
 
-export default function SearchBar({ videogames, searchBarDeploy, searchBarFocus }) {
+export default function SearchBar({ searchBarDeploy, searchBarFocus }) {
     const gameListBox = useRef();
     const inputList = useRef();
-    const [gameList, setGameList] = useState(false);
+    const [gameList, setGameList] = useState([]);
+    const videogames = useVideogames();
+
     const handleSearchGame = () => {
         const filterGamesTitle = videogames.filter(game => {
+            console.log(game);
             const lowGameTitle = game.title.toLowerCase();
             const currentInputValue = inputList.current.value.toLowerCase();
             if (currentInputValue === "") {
@@ -27,8 +31,8 @@ export default function SearchBar({ videogames, searchBarDeploy, searchBarFocus 
         }
     }
 
-    useEffect(()=>{
-        if(searchBarFocus){
+    useEffect(() => {
+        if (searchBarFocus) {
             inputList.current.focus();
         }
     }, [searchBarFocus])
@@ -45,7 +49,7 @@ export default function SearchBar({ videogames, searchBarDeploy, searchBarFocus 
                     className="w-100 search-bar"
                     placeholder="Minecraft, Valheim..."
                     type="search"
-                    />
+                />
             </form>
 
             <ul

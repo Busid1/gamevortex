@@ -8,6 +8,9 @@ import Carousel from "../Carousel/Carousel";
 import Buttons from "../Buttons/Buttons";
 import Comments from "../Comments/Comments";
 import { useVideogames } from "../../contexts/VideogamesContext";
+import useFirestore from "../Login/app/firestore";
+import { useCart } from "../../contexts/CartContext";
+import { useWishlist } from "../../contexts/WishListContext";
 
 export default function GameDetails({ handleIsTrue, handleAddToCart, handleRemoveFromCart }) {
     const { game } = useParams();
@@ -16,6 +19,9 @@ export default function GameDetails({ handleIsTrue, handleAddToCart, handleRemov
     const [otherVideogames, setOtherVideogames] = useState([]);
     const [isSet, setIsSet] = useState(false);
     const { id, title, description, price, image, background, screenshots, gameplay, prevGameplay, tags, stock } = specificGame;
+    const { user, handleAddGameToUserCart, handleRemoveGameFromUserCart, handleAddGameToUserWishlist, handleRemoveGameFromUserWishlist } = useFirestore();
+    const { cartVideogames, handleAddGameToCartContext, handleRemoveGameFromCartContext } = useCart();
+    const { wishlistVideogames, handleAddGameToWishlistContext, handleRemoveGameFromWishlistContext } = useWishlist();
 
     useEffect(() => {
         const filterOtherGames = () => {
@@ -30,12 +36,12 @@ export default function GameDetails({ handleIsTrue, handleAddToCart, handleRemov
             }
         }
 
-        if(videogames.length > 0){
+        if (videogames.length > 0) {
             const filterSpecificGame = videogames.filter(videogame => videogame.title === game)
             setSpecificGame(filterSpecificGame[0])
-            filterOtherGames()
         }
-    }, [videogames]);
+        filterOtherGames()
+    }, [videogames, specificGame, location.pathname]);
 
     const dispatch = useDispatch();
 
@@ -49,44 +55,20 @@ export default function GameDetails({ handleIsTrue, handleAddToCart, handleRemov
     const cartBtnRef = useRef(null);
     const delBtnRef = useRef(null);
 
-    const handleTrueCart = (gameId) => {
-        const localId = localStorage.getItem(gameId);
-
-        setTimeout(() => {
-            if (localId) {
-                localStorage.removeItem(gameId);
-                localStorage.setItem(id, JSON.stringify({ [gameId]: true }))
-                handleRemoveFromCart();
-                dispatch(removeFromCart(id));
-            }
-            else {
-                localStorage.setItem(id, JSON.stringify({ [gameId]: true }))
-            }
-
-            if (delBtnRef && delBtnRef.current) {
-                delBtnRef.current.blur();
-            }
-        }, 500)
+    // Function to add game to cart
+    const handleTrueCart = () => {
+        localStorage.setItem(id, JSON.stringify({ [id]: true }));
+        handleAddGameToCartContext({ id, title, price, image })
+        handleAddGameToUserCart({ id, title, price, image });
+        dispatch(addToCart({ id, title, price, image }));
     };
 
-    const handleFalseCart = (gameId) => {
-        const localId = localStorage.getItem(gameId);
-
-        setTimeout(() => {
-            if (localId) {
-                localStorage.removeItem(gameId);
-                localStorage.setItem(id, JSON.stringify({ [gameId]: false }))
-                handleAddToCart();
-                dispatch(addToCart({ id, title, price, description, image }));
-            }
-            else {
-                localStorage.setItem(id, JSON.stringify({ [gameId]: true }))
-            }
-
-            if (cartBtnRef && cartBtnRef.current) {
-                cartBtnRef.current.blur();
-            }
-        }, 500)
+    // Function to remove game from cart
+    const handleFalseCart = () => {
+        localStorage.removeItem(id);
+        handleRemoveGameFromCartContext(id);
+        handleRemoveGameFromUserCart(id);
+        dispatch(removeFromCart(id));
     };
 
     const [isStock, setIsStock] = useState(false);
@@ -142,20 +124,31 @@ export default function GameDetails({ handleIsTrue, handleAddToCart, handleRemov
         localStorage.setItem(title, JSON.stringify({ [title]: true }));
         setIsFav(true);
         dispatch(addToFav({ id, title, price, description, image, prevGameplay, handleAddToCart, handleRemoveFromCart }));
+        handleAddGameToWishlistContext({ id, title, price, description, image, prevGameplay })
+        handleAddGameToUserWishlist({ id, title, price, description, image, prevGameplay })
     };
 
     const handleRemoveFav = () => {
         localStorage.removeItem(title);
         setIsFav(false);
         dispatch(removeFromFav(id));
+        handleRemoveGameFromWishlistContext(id);
+        handleRemoveGameFromUserWishlist(id);
     };
 
-    // Inicializar ScrollReveal
-    ScrollReveal().reveal('.reveal', {
-        delay: 50, // retraso en milisegundos
-        interval: 100, // intervalo entre elementos
-        reset: false // para que los elementos se vuelvan a ocultar al hacer scroll hacia arriba
-    });
+    const handleToggleButtonCart = (gameId) => {
+        const isInCart = cartVideogames.some(
+            (games) => games.id === gameId
+        )
+        return isInCart
+    }
+
+    const handleToggleButtonWishlist = (gameId) => {
+        const isInWishlist = wishlistVideogames.some(
+            (game) => game.id === gameId
+        )
+        return isInWishlist;
+    }
 
     return (
         <div className="gameDetails-container">
@@ -198,7 +191,7 @@ export default function GameDetails({ handleIsTrue, handleAddToCart, handleRemov
                             isStock ?
                                 <div className="d-flex align-items-center w-100">
                                     {
-                                        isFav ?
+                                        handleToggleButtonWishlist(id) ?
                                             <button
                                                 id="favoriteFillGD-btn"
                                                 className="btn btn-danger"
@@ -214,25 +207,26 @@ export default function GameDetails({ handleIsTrue, handleAddToCart, handleRemov
                                             </button>
                                     }
                                     {
-                                        handleIsTrue(id) ? (
-                                            <button ref={cartBtnRef} onClick={() => handleFalseCart(id)}
-                                                id="topCart-btn"
-                                                className="position-relative w-100 btn btn-warning d-flex justify-content-center align-items-center gap-2">
-                                                Add to cart
-                                                <span className="material-symbols-outlined">
-                                                    add_shopping_cart
-                                                </span>
-                                            </button>
-                                        ) : (
-                                            <button ref={delBtnRef} onClick={() => handleTrueCart(id)}
-                                                id="topDelete-btn"
-                                                className="w-100 btn btn-danger d-flex justify-content-center align-items-center gap-2">
-                                                Delete from cart
-                                                <span className="material-symbols-outlined">
-                                                    delete
-                                                </span>
-                                            </button>
-                                        )
+                                        handleToggleButtonCart(id) ?
+                                            (
+                                                <button ref={delBtnRef} onClick={() => handleFalseCart(id)}
+                                                    className={cartBtnBottom ? "bottomDelete-btn" : "topDelete-btn"}>
+                                                    Delete from cart
+                                                    <span className="material-symbols-outlined">
+                                                        delete
+                                                    </span>
+                                                </button>
+                                            )
+                                            :
+                                            (
+                                                <button ref={cartBtnRef} onClick={() => handleTrueCart(id)}
+                                                    className={cartBtnBottom ? "topCart-btn bottom" : "topCart-btn"}>
+                                                    Add to cart
+                                                    <span className="material-symbols-outlined">
+                                                        add_shopping_cart
+                                                    </span>
+                                                </button>
+                                            )
                                     }
                                 </div>
                                 :
@@ -268,28 +262,8 @@ export default function GameDetails({ handleIsTrue, handleAddToCart, handleRemov
                         ) : (null)
                     }
                 </div>
-                <Comments />
+                <Comments id={id}/>
             </div>
-            {
-                isStock && cartBtnBottom ?
-                    <div id="detailBtns-box" className="d-flex align-items-center gap-3">
-                        {
-                            handleIsTrue(id) ? (
-                                <button id="detailCart-btn" ref={cartBtnRef} onClick={() => handleFalseCart(id)} className="btn btn-warning d-flex align-items-center gap-2">
-                                    <span className="material-symbols-outlined">
-                                        add_shopping_cart
-                                    </span>
-                                </button>
-                            ) : (
-                                <button id="detailDelete-btn" ref={delBtnRef} onClick={() => handleTrueCart(id)} className="btn btn-danger d-flex align-items-center gap-2">
-                                    <i className="fas fa-trash-alt"></i>
-                                </button>
-                            )
-                        }
-                    </div>
-                    :
-                    null
-            }
             <div id="otherGames-container" className="d-flex flex-column">
                 <h3 className="text-left text-warning mt-3">Related games</h3>
                 <div id="otherGames-box" className="pb-3 d-flex w-100 flex-wrap rounded-0 justify-content-evenly">

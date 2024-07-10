@@ -1,28 +1,28 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { HOME_URL } from "../../App";
 import { removeFromCart } from "../../redux/actions";
 import "./cartPreview.css";
+import { useCart } from "../../contexts/CartContext";
+import useFirestore from "../Login/app/firestore";
 
-export default function CartPreview({ handleRemoveFromCart }) {
-    const [cartGamesPrev, setCartGamesPrev] = useState([]);
+export default function CartPreview() {
     const reduxGamesInCart = useSelector(state => state.gamesInCart);
     const dispatch = useDispatch();
-
-    useEffect(() => {
-        // Actualiza gamesInCart cuando state.gamesInCart cambie
-        setCartGamesPrev(reduxGamesInCart);
-    }, [reduxGamesInCart]); // Este efecto se ejecuta cada vez que reduxGamesInCart cambie
+    const { cartVideogames, handleRemoveGameFromCartContext } = useCart();
+    const { handleRemoveGameFromUserCart } = useFirestore();
 
     const filterDelGame = (id) => {
-        const newGamesInCart = cartGamesPrev.filter(game => game.id !== id)
-        setCartGamesPrev(newGamesInCart);
-        handleRemoveFromCart();
+        handleRemoveGameFromCartContext(id);
+        handleRemoveGameFromUserCart(id);
         localStorage.removeItem(id);
         localStorage.setItem(id, JSON.stringify({ [id]: true }));
         dispatch(removeFromCart(id));
     }
+
+    const navigate = useNavigate();
+
     return (
         <div>
             <div className="offcanvas offcanvas-end cartGamesPrev-box" tabIndex="-1" id="offcanvasResponsive" aria-labelledby="offcanvasResponsiveLabel">
@@ -34,13 +34,13 @@ export default function CartPreview({ handleRemoveFromCart }) {
                 </div>
                 <ul className="offcanvas-body pt-2">
                     {
-                        cartGamesPrev.length !== 0 ?
-                            cartGamesPrev.map(game => (
+                        cartVideogames.length !== 0 ?
+                            cartVideogames.map(game => (
                                 <li className="cartGamePrev-item mb-3" key={game.id}>
                                     <div>
                                         <img className="shadow" src={game.image} alt={game.title} />
                                         <div className="cartPrev-body d-flex flex-column w-100">
-                                            <Link to={`${HOME_URL}/${game.title}`} className="text-warning">
+                                            <Link data-bs-dismiss="offcanvas" data-bs-target="#offcanvasResponsive" onClick={() => navigate(`${HOME_URL}/${game.title}`)} className="text-warning">
                                                 {game.title}
                                             </Link>
                                             <div className="cartPrev-bottom d-flex align-items-center justify-content-between">
@@ -62,7 +62,7 @@ export default function CartPreview({ handleRemoveFromCart }) {
                                 </span>
                             </li>
                     }
-                    <Link to="/cart"  className="icon-link btn btn-primary">
+                    <Link data-bs-dismiss="offcanvas" data-bs-target="#offcanvasResponsive" onClick={() => navigate("/cart")} className="icon-link btn btn-primary">
                         Go to cart
                         <span className="material-symbols-outlined">
                             arrow_right_alt

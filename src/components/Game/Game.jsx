@@ -8,15 +8,44 @@ import { useLocation } from "react-router-dom";
 import { HOME_URL } from "../../App";
 import showMessage from "../Login/app/showMessage";
 import useFirestore from "../Login/app/firestore";
+import { useCart } from "../../contexts/CartContext";
+import { useWishlist } from "../../contexts/WishListContext";
 
-export default function Game({ id, title, price, description, image, prevGameplay, handleAddToCart, handleRemoveFromCart }) {
+export default function Game({ id, title, price, description, image, prevGameplay }) {
     const location = useLocation();
     const popoverList = useRef();
     const dispatch = useDispatch();
     const cartBtnRef = useRef(null);
     const delBtnRef = useRef(null);
     const changeFocus = useRef(null);
-    const { user } = useFirestore();
+    const { user, handleAddGameToUserCart, handleRemoveGameFromUserCart, handleAddGameToUserWishlist, handleRemoveGameFromUserWishlist } = useFirestore();
+    const { cartVideogames, handleAddGameToCartContext, handleRemoveGameFromCartContext } = useCart();
+    const { wishlistVideogames, handleAddGameToWishlistContext, handleRemoveGameFromWishlistContext } = useWishlist();
+
+    const handleToggleButtonCart = (gameId) => {
+        const isInCart = cartVideogames.some(
+            (games) => games.id === gameId
+        )
+        return isInCart
+    }
+
+    const handleToggleButtonWishlist = (gameId) => {
+        if (!Array.isArray(wishlistVideogames)) {
+            console.error("wishlistVideogames no es un array o no está definido");
+            return false;
+        }
+        
+        const isInWishlist = wishlistVideogames.some((game) => {
+            if (!game || !game.id) {
+                console.error("Un elemento en wishlistVideogames no tiene la propiedad id o es undefined");
+                return false;
+            }
+            return game.id === gameId;
+        });
+    
+        return isInWishlist;
+    }
+    
 
     // State and effect for game in cart
     const [isInCart, setIsInCart] = useState(false);
@@ -33,16 +62,18 @@ export default function Game({ id, title, price, description, image, prevGamepla
     // Function to add game to cart
     const handleTrueCart = () => {
         setIsInCart(true);
-        handleAddToCart(id, title, price, image, false);
+        handleAddGameToCartContext({ id, title, price, image })
+        handleAddGameToUserCart({ id, title, price, image });
         localStorage.setItem(id, JSON.stringify({ [id]: true }));
-        dispatch(addToCart({ id, title, price, description, image }));
+        dispatch(addToCart({ id, title, price, image }));
     };
 
     // Function to remove game from cart
     const handleFalseCart = () => {
-        handleRemoveFromCart(id);
         localStorage.removeItem(id);
         setIsInCart(false);
+        handleRemoveGameFromCartContext(id);
+        handleRemoveGameFromUserCart(id);
         dispatch(removeFromCart(id));
     };
 
@@ -73,38 +104,6 @@ export default function Game({ id, title, price, description, image, prevGamepla
         }
     };
 
-    const [cartAnimation, setCartAnimation] = useState(false);
-    const [cartCoordinates, setCartCoordinates] = useState({ top: 0, left: 0 });
-    const [currentCartCoordinates, setCurrentCartCoordinates] = useState({ top: 0, left: 0 });
-
-    const handleAnimAddToCart = () => {
-        const cartIcon = document.getElementById('cart-icon');
-        const cartIconCoordinates = cartIcon.getBoundingClientRect();
-        setCartCoordinates({
-            top: cartIconCoordinates.top,
-            left: cartIconCoordinates.left,
-        });
-        setCartAnimation(true);
-
-        setTimeout(() => {
-            setCartAnimation(false);
-        }, 800);
-    };
-
-    const handleMouseMove = (event) => {
-        setCurrentCartCoordinates({
-            top: event.clientY,
-            left: event.clientX,
-        });
-    };
-
-    const animationProps = useSpring({
-        top: cartAnimation ? cartCoordinates.top : currentCartCoordinates.top,
-        left: cartAnimation ? `${cartCoordinates.left - 30}px` : `${currentCartCoordinates.left}px`, // Utilizamos template literals para asegurar que el valor sea un string
-        opacity: cartAnimation ? 1 : 0,
-        scale: cartAnimation ? 0.6 : 1,
-    });
-
     const [isFav, setIsFav] = useState(false);
     useEffect(() => {
         const getIsTrue = localStorage.getItem(title);
@@ -120,7 +119,9 @@ export default function Game({ id, title, price, description, image, prevGamepla
         if (user) {
             localStorage.setItem(title, JSON.stringify({ [title]: true }));
             setIsFav(true);
-            dispatch(addToFav({ id, title, price, description, image, prevGameplay, handleAddToCart, handleRemoveFromCart }));
+            dispatch(addToFav({ id, title, price, description, image, prevGameplay }));
+            handleAddGameToUserWishlist({ id, title, price, image, description, prevGameplay })
+            handleAddGameToWishlistContext({ id, title, price, image, description, prevGameplay })
         }
         else {
             showMessage("You must be logged", "error");
@@ -131,6 +132,8 @@ export default function Game({ id, title, price, description, image, prevGamepla
         localStorage.removeItem(title);
         setIsFav(false);
         dispatch(removeFromFav(id));
+        handleRemoveGameFromUserWishlist(id);
+        handleRemoveGameFromWishlistContext(id);
     };
 
     useEffect(() => {
@@ -149,7 +152,7 @@ export default function Game({ id, title, price, description, image, prevGamepla
                     <video ref={videoRef} autoPlay={false} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut} playsInline loop muted preload="none" className="prevGameplay" src={prevGameplay}></video>
                 </Link>
                 {
-                    isFav ?
+                    handleToggleButtonWishlist(id) ?
                         <button onClick={() => handleRemoveFav(title)} id="favoriteFill-btn">
                             <i className="fas fa-heart"></i>
                         </button>
@@ -175,7 +178,7 @@ export default function Game({ id, title, price, description, image, prevGamepla
                     <div className="btns-box">
                         <span ref={changeFocus} className="card-price">{price}</span>
                         {
-                            isInCart ?
+                            handleToggleButtonCart(id) ?
                                 (
                                     <button id="delete-btn" ref={delBtnRef} onClick={() => handleFalseCart(id)}
                                         className="d-flex align-items-center gap-2">

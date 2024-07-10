@@ -178,10 +178,6 @@
     gap: 15px;
 }
 
-#cardGames-box {
-    position: relative;
-}
-
 .cardGames-content {
     display: grid;
     grid-auto-flow: column;
@@ -189,10 +185,15 @@
     gap: 20px;
     overflow-x: auto;
     overflow-y: hidden;
+    position: relative;
 }
 
-#cardGames-box > button {
-    display: none;
+.cardGames-container{
+    position: relative;
+}
+
+.cardGames-container>button{
+    display: flex;
     align-self: center;
     justify-content: center;
     font-size: 30px;
@@ -200,30 +201,37 @@
     text-shadow: 1px 1px 3px #000;
     cursor: pointer;
     height: 100%;
-    width: 45px;
+    width: 20px;
     transition: all .5s linear;
     border: none;
-    padding: 0;
+    padding: 0 15px;
     z-index: 1;
+    position: absolute;
 }
 
 .cardGamesBtn-left{
-    position: absolute;
     align-items: center;
     left: 0;
     top: 0;
     bottom: 0;
-    border-radius: 10px 0 0;
-    background: linear-gradient(to right, rgba(18, 18, 18), transparent);
+    background-color: transparent;
+}
+
+.cardGamesBtn-left:hover{
+    background: linear-gradient(to right, rgba(18, 18, 18, .9), transparent);
+    transition: all .3s linear;
 }
 
 .cardGamesBtn-right{
-    position: absolute;
     align-items: center;
     right: 0;
     top: 0;
     bottom: 0;
-    background: linear-gradient(to left, rgba(18, 18, 18), transparent);
+    background-color: transparent;
+}
+
+.cardGamesBtn-right:hover{
+    background: linear-gradient(to left, rgba(18, 18, 18, .9), transparent);
 }
 
 .cardGames-content::-webkit-scrollbar {

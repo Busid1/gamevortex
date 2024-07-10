@@ -6,7 +6,6 @@ import { useVideogames } from "../../contexts/VideogamesContext";
 export default function FrontPages({ handleIsTrue, handleAddToCart, handleRemoveFromCart }) {
     const videogames = useVideogames();
     const frontPageGames = videogames.filter(game => game.id > 18 && game.id < 24)
-    console.log(frontPageGames);
     const [currentSlide, setCurrentSlide] = useState(0);
 
     const handleSlideChange = (direction) => {
@@ -19,8 +18,8 @@ export default function FrontPages({ handleIsTrue, handleAddToCart, handleRemove
 
     // useEffect(() => {
     //     setTimeout(() => {
-    //         setCurrentSlide(currentSlide + 1);
-    //     }, 10000)
+    //         handleSlideChange("right")
+    //     }, 3000)
     // }, [currentSlide])
 
     return (

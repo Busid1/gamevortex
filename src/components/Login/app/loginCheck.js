@@ -4,7 +4,7 @@ import showMessage from "./showMessage";
 import { signOut } from "firebase/auth";
 import { auth } from "./firebase";
 
-export const loginCheck = async (user, videogames) => {
+export const loginCheck = async (user) => {
     if (user) {
         try {
             const userDocRef = doc(db, "users", user.uid);
@@ -17,10 +17,13 @@ export const loginCheck = async (user, videogames) => {
                     email: user.email,
                     photoURL: user.photoURL,
                     uid: user.uid,
+                    wishlist: [],
                     cart: [],
-                    whislist: [],
+                    comments: {
+                        commentPhoto: user.photoURL,
+                        gameComments: []
+                    }
                 });
-                
             }
         } catch (error) {
             await signOut(auth);

@@ -8,21 +8,19 @@ import Payment from "../Payment/Payment";
 import PaymentGateway from "../PaymentGateway/PaymentGateway";
 import { HOME_URL } from "../../App";
 import randomstring from "randomstring";
-import { getDoc, doc } from "firebase/firestore";
-import { db } from "../Login/app/firebase";
-import { auth } from "../Login/app/firebase";
-import { onAuthStateChanged } from "firebase/auth";
 import useFirestore from "../Login/app/firestore";
+import { useCart } from "../../contexts/CartContext";
 
-export default function Cart({ cartCount, handleRemoveFromCart, inputRef, focusInput }) {
+export default function Cart({ inputRef, focusInput }) {
     const [gamesInCart, setGamesInCart] = useState(useSelector(state => state.gamesInCart));
     const [gameCounts, setGameCounts] = useState({}); // Inicialmente, no hay cantidades para ningún juego
     //Accedemos al ultimo array ya que este tendra todos los valores validos de la tarjeta y asi no se duplican los elementos
     const creditCardData = useSelector(state => state.creditCard.slice(-1)[0]);
     const creditCardErrors = useSelector(state => state.creditCardErrors.slice(-1)[0]);
     const [lastCreditCard, setLastCreditCard] = useState("");
-    const [firestoreData, setFirestoreData] = useState([]);
-    const { handleDeleteFirestoreField } = useFirestore();
+    const { cartVideogames } = useCart();
+    const { handleRemoveGameFromUserCart } = useFirestore();
+    const { handleRemoveGameFromCartContext } = useCart();
 
     const creditCardComponent = creditCardData ? (
         <div className="creditCardBox">
@@ -32,26 +30,6 @@ export default function Cart({ cartCount, handleRemoveFromCart, inputRef, focusI
             <h3>CVC: {lastCreditCard.cardCVC}</h3>
         </div>
     ) : (null);
-
-    useEffect(() => {
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                try {
-                    const docRef = doc(db, "usersData", user.uid);
-                    const docSnap = await getDoc(docRef);
-
-                    if (docSnap.exists()) {
-                        const cartGames = docSnap.data().cart;
-                        setFirestoreData(cartGames);
-                    } else {
-                        console.log("No such document!");
-                    }
-                } catch (error) {
-                    console.error("Error getting documents: ", error);
-                }
-            }
-        })
-    }, []);
 
     useEffect(() => {
         // Obtener las claves del objeto gameCounts
@@ -65,7 +43,7 @@ export default function Cart({ cartCount, handleRemoveFromCart, inputRef, focusI
     }, []);
 
     const dispatch = useDispatch();
-    const filterGames = firestoreData.length > 0 ? firestoreData : gamesInCart.filter((elem, index, arr) => {
+    const filterGames = cartVideogames.length > 0 ? cartVideogames : gamesInCart.filter((elem, index, arr) => {
         // Usa `findIndex` para encontrar el índice del primer elemento con el mismo ID
         const firstIndex = arr.findIndex((el) => el.id === elem.id);
         // Devuelve `true` solo si el índice actual coincide con el primer índice encontrado
@@ -73,14 +51,13 @@ export default function Cart({ cartCount, handleRemoveFromCart, inputRef, focusI
     });
 
     const filterDelGame = (id) => {
-        const newGamesInCart = filterGames.filter(game => game.id !== id)
-        setFirestoreData(newGamesInCart);
+        const newGamesInCart = filterGames.filter(game => game.id !== id);
         setGamesInCart(newGamesInCart);
-        handleRemoveFromCart();
         localStorage.removeItem(id);
         localStorage.setItem(id, JSON.stringify({ [id]: true }));
         dispatch(removeFromCart(id));
-        handleDeleteFirestoreField(id);
+        handleRemoveGameFromUserCart(id);
+        handleRemoveGameFromCartContext(id);
     }
 
     const gamesAddsInCart = filterGames.map((game) => (
@@ -93,15 +70,13 @@ export default function Cart({ cartCount, handleRemoveFromCart, inputRef, focusI
                 <span className="gamePrice">{game.price}</span>
                 <div id={game.id} className="d-flex gap-1 align-items-center">
                     <span className="gameAmount">Amount:</span>
-                    <span id={game.id} onClick={() => increaseCount(game.id)} className="cartBtns material-symbols-outlined btn btn-dark p-1">
-                        add
-                    </span>
-                    {/* Accede al objeto que se le pasa por id, en caso de que dentro de 
-                        ese objeto no haya nada pues gameCount sera igual a 0 */}
-                    <span className="cartBtns" id={game.id}>{gameCounts[game.id] || 1}</span>
-                    <span onClick={() => decreaseCount(game.id)} className="cartBtns material-symbols-outlined btn btn-dark p-1">
-                        remove
-                    </span>
+                    <select name="amount" id="">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
                     <button onClick={() => filterDelGame(game.id)} className="cartBtns material-symbols-outlined btn btn-danger p-1">
                         delete
                     </button>
@@ -111,7 +86,7 @@ export default function Cart({ cartCount, handleRemoveFromCart, inputRef, focusI
     ));
 
     let prices = filterGames.map(game => {
-        const roundedPrice = (parseFloat(game.price) * gameCounts[game.id]).toFixed(2);
+        const roundedPrice = (parseFloat(game.price));
         return parseFloat(roundedPrice);
     });
 
@@ -214,7 +189,7 @@ export default function Cart({ cartCount, handleRemoveFromCart, inputRef, focusI
                 <div className="cartGamesContainer w-100">
                     <h2>Cart</h2>
                     {
-                        gamesInCart.length === 0 && firestoreData.length === 0 ?
+                        gamesInCart.length === 0 && cartVideogames.length === 0 ?
                             <div className="emptyCart-box">
                                 <h3>The cart is empty :(</h3>
                             </div>

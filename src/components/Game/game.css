@@ -188,6 +188,8 @@ button {
 
 #delete-btn{
     background-image: linear-gradient(0deg, #dc3545 50%, #e04958 80%);
+    border: 2px solid #dc3545;
+    box-shadow: inset 0 0 0.25rem 1px #dc3545;
 }
 
 #cart-btn{
@@ -209,6 +211,7 @@ button {
 
 #cart-btn:hover span {
     animation: shakeCartAn .5s ease-in-out alternate;
+    transition: transform .2s ease-in-out;
 }
 
 @keyframes shakeCartAn {

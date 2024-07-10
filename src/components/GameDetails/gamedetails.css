@@ -9,6 +9,7 @@
     position: absolute;
     width: 100%;
     height: 200px;
+    mask-image: linear-gradient(rgb(18, 18, 18), transparent);
 }
 
 .gameBackground {
@@ -97,19 +98,35 @@
     color: #ccc;
 }
 
-#favoriteFillGD-btn{
+#favoriteFillGD-btn {
     animation: favoriteFillAn .3s ease-in-out;
 }
 
-#favoriteGD-btn{
+#favoriteGD-btn {
     animation: favoriteAn .3s ease-in-out;
 }
 
-#topCart-btn:hover span{
+.topCart-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    position: relative;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    padding: 5px;
+    background-image: linear-gradient(0deg, #ffc107 50%, #f7d160 80%);
+    border: 2px solid #f7d160;
+    box-shadow: inset 0 0 0.25rem 1px #f7d160;    
+}
+
+#topCart-btn:hover span {
     animation: shakeCartAn .5s ease-in-out alternate;
 }
 
-#topCart-btn:focus span{
+#topCart-btn:focus span {
     animation: topCartAn .6s ease-in-out;
 }
 
@@ -118,13 +135,29 @@
         transform: translateX(0px) rotate(-25deg);
     }
 
-    50%{
+    50% {
         transform: translateX(200px);
     }
 
     100% {
         transform: rotate(0deg) translateX(300px);
     }
+}
+
+.topDelete-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    position: relative;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    padding: 5px;
+    background-image: linear-gradient(0deg, #dc3545 50%, #e04958 80%);
+    border: 2px solid #dc3545;
+    box-shadow: inset 0 0 0.25rem 1px #dc3545;
 }
 
 #topDelete-btn>span {
@@ -154,24 +187,24 @@
     z-index: 1;
 }
 
-#detailCart-btn,
-#detailDelete-btn {
+.topCart-btn.bottom {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
     width: 100%;
+    background-color: #ffc107;
 }
 
-#detailCart-btn>span {
+.topCart-btn.bottom>span {
     font-size: 30px;
     transition: transform .2s ease-in-out;
     position: absolute;
     overflow: hidden;
 }
 
-#detailCart-btn:hover span {
+#bottomCart-btn:hover span {
     animation: shakeCartAn .5s ease-in-out;
 }
 
@@ -198,7 +231,7 @@
     }
 }
 
-#detailCart-btn:focus>span {
+#bottomCart-btn:focus>span {
     animation: cartAn .5s ease-in-out;
 }
 
@@ -229,12 +262,12 @@
     }
 }
 
-#detailDelete-btn>i {
+#bottomDelete-btn>i {
     transform: scale(1);
     transition: transform .5s linear;
 }
 
-#detailDelete-btn:focus>i {
+#bottomDelete-btn:focus>i {
     transform: scale(1.3);
 }
 
@@ -242,7 +275,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 90%;
+    width: 80%;
     height: 200px;
 }
 

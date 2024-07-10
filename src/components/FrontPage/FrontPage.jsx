@@ -5,13 +5,24 @@ import { addToCart, removeFromCart } from "../../redux/actions";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { HOME_URL } from "../../App";
+import { useCart } from "../../contexts/CartContext";
+import useFirestore from "../Login/app/firestore";
 
-export default function FrontPage({ id, title, price, description, image, background, handleAddToCart, handleRemoveFromCart, currentSlide }) {
+export default function FrontPage({ id, title, price, description, image, background, currentSlide }) {
     const location = useLocation();
     const dispatch = useDispatch();
     const cartBtnRef = useRef(null);
     const delBtnRef = useRef(null);
     const changeFocus = useRef(null);
+    const { handleAddGameToUserCart, handleRemoveGameFromUserCart } = useFirestore();
+    const { cartVideogames, handleAddGameToCartContext, handleRemoveGameFromCartContext } = useCart();
+
+    const handleToggleButtonCart = (gameId) => {
+        const isInCart = cartVideogames.some(
+            (games) => games.id === gameId
+        )
+        return isInCart
+    }
 
     useEffect(() => {
         if (location.pathname !== `/${HOME_URL}`) {
@@ -33,19 +44,19 @@ export default function FrontPage({ id, title, price, description, image, backgr
 
     // Function to add game to cart
     const handleTrueCart = () => {
-        setTimeout(() => {
-            setIsInCart(true);
-        }, 500)
-        handleAddToCart(id, title, price, image);
+        setIsInCart(true);
+        handleAddGameToCartContext({ id, title, price, image })
+        handleAddGameToUserCart({ id, title, price, image });
         localStorage.setItem(id, JSON.stringify({ [id]: true }));
-        dispatch(addToCart({ id, title, price, description, image }));
+        dispatch(addToCart({ id, title, price, image }));
     };
 
     // Function to remove game from cart
     const handleFalseCart = () => {
-        handleRemoveFromCart(id);
         localStorage.removeItem(id);
         setIsInCart(false);
+        handleRemoveGameFromCartContext(id);
+        handleRemoveGameFromUserCart(id);
         dispatch(removeFromCart(id));
     };
 
@@ -66,7 +77,7 @@ export default function FrontPage({ id, title, price, description, image, backgr
                     </div>
                     <div id="frontPageBtns-box" className="d-flex align-items-center w-100 gap-3">
                         {
-                            isInCart ?
+                            handleToggleButtonCart(id) ?
                                 (
                                     <button id="delete-btn" ref={delBtnRef} onClick={() => handleFalseCart(id)}
                                         className="d-flex align-items-center gap-2">
@@ -78,6 +89,9 @@ export default function FrontPage({ id, title, price, description, image, backgr
                                 (
                                     <button
                                         id="cart-btn"
+                                        data-bs-toggle="offcanvas"
+                                        data-bs-target="#offcanvasResponsive"
+                                        aria-controls="offcanvasResponsive"
                                         ref={cartBtnRef}
                                         onClick={() => handleTrueCart(id)}
                                         className="d-flex align-items-center gap-2">

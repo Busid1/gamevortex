@@ -8,12 +8,14 @@ import { HOME_URL } from "../../App";
 import Logout from "../Login/app/Logout";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../Login/app/firebase";
+import { useCart } from "../../contexts/CartContext";
 
-export default function Header({ cartCount, onSearch, searchGame, videogames, handleRemoveFromCart }) {
+export default function Header() {
     const cartHeaderRef = useRef();
     const [isScrollY, setIsScrollY] = useState(false);
     const [isLogin, setIsLogin] = useState(false);
     const [pfp, setPfp] = useState("");
+    const { cartVideogames } = useCart();
 
     useEffect(() => {
         onAuthStateChanged(auth, async (user) => {
@@ -25,8 +27,8 @@ export default function Header({ cartCount, onSearch, searchGame, videogames, ha
                 else {
                     setPfp("https://i.pinimg.com/564x/5d/2a/d1/5d2ad10c1f4e6b0136e8abddb6205102.jpg");
                 }
-            }  
-            else{
+            }
+            else {
                 setIsLogin(false);
             }
         })
@@ -72,7 +74,7 @@ export default function Header({ cartCount, onSearch, searchGame, videogames, ha
                     className="text-white material-symbols-outlined">
                     {searchBarDeploy ? "search" : "close"}
                 </span>
-                <SearchBar searchBarFocus={searchBarFocus} handleSearchBarDeploy={handleSearchBarDeploy} searchBarDeploy={searchBarDeploy} onSearch={onSearch} searchGame={searchGame} videogames={videogames} />
+                <SearchBar searchBarFocus={searchBarFocus} handleSearchBarDeploy={handleSearchBarDeploy} searchBarDeploy={searchBarDeploy}/>
                 {
                     searchBarDeploy ?
                         <div ref={cartHeaderRef} className="cartHeader-container">
@@ -81,7 +83,7 @@ export default function Header({ cartCount, onSearch, searchGame, videogames, ha
                                     shopping_cart_checkout
                                     <span id="push-cart"
                                         className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        {cartCount}
+                                        {cartVideogames.length}
                                     </span>
                                 </div>
                             </Link>
