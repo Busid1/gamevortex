@@ -57,7 +57,7 @@ export const WishlistProvider = ({ children }) => {
                     prevGameplay: prevGameplay,
                 }
             ];
-        });
+        });   
     }
 
     function handleRemoveGameFromWishlistContext(id) {

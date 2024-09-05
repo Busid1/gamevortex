@@ -93,13 +93,18 @@ export default function Header() {
                                         <ul className="m-0 p-0">
                                             <li className="nav-item dropdown">
                                                 <button className="nav-link dropdown-toggle text-white" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <img className="user-profile" src={pfp} alt="profile-picture" />
+                                                    <img className="user-profile" src={pfp} alt="" />
                                                 </button>
                                                 <ul className="dropdown-menu">
                                                     <Logout />
                                                     <li>
                                                         <Link className="dropdown-item" to={`${HOME_URL}/wishlist`}>
                                                             Wishlist
+                                                        </Link>
+                                                    </li>
+                                                    <li>
+                                                        <Link className="dropdown-item" to={`${HOME_URL}/purchases`}>
+                                                            Purchases
                                                         </Link>
                                                     </li>
                                                 </ul>

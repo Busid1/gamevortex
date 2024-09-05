@@ -3,6 +3,7 @@
     flex-direction: column;
     align-items: center;
     margin-bottom: 60px;
+    position: relative;
 }
 
 .gameBackgroundContainer {
@@ -35,7 +36,6 @@
     width: 90%;
     gap: 10px;
     margin-top: 100px;
-    position: relative;
 }
 
 .gameOptions-container {
@@ -112,7 +112,6 @@
     align-items: center;
     gap: 10px;
     width: 100%;
-    position: relative;
     border: none;
     outline: none;
     border-radius: 5px;
@@ -122,11 +121,11 @@
     box-shadow: inset 0 0 0.25rem 1px #f7d160;    
 }
 
-#topCart-btn:hover span {
+.topCart-btn:hover span {
     animation: shakeCartAn .5s ease-in-out alternate;
 }
 
-#topCart-btn:focus span {
+.topCart-btn:focus span {
     animation: topCartAn .6s ease-in-out;
 }
 
@@ -160,13 +159,18 @@
     box-shadow: inset 0 0 0.25rem 1px #dc3545;
 }
 
-#topDelete-btn>span {
+.topDelete-btn>span {
     transform: scale(1);
     transition: transform .5s linear;
 }
 
-#topDelete-btn:focus>span {
+.topDelete-btn:focus>span {
     transform: scale(1.2);
+}
+
+.topDelete-btn.bottom{
+    height: 60px;
+    width: 60px;
 }
 
 .description-box>p {
@@ -188,13 +192,9 @@
 }
 
 .topCart-btn.bottom {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-    background-color: #ffc107;
+    height: 60px;
+    width: 60px;
+    z-index: 1;
 }
 
 .topCart-btn.bottom>span {
@@ -204,7 +204,7 @@
     overflow: hidden;
 }
 
-#bottomCart-btn:hover span {
+.bottomCart-btn:hover span {
     animation: shakeCartAn .5s ease-in-out;
 }
 
@@ -231,7 +231,7 @@
     }
 }
 
-#bottomCart-btn:focus>span {
+.bottomCart-btn:focus>span {
     animation: cartAn .5s ease-in-out;
 }
 
@@ -262,12 +262,12 @@
     }
 }
 
-#bottomDelete-btn>i {
+.bottomDelete-btn>i {
     transform: scale(1);
     transition: transform .5s linear;
 }
 
-#bottomDelete-btn:focus>i {
+.bottomDelete-btn:focus>i {
     transform: scale(1.3);
 }
 

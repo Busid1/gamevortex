@@ -29,7 +29,6 @@ export const CommentsProvider = ({ children }) => {
                 const comments = userDoc.docs.map(doc => doc.data())
                 if(comments[0] !== undefined){
                     setCommentsInVideogames(comments);
-                    setPhotoURLComment(comments.userCommentPhoto);
                 }
             } catch (error) {
                 console.error("Error fetching comments data: ", error);

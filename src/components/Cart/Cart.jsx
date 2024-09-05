@@ -1,5 +1,5 @@
-import { useSelector } from "react-redux";
 import "./cart.css";
+import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { removeFromCart } from "../../redux/actions";
 import { useDispatch } from "react-redux";
@@ -7,11 +7,10 @@ import { Link } from "react-router-dom";
 import Payment from "../Payment/Payment";
 import PaymentGateway from "../PaymentGateway/PaymentGateway";
 import { HOME_URL } from "../../App";
-import randomstring from "randomstring";
 import useFirestore from "../Login/app/firestore";
 import { useCart } from "../../contexts/CartContext";
 
-export default function Cart({ inputRef, focusInput }) {
+export default function Cart({ focusInput }) {
     const [gamesInCart, setGamesInCart] = useState(useSelector(state => state.gamesInCart));
     const [gameCounts, setGameCounts] = useState({}); // Inicialmente, no hay cantidades para ningún juego
     //Accedemos al ultimo array ya que este tendra todos los valores validos de la tarjeta y asi no se duplican los elementos
@@ -19,8 +18,8 @@ export default function Cart({ inputRef, focusInput }) {
     const creditCardErrors = useSelector(state => state.creditCardErrors.slice(-1)[0]);
     const [lastCreditCard, setLastCreditCard] = useState("");
     const { cartVideogames } = useCart();
-    const { handleRemoveGameFromUserCart } = useFirestore();
-    const { handleRemoveGameFromCartContext } = useCart();
+    const { handleRemoveGameFromUserCart, handleDeleteAllGamesFromUserCart } = useFirestore();
+    const { handleRemoveGameFromCartContext, handleDeleteAllGamesFromCartContext } = useCart();
 
     const creditCardComponent = creditCardData ? (
         <div className="creditCardBox">
@@ -30,17 +29,6 @@ export default function Cart({ inputRef, focusInput }) {
             <h3>CVC: {lastCreditCard.cardCVC}</h3>
         </div>
     ) : (null);
-
-    useEffect(() => {
-        // Obtener las claves del objeto gameCounts
-        const keys = Object.keys(gameCounts);
-
-        // Crear un nuevo objeto con las claves y valores inicializados en 1
-        const initialGameCounts = Object.fromEntries(keys.map(key => [key, 1]));
-
-        // Establecer el objeto inicializado en 1 en el estado
-        setGameCounts(initialGameCounts);
-    }, []);
 
     const dispatch = useDispatch();
     const filterGames = cartVideogames.length > 0 ? cartVideogames : gamesInCart.filter((elem, index, arr) => {
@@ -60,6 +48,24 @@ export default function Cart({ inputRef, focusInput }) {
         handleRemoveGameFromCartContext(id);
     }
 
+    useEffect(() => {
+        // Get the keys of the filterGames object
+        const keys = filterGames.map(game => game.id);
+
+        // Create a new object with keys and values initialized to 1
+        const initialGameCounts = Object.fromEntries(keys.map(key => [key, 1]));
+
+        // Set the initialized object to state
+        setGameCounts(initialGameCounts);
+    }, []);
+
+    const handleAmountValue = (e, gameId) => {
+        setGameCounts((prevCounts) => ({
+            ...prevCounts,
+            [gameId]: Number(e.target.value),
+        }));
+    }
+
     const gamesAddsInCart = filterGames.map((game) => (
         <div key={game.id} className="cart-box shadow rounded d-flex gap-3">
             <img className="rounded" src={game.image} alt={game.title} />
@@ -70,7 +76,7 @@ export default function Cart({ inputRef, focusInput }) {
                 <span className="gamePrice">{game.price}</span>
                 <div id={game.id} className="d-flex gap-1 align-items-center">
                     <span className="gameAmount">Amount:</span>
-                    <select name="amount" id="">
+                    <select className="rounded me-1" name="amount" onChange={(e) => handleAmountValue(e, game.id)}>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -86,7 +92,8 @@ export default function Cart({ inputRef, focusInput }) {
     ));
 
     let prices = filterGames.map(game => {
-        const roundedPrice = (parseFloat(game.price));
+        const count = gameCounts[game.id] || 1;
+        const roundedPrice = (parseFloat(game.price) * count).toFixed(2);
         return parseFloat(roundedPrice);
     });
 
@@ -94,7 +101,7 @@ export default function Cart({ inputRef, focusInput }) {
         prices = [0];
     }
 
-    let total = prices.reduce((a, b) => a + b);
+    let total = prices.reduce((a, b) => a + b, 0);
 
     const [isBuyGame, setIsBuyGame] = useState(false);
     const [isSpinner, setIsSpinner] = useState(true);
@@ -212,71 +219,10 @@ export default function Cart({ inputRef, focusInput }) {
                                     </span>
                                 </button>
                                 :
-                                <button onClick={() => { handleClosePayment(); focusInput(); }} className="d-flex align-items-center gap-2 fs- btn btn-warning shadow mt-3">
-                                    Add payment
-                                    <span className="material-symbols-outlined">
-                                        add_card
-                                    </span>
-                                </button>
+                                <Payment total={total} />
                         }
 
                         {lastCreditCard && creditCardData ? creditCardComponent : null}
-
-                        {creditCardValid ? (
-                            <div>
-                                <button onClick={handleBuyGame} className="d-flex align-items-center gap-2 fs-5 btn btn-success shadow mt-3">
-                                    Buy game/s
-                                    <span className="material-symbols-outlined">
-                                        payments
-                                    </span>
-                                </button>
-                                {isBuyGameAlert ?
-                                    <div style={{ display: isBuyGame ? "flex" : "none" }} className="activationCode-container">
-                                        {isSpinner ?
-                                            <span className="spinner"></span>
-                                            :
-                                            <div className="activationCode-box">
-                                                <p className="buyGameMessage">
-                                                    The purchase was successfully.
-                                                    <br></br>
-                                                    The game/s code is below this message:
-                                                </p>
-                                                <div className="d-flex flex-column gap-2">
-                                                    {
-                                                        filterGames.map(({ title, id }) => (
-                                                            <div key={id} className="d-flex justify-content-between gap-3">
-                                                                <span className="text-warning" key={id}>{title}</span>
-                                                                <span className="text-warning" key={id}>{randomstring.generate({ length: 10, charset: 'alphanumeric' })}</span>
-                                                            </div>
-                                                        ))
-                                                    }
-                                                </div>
-                                                <Link to={HOME_URL} className="d-flex justify-content-center mt-3">
-                                                    <button className="btn btn-primary">
-                                                        Go to home page
-                                                    </button>
-                                                </Link>
-                                            </div>
-                                        }
-                                    </div>
-                                    :
-                                    (null)
-                                }
-
-                            </div>
-                        ) : null}
-
-                        {
-                            closePayment ? <Payment
-                                handlePaymentCorrect={handlePaymentCorrect}
-                                handleClosePayment={handleClosePayment}
-                                handleAddPayment={handleAddPayment}
-                                creditCardData={creditCardData}
-                                inputRef={inputRef}
-                                isErrors={isErrors}
-                            /> :
-                                null
-                        }
                     </div>
                 </div>
             </div>

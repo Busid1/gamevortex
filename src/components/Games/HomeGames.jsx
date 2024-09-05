@@ -24,9 +24,6 @@ export default function HomeGames({ handleAddToCart, handleRemoveFromCart }) {
         <div id="cardGames-box" className="px-3">
             <div className="homeFilter-box">
                 <h2 className="text-white m-0">Home</h2>
-                <button className="text-white material-symbols-outlined" id="filter-btn">
-                    tune
-                </button>
             </div>
             <div className="cardGames-container">
                 <button className="material-symbols-outlined cardGamesBtn-left"

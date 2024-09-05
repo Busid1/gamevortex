@@ -7,8 +7,8 @@ export const CartContext = createContext({
     cartVideogames: [],
     handleAddGameToCartContext: () => { },
     handleRemoveGameFromCartContext: () => { },
+    handleDeleteAllGamesFromCartContext: () => { },
     getTotalCoast: () => { },
-    deleteAllCart: () => { },
 });
 
 export const useCart = () => {
@@ -62,10 +62,15 @@ export const CartProvider = ({ children }) => {
         setCartVideogames(cartGames => cartGames.filter(currentGame => currentGame.id !== id));
     }
 
+    function handleDeleteAllGamesFromCartContext() {
+        setCartVideogames([]);
+    }
+
     const contextValue = {
         cartVideogames: cartVideogames,
         handleAddGameToCartContext,
         handleRemoveGameFromCartContext,
+        handleDeleteAllGamesFromCartContext,
     }
 
     return (

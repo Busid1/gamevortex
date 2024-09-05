@@ -5,6 +5,7 @@ export default function Logout() {
     
     const handleLogout = async () => {
         await signOut(auth);
+        window.location.reload();
         console.log("logout");
     }
 

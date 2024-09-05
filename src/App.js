@@ -11,6 +11,8 @@ import Login from './components/Login/Login';
 import Home from './components/Home/Home';
 export const HOME_URL = "";
 export const API_URL = `https://gamevortex.glitch.me/gamevortex`;
+import "./responsive.css"
+import Purchases from './components/Purchases/Purchases';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -76,6 +78,7 @@ function App() {
                   (null)
               }
               <Route path={`/cart`} element={<Cart inputRef={inputRef} focusInput={focusInput} />} />
+              <Route path={`/purchases`} element={<Purchases/>} />
             </Routes>
             <Login />
             <Footer />

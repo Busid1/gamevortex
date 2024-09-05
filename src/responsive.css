@@ -200,8 +200,12 @@
         height: 70px;
     }
 
+    header.headerBackground>nav{
+        width: 55%;
+    }
+
     .logo-box{
-        width: 170px;
+        width: 150px;
     }
 
     .searchBar-container{
@@ -214,9 +218,24 @@
         border-radius: 5px;
     }
 
+    .cart-box>img{
+        width: 140px;
+    }
+
+    .gameTitle{
+        font-size: 1.2em;
+    }
+
+    .gamePrice{
+        font-size: .9em;
+    }
+
+    .gameAmount{
+        font-size: .8em;
+    }
+
     .cartGamesPrev-box {
         width: 360px;
-        max-height: 400px;
         gap: 15px;
     }
 
@@ -224,9 +243,9 @@
         margin-top: 20px;
     }
 
-    /* .frontPage-container{
-        height: 110vh;
-    } */
+    .frontPage-container{
+        height: 80vh;
+    }
 
     .frontPageCard-title{
         font-size: 1.5em;
@@ -244,6 +263,10 @@
         width: 280px;
     }
 
+    .cartGamesResume-box{
+        width: 70%;
+    }
+
     .gameplay-box{
         width: 85%;
     }
@@ -252,8 +275,12 @@
         gap: 40px;
     }
 
-    .gameDetails-box, #otherGames-container, #cardGames-container, #tags-games-box{
-        width: 70%;
+    #cardGames-container, #tags-games-box{
+        width: 60%;
+    }
+
+    .gameDetails-box, #otherGames-container{
+        width: 50%;
     }
 }
 

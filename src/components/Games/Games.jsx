@@ -14,7 +14,7 @@ export default function Games({ handleAddToCart, handleRemoveFromCart }) {
                 <PopularGames handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart} />
                 <OfferGames handleAddToCart={handleAddToCart} handleRemoveFromCart={handleRemoveFromCart}/>
             </div>
-            {/* <Buttons /> */}
+            <Buttons />
         </section>
     )
 }

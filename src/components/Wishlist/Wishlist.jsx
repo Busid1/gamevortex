@@ -3,7 +3,7 @@ import Game from "../Game/Game";
 import "./wishlist.css";
 import { useWishlist } from "../../contexts/WishListContext";
 
-export default function Wishlist({ handleIsTrue }) {
+export default function Wishlist() {
     const reduxfavorites = useSelector(state => state.favGames);
     const { wishlistVideogames } = useWishlist();
     const favorites = reduxfavorites.filter((elem, index, arr) => {
@@ -13,11 +13,12 @@ export default function Wishlist({ handleIsTrue }) {
         return firstIndex === index;
     });
     const gamesToRender = wishlistVideogames.length > 0 ? wishlistVideogames : favorites;
-    console.log(gamesToRender);
+
     return (
         <section className="wishlist-container">
+            <h1 className="text-white mt-3">Wishlist</h1>
             <div className="wishlist-box">
-                {
+                {gamesToRender.length > 0 ?
                     gamesToRender.map(game => {
                         return (
                             <Game
@@ -30,8 +31,9 @@ export default function Wishlist({ handleIsTrue }) {
                                 prevGameplay={game.prevGameplay}
                             />
                         )
-
                     })
+                    :
+                    <p className="text-white fs-4 mt-5">There are still no games on the wishlist :(</p>
                 }
             </div>
         </section>

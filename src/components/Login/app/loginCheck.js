@@ -19,10 +19,6 @@ export const loginCheck = async (user) => {
                     uid: user.uid,
                     wishlist: [],
                     cart: [],
-                    comments: {
-                        commentPhoto: user.photoURL,
-                        gameComments: []
-                    }
                 });
             }
         } catch (error) {

@@ -93,7 +93,7 @@ export default function GameDetails({ handleIsTrue, handleAddToCart, handleRemov
 
     const [cartBtnBottom, setCartBtnBottom] = useState(false);
     const handleCartBtnBottom = () => {
-        if (window.scrollY > 400) {
+        if (window.scrollY > 350) {
             setCartBtnBottom(true);
         }
         else {
@@ -210,7 +210,7 @@ export default function GameDetails({ handleIsTrue, handleAddToCart, handleRemov
                                         handleToggleButtonCart(id) ?
                                             (
                                                 <button ref={delBtnRef} onClick={() => handleFalseCart(id)}
-                                                    className={cartBtnBottom ? "bottomDelete-btn" : "topDelete-btn"}>
+                                                    className="topDelete-btn">
                                                     Delete from cart
                                                     <span className="material-symbols-outlined">
                                                         delete
@@ -220,7 +220,7 @@ export default function GameDetails({ handleIsTrue, handleAddToCart, handleRemov
                                             :
                                             (
                                                 <button ref={cartBtnRef} onClick={() => handleTrueCart(id)}
-                                                    className={cartBtnBottom ? "topCart-btn bottom" : "topCart-btn"}>
+                                                    className="topCart-btn">
                                                     Add to cart
                                                     <span className="material-symbols-outlined">
                                                         add_shopping_cart
@@ -262,8 +262,35 @@ export default function GameDetails({ handleIsTrue, handleAddToCart, handleRemov
                         ) : (null)
                     }
                 </div>
-                <Comments id={id}/>
+                <Comments id={id} />
             </div>
+            {
+                isStock && cartBtnBottom ?
+                    <div id="detailBtns-box" className="d-flex align-items-center gap-3">
+                        {
+                            handleToggleButtonCart(id) ?
+                                (
+                                    <button ref={delBtnRef} onClick={() => handleFalseCart(id)}
+                                        className="topDelete-btn bottom">
+                                        <span className="material-symbols-outlined">
+                                            delete
+                                        </span>
+                                    </button>
+                                )
+                                :
+                                (
+                                    <button ref={cartBtnRef} onClick={() => handleTrueCart(id)}
+                                        className="topCart-btn bottom">
+                                        <span className="material-symbols-outlined">
+                                            add_shopping_cart
+                                        </span>
+                                    </button>
+                                )
+                        }
+                    </div>
+                    :
+                    null
+            }
             <div id="otherGames-container" className="d-flex flex-column">
                 <h3 className="text-left text-warning mt-3">Related games</h3>
                 <div id="otherGames-box" className="pb-3 d-flex w-100 flex-wrap rounded-0 justify-content-evenly">

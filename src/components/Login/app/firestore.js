@@ -61,7 +61,18 @@ export default function useFirestore() {
     }
   }
 
-  async function handleAddGameToUserWishlist({ id, title, price, image, description }) {
+  async function handleDeleteAllGamesFromUserCart() {
+    if (user) {
+      try {
+        const userDocRef = doc(db, "users", user.uid);
+        await updateDoc(userDocRef, { cart: [] });
+      } catch (e) {
+        console.error("Error deleting all cart: ", e);
+      }
+    }
+  }
+
+  async function handleAddGameToUserWishlist({ id, title, price, image, description, prevGameplay }) {
     if (user) {
       try {
         const userDocRef = doc(db, "users", user.uid);
@@ -74,7 +85,7 @@ export default function useFirestore() {
             existingWishlist = [];
           }
           // Fusionar el nuevo objeto con el array existente
-          const updatedWishlist = [...existingWishlist, { id, title, price, image, description }];
+          const updatedWishlist = [...existingWishlist, { id, title, price, image, description, prevGameplay }];
           const filterDuplicateGames = updatedWishlist.filter((elem, index, arr) => {
             // Usa `findIndex` para encontrar el índice del primer elemento con el mismo ID
             const firstIndex = arr.findIndex((el) => el.id === elem.id);
@@ -150,6 +161,7 @@ export default function useFirestore() {
         await setDoc(userDocRef, {
           userCommentPhoto: user.photoURL,
           gameComments: updatedComments,
+          uid: user.uid,
         }, { merge: true }); // Merge para mantener otros campos del documento
 
       } catch (e) {
@@ -163,18 +175,18 @@ export default function useFirestore() {
       try {
         const userDocRef = doc(db, "comments", user.uid);
         const userDocSnap = await getDoc(userDocRef);
-        
+
         if (userDocSnap.exists()) {
           let existingData = userDocSnap.data();
           let existingComments = existingData.gameComments || [];
-  
+
           // Encontrar el videojuego por id
           const gameIndex = existingComments.findIndex(game => game.id === id);
-  
+
           if (gameIndex !== -1) {
             // Eliminar el comentario en el índice especificado
             existingComments[gameIndex].gameComment.splice(commentIndex, 1);
-            
+
             // Guardar los datos actualizados
             await updateDoc(userDocRef, {
               gameComments: existingComments,
@@ -189,23 +201,23 @@ export default function useFirestore() {
     }
   }
 
-  async function handleEditCommentFromUserGame(commentIndex, newComment) {
+  async function handleEditCommentFromUserGame(id, commentIndex, editedComment) {
     if (user) {
       try {
         const userDocRef = doc(db, "comments", user.uid);
         const userDocSnap = await getDoc(userDocRef);
-        
+
         if (userDocSnap.exists()) {
           let existingData = userDocSnap.data();
           let existingComments = existingData.gameComments || [];
-  
+
           // Encontrar el videojuego por id
           const gameIndex = existingComments.findIndex(game => game.id === id);
-  
+
           if (gameIndex !== -1) {
             // Eliminar el comentario en el índice especificado
-            existingComments[gameIndex].gameComment.splice(commentIndex, 1, newComment);
-            
+            existingComments[gameIndex].gameComment.splice(commentIndex, 1, editedComment);
+
             // Guardar los datos actualizados
             await updateDoc(userDocRef, {
               gameComments: existingComments,
@@ -215,19 +227,59 @@ export default function useFirestore() {
           console.error("No se encontró el documento.");
         }
       } catch (e) {
-        console.error("Error deleting comment: ", e);
+        console.error("Error editing comment: ", e);
       }
     }
   }
-  
+
+  async function handleAddGameToUserPurchases(cartVideogames) {
+    if (user) {
+      try {
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists()) {
+          let existingPurchases = userDocSnap.data().purchases || [];
+
+          // Asegurarse de que existingPurchases es un array
+          if (!Array.isArray(existingPurchases)) {
+            existingPurchases = [];
+          }
+
+          // Añadir cada videojuego del carrito individualmente
+          cartVideogames.forEach((game) => {
+            // Verificar si el juego ya está en las compras
+            const isGameAlreadyPurchased = existingPurchases.some((purchasedGame) => purchasedGame.id === game.id);
+
+            // Solo añadir si no está en las compras
+            if (!isGameAlreadyPurchased) {
+              existingPurchases.push(game);
+            }
+          });
+
+          // Actualizar el documento con el array aplanado de objetos
+          await updateDoc(userDocRef, { purchases: existingPurchases });
+        } else {
+          await setDoc(doc(db, "users", user.uid), {
+            purchases: cartVideogames, // Si es la primera vez, simplemente añade los juegos
+          });
+        }
+      } catch (e) {
+        console.error("Error updating document: ", e);
+      }
+    }
+  }
+
   return {
     user,
     handleAddGameToUserCart,
     handleRemoveGameFromUserCart,
+    handleDeleteAllGamesFromUserCart,
     handleAddGameToUserWishlist,
     handleRemoveGameFromUserWishlist,
     handleAddCommentToUserGame,
     handleRemoveCommentFromUserGame,
-    handleEditCommentFromUserGame
+    handleEditCommentFromUserGame,
+    handleAddGameToUserPurchases,
   };
 }
