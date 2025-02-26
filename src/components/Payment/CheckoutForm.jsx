@@ -45,7 +45,7 @@ const CheckoutForm = ({ total }) => {
       const { id } = paymentMethod;
 
       try {
-        const response = await axios.post(`http://localhost:4000/api/checkout`, {
+        const response = await axios.post(`https://ndmy1qx0yl.execute-api.eu-west-3.amazonaws.com/checkout`, {
           id,
           amount: total.toFixed(2) * 100,
         })

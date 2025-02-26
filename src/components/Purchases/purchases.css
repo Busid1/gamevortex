@@ -2,3 +2,12 @@
     min-height: calc(100vh - 60px);
     margin-top: 30px;
 }
+
+#purchases-container>div{
+    width: 90%;
+}
+
+#purchaseCard{
+    min-width: 200px;
+    max-width: 400px;
+}

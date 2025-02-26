@@ -7,7 +7,7 @@ export default function Purchases() {
     return (
         <div className="d-flex flex-column align-items-center gap-3" id="purchases-container">
             <h1 className="text-white mt-5">Purchases</h1>
-            <div className="d-flex flex-wrap justify-content-center">
+            <div className="d-flex flex-wrap justify-content-center gap-5">
                 {
                     purchases.length > 0 ?
                         purchases.map(({ id, title, image, activationCode }) => (

@@ -26,7 +26,7 @@ export default function CartPreview() {
     return (
         <div>
             <div className="offcanvas offcanvas-end cartGamesPrev-box" tabIndex="-1" id="offcanvasResponsive" aria-labelledby="offcanvasResponsiveLabel">
-                <div className="offcanvas-header">
+                <div className="offcanvas-header d-flex justify-content-between">
                     <h5 className="offcanvas-title cartPrev-title" id="offcanvasResponsiveLabel">Cart preview</h5>
                     <button type="button" className="material-symbols-outlined cart-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasResponsive" aria-label="Close">
                         close
@@ -56,7 +56,7 @@ export default function CartPreview() {
                                 </li>
                             ))
                             :
-                            <li className="emptyCartPrev-box text-white">Empty cart...
+                            <li className="emptyCartPrev-box text-white mb-3">Empty cart...
                                 <span className="fs-5 text-white material-symbols-outlined">
                                     shopping_cart_off
                                 </span>

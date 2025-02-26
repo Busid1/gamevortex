@@ -8,7 +8,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "lint": "eslint ."
   },
   "author": "",
   "license": "ISC",
@@ -25,6 +26,7 @@
     "emoji-mart": "^5.5.2",
     "express": "^4.18.2",
     "firebase": "^10.11.1",
+    "firebase-functions": "^5.1.1",
     "fs": "^0.0.1-security",
     "http": "^0.0.1-security",
     "mdb-ui-kit": "^7.2.0",
@@ -64,6 +66,12 @@
   "main": "script.js",
   "keywords": [],
   "devDependencies": {
+    "@babel/eslint-parser": "^7.25.1",
+    "eslint": "^9.9.1",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.30.0",
+    "eslint-plugin-jsx-a11y": "^6.10.0",
+    "eslint-plugin-react": "^7.35.2",
     "gh-pages": "^6.1.1"
   }
 }

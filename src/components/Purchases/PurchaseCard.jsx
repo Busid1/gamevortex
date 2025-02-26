@@ -2,9 +2,9 @@ import { Link } from "react-router-dom";
 
 export default function PurchaseCard({id, title, image, activationCode}) {
     return (
-        <div key={id} className="d-flex flex-column gap-3 col-5">
-            <div className="d-flex flex-column gap-3 px-5">
-                <img className="rounded" src={image} alt={title} />
+        <div key={id} className="d-flex flex-column gap-3" id="purchaseCard">
+            <div className="d-flex flex-column gap-3">
+                <img className="rounded w-full" src={image} alt={title} />
                 <div className="d-flex flex-column gap-2">
                     <Link to={`/${title}`} className="text-warning">
                         {title}

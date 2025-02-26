@@ -13,7 +13,7 @@ app.post("/api/checkout", async (req, res) => {
     const payment = await stripe.paymentIntents.create({
       amount,
       currency: "USD",
-      description: "curso programacion",
+      description: "videogame/s",
       payment_method: id,
       confirm: true,
       automatic_payment_methods: {
